@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <component :is="currentRole"/>
+    <component :is="currentRole" />
   </div>
 </template>
 
@@ -27,7 +27,7 @@ export default {
   mounted: function() {
     const userInfo = JSON.parse(sessionStorage.getItem(getToken()))
     //  watermark.set(userInfo.logonName) 不显示水印
-     watermark.set("")
+    watermark.set('')
   },
   created() {
     if (!this.roles.includes('admin')) {

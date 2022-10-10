@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <lock-screen/>
-    <router-view/>
-    <stomp-mq/>
+    <lock-screen />
+    <router-view />
+    <stomp-mq />
     <!--  底部  -->
     <div class="el-login-footer">
       <span>宁国市燕津投资管理有限公司</span>

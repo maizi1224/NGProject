@@ -19,7 +19,7 @@
         click-mode="push"
       />
     </div>
-    <img :src="img1" class="login-code-img" >
+    <img :src="img1" class="login-code-img">
     <div class="content">
       <el-form
         ref="loginForm"
@@ -120,7 +120,7 @@
     </div>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>宁国市燕津投资管理有限公司</span>     
+      <span>宁国市燕津投资管理有限公司</span>
     </div>
   </div>
 </template>
@@ -128,8 +128,6 @@
 <script>
 import watermark from '@/utils/water-mark'
 import img1 from '@/assets/images/nggk.jpg'
-
-
 
 export default {
   name: 'Login',
@@ -142,7 +140,7 @@ export default {
       }
     }
     return {
-      img1:img1,
+      img1: img1,
       codeUrl: '',
       options: null,
       loginForm: {
@@ -321,7 +319,7 @@ $cursor: #fff;
     input {
       background: transparent;
       border: 0px;
-     
+
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
