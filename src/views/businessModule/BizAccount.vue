@@ -306,21 +306,21 @@ export default {
       data: null,
       currentNode: null,
       form: {
-        id: null,
-        moduleId: null,
-        userLogonName: null,
-        userDisplayName: null,
-        userPassword: null,
-        telephone: null,
-        mobilePhone: null,
-        email: null,
-        remark: null,
-        isEnabled: null,
-        isDel: null,
-        creator: null,
-        createTime: null,
-        modifier: null,
-        modifyTime: null
+        id: '',
+        moduleId: '',
+        userLogonName: '',
+        userDisplayName: '',
+        userPassword: '',
+        telephone: '',
+        mobilePhone: '',
+        email: '',
+        remark: '',
+        isEnabled: '',
+        isDel: '',
+        creator: '',
+        createTime: '',
+        modifier: '',
+        modifyTime: ''
       },
       rules: {
         userDisplayName: [
@@ -501,20 +501,20 @@ export default {
       })
     },
     resetForm: function() {
-      this.form.id = null
-      this.form.moduleId = null
-      this.form.userLogonName = null
-      this.form.userDisplayName = null
-      this.form.userPassword = null
-      this.form.telephone = null
-      this.form.mobilePhone = null
-      this.form.email = null
-      this.form.remark = null
-      this.form.isDel = null
-      this.form.creator = null
-      this.form.createTime = null
-      this.form.modifier = null
-      this.form.modifyTime = null
+      this.form.id = ''
+      this.form.moduleId = ''
+      this.form.userLogonName = ''
+      this.form.userDisplayName = ''
+      this.form.userPassword = ''
+      this.form.telephone = ''
+      this.form.mobilePhone = ''
+      this.form.email = ''
+      this.form.remark = ''
+      this.form.isDel = ''
+      this.form.creator = ''
+      this.form.createTime = ''
+      this.form.modifier = ''
+      this.form.modifyTime = ''
     }
   }
 }

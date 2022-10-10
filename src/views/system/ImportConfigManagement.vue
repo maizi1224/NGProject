@@ -485,25 +485,25 @@ export default {
       ynOptions: null,
       dtOptions: null,
       detailForm: {
-        id: null,
+        id: '',
         parentId: null,
-        dataType: null,
-        cells: null,
-        required: null,
-        maxValue: null,
-        minValue: null,
-        decimalLimit: null,
-        textEnum: null,
-        extend1: null,
-        extend2: null,
-        extend3: null,
-        serialNumber: null,
-        remark: null,
-        isDel: null,
-        creator: null,
-        createTime: null,
-        modifier: null,
-        modifyTime: null
+        dataType: '',
+        cells: '',
+        required: '',
+        maxValue: '',
+        minValue: '',
+        decimalLimit: '',
+        textEnum: '',
+        extend1: '',
+        extend2: '',
+        extend3: '',
+        serialNumber: '',
+        remark: '',
+        isDel: '',
+        creator: '',
+        createTime: '',
+        modifier: '',
+        modifyTime: ''
       },
       detailFormRules: {
         dataType: [
@@ -657,23 +657,23 @@ export default {
     resetDetailForm: function() {
       this.detailForm.id = this.Guid.Empty
       this.detailForm.parentId = null
-      this.detailForm.dataType = null
-      this.detailForm.cells = null
-      this.detailForm.required = null
-      this.detailForm.maxValue = null
-      this.detailForm.minValue = null
-      this.detailForm.decimalLimit = null
-      this.detailForm.textEnum = null
-      this.detailForm.extend1 = null
-      this.detailForm.extend2 = null
-      this.detailForm.extend3 = null
-      this.detailForm.serialNumber = null
-      this.detailForm.remark = null
-      this.detailForm.isDel = null
-      this.detailForm.creator = null
-      this.detailForm.createTime = null
-      this.detailForm.modifier = null
-      this.detailForm.modifyTime = null
+      this.detailForm.dataType = ''
+      this.detailForm.cells = ''
+      this.detailForm.required = ''
+      this.detailForm.maxValue = ''
+      this.detailForm.minValue = ''
+      this.detailForm.decimalLimit = ''
+      this.detailForm.textEnum = ''
+      this.detailForm.extend1 = ''
+      this.detailForm.extend2 = ''
+      this.detailForm.extend3 = ''
+      this.detailForm.serialNumber = ''
+      this.detailForm.remark = ''
+      this.detailForm.isDel = ''
+      this.detailForm.creator = ''
+      this.detailForm.createTime = ''
+      this.detailForm.modifier = ''
+      this.detailForm.modifyTime = ''
     }
   }
 }

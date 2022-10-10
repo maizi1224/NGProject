@@ -433,25 +433,25 @@ export default {
       },
       currentNode: null,
       form: {
-        id: null,
-        orgId: null,
-        orgName: null,
-        logonName: null,
-        displayName: null,
-        password: null,
-        telephone: null,
-        mobilePhone: null,
-        email: null,
-        isSupperAdmin: null,
-        serialNumber: null,
-        remark: null,
-        isEnabled: null,
-        sex: null,
-        isDel: null,
-        creator: null,
-        createTime: null,
-        modifier: null,
-        modifyTime: null
+        id: '',
+        orgId: '',
+        orgName: '',
+        logonName: '',
+        displayName: '',
+        password: '',
+        telephone: '',
+        mobilePhone: '',
+        email: '',
+        isSupperAdmin: '',
+        serialNumber: '',
+        remark: '',
+        isEnabled: '',
+        sex: '',
+        isDel: '',
+        creator: '',
+        createTime: '',
+        modifier: '',
+        modifyTime: ''
       },
       rules: {
         logonName: [
@@ -713,25 +713,25 @@ export default {
       }
     },
     resetForm: function() {
-      this.form.id = null
-      this.form.orgId = null
-      this.form.orgName = null
-      this.form.logonName = null
-      this.form.displayName = null
-      this.form.password = null
-      this.form.telephone = null
-      this.form.mobilePhone = null
-      this.form.email = null
-      this.form.isSupperAdmin = null
-      this.form.serialNumber = null
-      this.form.remark = null
-      this.form.isEnabled = null
-      this.form.sex = null
-      this.form.isDel = null
-      this.form.creator = null
-      this.form.createTime = null
-      this.form.modifier = null
-      this.form.modifyTime = null
+      this.form.id = ''
+      this.form.orgId = ''
+      this.form.orgName = ''
+      this.form.logonName = ''
+      this.form.displayName = ''
+      this.form.password = ''
+      this.form.telephone = ''
+      this.form.mobilePhone = ''
+      this.form.email = ''
+      this.form.isSupperAdmin = ''
+      this.form.serialNumber = ''
+      this.form.remark = ''
+      this.form.isEnabled = ''
+      this.form.sex = ''
+      this.form.isDel = ''
+      this.form.creator = ''
+      this.form.createTime = ''
+      this.form.modifier = ''
+      this.form.modifyTime = ''
     },
     uploadFile: function() {
       if (!this.currentNode) {

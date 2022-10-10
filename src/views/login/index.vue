@@ -19,6 +19,7 @@
         click-mode="push"
       />
     </div>
+    <img :src="img1" class="login-code-img" >
     <div class="content">
       <el-form
         ref="loginForm"
@@ -126,6 +127,9 @@
 
 <script>
 import watermark from '@/utils/water-mark'
+import img1 from '@/assets/images/nggk.jpg'
+
+
 
 export default {
   name: 'Login',
@@ -138,6 +142,7 @@ export default {
       }
     }
     return {
+      img1:img1,
       codeUrl: '',
       options: null,
       loginForm: {
@@ -316,7 +321,7 @@ $cursor: #fff;
     input {
       background: transparent;
       border: 0px;
-      -webkit-appearance: none;
+     
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
@@ -507,5 +512,10 @@ $light_gray: #eee;
   width: 100%;
   z-index: -1;
   position: absolute;
+}
+
+#nggk
+{
+  src: url("/background_image/nggk.jpg");
 }
 </style>

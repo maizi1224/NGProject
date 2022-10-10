@@ -365,23 +365,23 @@ export default {
       disabled: false,
       parentMenuName: null,
       form: {
-        id: null,
-        path: null,
-        menuName: null,
-        menuNameEn: null,
-        menuNameRu: null,
-        menuUrl: null,
+        id: '',
+        path: '',
+        menuName: '',
+        menuNameEn: '',
+        menuNameRu: '',
+        menuUrl: '',
         parentId: null,
-        serialNumber: null,
-        menuType: null,
-        icon: null,
-        code: null,
-        remark: null,
-        isDel: null,
-        creator: null,
-        createTime: null,
-        modifier: null,
-        modifyTime: null
+        serialNumber: '',
+        menuType: '',
+        icon: '',
+        code: '',
+        remark: '',
+        isDel: '',
+        creator: '',
+        createTime: '',
+        modifier: '',
+        modifyTime: ''
       },
       rules: {
         menuName: [
@@ -454,16 +454,16 @@ export default {
         this.ps = false
       }
 
-      this.form.path = null
-      this.form.menuName = null
-      this.form.menuNameEn = null
-      this.form.menuNameRu = null
-      this.form.menuUrl = null
+      this.form.path = ''
+      this.form.menuName = ''
+      this.form.menuNameEn = ''
+      this.form.menuNameRu = ''
+      this.form.menuUrl = ''
       this.form.menuType = 0
-      this.form.icon = null
-      this.form.code = null
-      this.form.serialNumber = null
-      this.form.remark = null
+      this.form.icon = ''
+      this.form.code = ''
+      this.form.serialNumber = ''
+      this.form.remark = ''
 
       this.form.isDel = this.DeletionType.Undeleted
       this.form.creator = this.Guid.Empty

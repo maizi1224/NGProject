@@ -5,7 +5,7 @@
     <stomp-mq/>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>删繁就简三秋树，领异标新二月花。如意Admin，为开源而生。</span>
+      <span>宁国市燕津投资管理有限公司</span>
       <!--<span>Copyright © 2021 RuYiAdmin All Rights Reserved.</span>-->
     </div>
   </div>
