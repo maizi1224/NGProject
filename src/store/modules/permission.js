@@ -113,80 +113,112 @@ const actions = {
       })
 
       // 添加系统帮助
-      asyncRoutes.push({
-        path: '/SystemDocument',
-        component: Layout,
-        redirect: 'noRedirect',
-        name: 'SystemDocument',
-        meta: {
-          title: '系统帮助',
-          icon: 'table'
-        },
-        children: [
-          {
-            path: 'SysDocument',
-            component: () => import('@/views/pdf/sysdocument'),
-            name: 'SysDocument',
-            meta: { title: '系统手册', icon: 'table' }
-          }
-        ]
-      })
+      // asyncRoutes.push({
+      //   path: '/SystemDocument',
+      //   component: Layout,
+      //   redirect: 'noRedirect',
+      //   name: 'SystemDocument',
+      //   meta: {
+      //     title: '系统帮助',
+      //     icon: 'table'
+      //   },
+      //   children: [
+      //     {
+      //       path: 'SysDocument',
+      //       component: () => import('@/views/pdf/sysdocument'),
+      //       name: 'SysDocument',
+      //       meta: { title: '系统手册', icon: 'table' }
+      //     }
+      //   ]
+      // })
 
       const user = JSON.parse(sessionStorage.getItem(getToken()))
       const codeGeneratorConfig = JSON.parse(sessionStorage.getItem('codeGeneratorConfig'))
       if (codeGeneratorConfig.isEnabled === true && user.isSupperAdmin === 1) {
-        // 添加代码生成器
-        asyncRoutes.push({
-          path: '/SystemHelp',
-          component: Layout,
-          redirect: 'noRedirect',
-          name: 'SystemHelp',
-          meta: {
-            title: '系统工具',
-            icon: 'table'
-          },
-          children: [
-            {
-              path: 'FormDesigner',
-              component: () => import('@/views/system/FormDesigner'),
-              name: 'FormDesigner',
-              meta: { title: '表单设计器', icon: 'table' }
-            },
-            {
-              path: 'CodeGenerator',
-              component: () => import('@/views/system/CodeGenerator'),
-              name: 'CodeGenerator',
-              meta: { title: '代码生成器', icon: 'table' }
-            },
-            {
-              path: 'SystemWebAPI',
-              component: () => import('@/views/system/SystemWebAPI'),
-              name: 'SystemWebAPI',
-              meta: { title: '系统WebAPI', icon: 'table' }
-            }
-          ]
-        })
+        // // 添加代码生成器
+        // asyncRoutes.push({
+        //   path: '/SystemHelp',
+        //   component: Layout,
+        //   redirect: 'noRedirect',
+        //   name: 'SystemHelp',
+        //   meta: {
+        //     title: '系统工具',
+        //     icon: 'table'
+        //   },
+        //   children: [
+        //     {
+        //       path: 'FormDesigner',
+        //       component: () => import('@/views/system/FormDesigner'),
+        //       name: 'FormDesigner',
+        //       meta: { title: '表单设计器', icon: 'table' }
+        //     },
+        //     {
+        //       path: 'CodeGenerator',
+        //       component: () => import('@/views/system/CodeGenerator'),
+        //       name: 'CodeGenerator',
+        //       meta: { title: '代码生成器', icon: 'table' }
+        //     },
+        //     {
+        //       path: 'SystemWebAPI',
+        //       component: () => import('@/views/system/SystemWebAPI'),
+        //       name: 'SystemWebAPI',
+        //       meta: { title: '系统WebAPI', icon: 'table' }
+        //     }
+        //   ]
+        // })
       }
 
-      // 添加大屏幕
+      // 添加代码生成器
       asyncRoutes.push({
-        path: '/DataViewer',
+        path: '/SystemHelp',
         component: Layout,
         redirect: 'noRedirect',
-        name: 'DataViewer',
+        name: 'SystemHelp',
         meta: {
-          title: '大数据',
+          title: '系统工具',
           icon: 'table'
         },
         children: [
           {
-            path: 'dataviewer',
-            component: () => import('@/views/data-view/datav'),
-            name: 'dataviewer',
-            meta: { title: '智慧大屏幕', icon: 'table' }
+            path: 'FormDesigner',
+            component: () => import('@/views/system/FormDesigner'),
+            name: 'FormDesigner',
+            meta: { title: '表单设计器', icon: 'table' }
+          },
+          {
+            path: 'CodeGenerator',
+            component: () => import('@/views/system/CodeGenerator'),
+            name: 'CodeGenerator',
+            meta: { title: '代码生成器', icon: 'table' }
+          },
+          {
+            path: 'SystemWebAPI',
+            component: () => import('@/views/system/SystemWebAPI'),
+            name: 'SystemWebAPI',
+            meta: { title: '系统WebAPI', icon: 'table' }
           }
         ]
       })
+
+      // 添加大屏幕
+      // asyncRoutes.push({
+      //   path: '/DataViewer',
+      //   component: Layout,
+      //   redirect: 'noRedirect',
+      //   name: 'DataViewer',
+      //   meta: {
+      //     title: '大数据',
+      //     icon: 'table'
+      //   },
+      //   children: [
+      //     {
+      //       path: 'dataviewer',
+      //       component: () => import('@/views/data-view/datav'),
+      //       name: 'dataviewer',
+      //       meta: { title: '智慧大屏幕', icon: 'table' }
+      //     }
+      //   ]
+      // })
 
       sessionStorage.setItem(getToken() + '_codes', codes.toString())
 
