@@ -302,6 +302,11 @@ export const BusinessLanguage = {
           CN: '操作类型：',
           EN: 'operation type',
           RU: 'operation type'
+        },
+        AssetMentCode: {
+          CN: '评估报告编码：',
+          EN: '',
+          RU: ''
         }
       },
       Placeholder: {
@@ -319,6 +324,11 @@ export const BusinessLanguage = {
           CN: '请选择操作类型',
           EN: 'please select operation type',
           RU: 'please select operation type'
+        },
+        Reserch: {
+          CN: '搜索关键字',
+          EN: '',
+          RU: ''
         }
       }
     },
@@ -1262,6 +1272,46 @@ export const BusinessLanguage = {
           EN: 'left and right layout',
           RU: 'left and right layout'
         }
+      }
+    }
+  },
+  AssetMent: {
+    Placeholder: {
+      AssetMentCode: {
+        CN: '评估报告编码',
+        EN: '',
+        RU: ''
+      },
+      Search: {
+        CN: '搜索关键字',
+        EN: '',
+        RU: ''
+      },
+      AssetMentTime: {
+        CN: '开始时间',
+        EN: '',
+        RU: ''
+      },
+      AssetCode: {
+        CN: '资产编号',
+        EN: '',
+        RU: ''
+      },
+      Refresh: {
+        CN: '刷新',
+        EN: '',
+        RU: ''
+      }
+    },
+    Grid: {
+      AssetMentCode: {
+        CN: '评估报告编码',
+        EN: '',
+        RU: ''
+      }, AssetMentTime: {
+        CN: '评估报告时间',
+        EN: '',
+        RU: ''
       }
     }
   },
