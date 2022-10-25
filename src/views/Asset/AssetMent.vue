@@ -13,10 +13,10 @@
             BusinessLanguage.AssetMent.Placeholder.AssetMentCode
           )
         "
-        prop="jobName"
+        prop="AssetCode"
       >
         <el-input
-          v-model="queryForm.jobName"
+          v-model="queryForm.AssetCode"
           :placeholder="
             BusinessLanguage.GetMenuName(
               BusinessLanguage.AssetMent.Placeholder.Search
@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item>
         <el-button
-          v-if="ButtonPermission('job:query:list')"
+          v-if="ButtonPermission('Asset:qurey:list')"
           type="success"
           size="mini"
           icon="el-icon-search"
@@ -40,7 +40,7 @@
         }}
         </el-button>
         <el-button
-          v-if="ButtonPermission('job:query:list')"
+          v-if="ButtonPermission('Asset:qurey:list')"
           type="warning"
           size="mini"
           icon="el-icon-refresh-left"
@@ -58,10 +58,10 @@
             BusinessLanguage.AssetMent.Placeholder.AssetCode
           )
         "
-        prop="jobName"
+        prop="AssetCode"
       >
         <el-input
-          v-model="queryForm.jobName"
+          v-model="queryForm.AssetCode"
           :placeholder="
             BusinessLanguage.GetMenuName(
               BusinessLanguage.AssetMent.Placeholder.Search
@@ -74,7 +74,7 @@
       </el-form-item>
       <el-form-item>
         <el-button
-          v-if="ButtonPermission('job:query:list')"
+          v-if="ButtonPermission('Asset:qurey:list')"
           type="success"
           size="mini"
           icon="el-icon-search"
@@ -85,7 +85,7 @@
         }}
         </el-button>
         <el-button
-          v-if="ButtonPermission('job:query:list')"
+          v-if="ButtonPermission('Asset:qurey:list')"
           type="warning"
           size="mini"
           icon="el-icon-refresh-left"
@@ -215,14 +215,14 @@
       <el-table-column
         type="index"
         :label="
-          BusinessLanguage.GetMenuName(BusinessLanguage.AssetMent.Grid.AssetMentCode)
+          BusinessLanguage.GetMenuName(BusinessLanguage.AssetMent.Placeholder.AssetMentCode)
         "
         width="560"
         :index="IndexMethod"
         align="center"
       />
       <el-table-column
-        prop="jobName"
+        prop="AssetCode"
         width="560"
         :label="
           BusinessLanguage.GetMenuName(
@@ -261,17 +261,17 @@
               <el-form-item
                 :label="
                   BusinessLanguage.GetMenuName(
-                    BusinessLanguage.ScheduleJob.Form.Field.JobName
+                    BusinessLanguage.AssetMent.Grid.AssetMentCode
                   )
                 "
-                prop="jobName"
+                prop="AssetCode"
               >
                 <el-input
-                  v-model="form.jobName"
+                  v-model="form.AssetCode"
                   prefix-icon="el-icon-search"
                   :placeholder="
                     BusinessLanguage.GetMenuName(
-                      BusinessLanguage.ScheduleJob.Form.Placeholder.JobName
+                      BusinessLanguage.AssetMent.Grid.AssetMentCode
                     )
                   "
                   class="colWidth"
@@ -510,122 +510,56 @@ import RuYiAdminBasePage from '@/components/BasePage/RuYiAdminBasePage'
 import { generateQueryItem } from '@/utils/query-item'
 
 export default {
-  name: 'ScheduleJobManagement',
+  name: 'AssetMent',
   extends: RuYiAdminBasePage,
   data() {
     return {
       queryForm: {
-        jobName: null
+        AssetCode: null
       },
       form: {
         id: null,
-        jobName: null,
-        jobDescription: null,
-        nameSpace: null,
-        jobImplement: null,
-        cronExpression: null,
-        startTime: null,
-        endTime: null,
-        groupId: null,
-        serialNumber: null,
-        remark: null,
-        isDel: null,
-        creator: null,
-        createTime: null,
-        modifier: null,
-        modifyTime: null
+        AssetCode: null,
+        BuildDate: null,
+        PersonId: null,
+        PersonName: null,
+        DepartmentId: null,
+        DepartName: null,
+        MAEPName: null,
+        Money: null,
+        MAEPFileGroupId: null
       },
       rules: {
-        jobName: [
+        AssetCode: [
           {
             required: true,
             message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Placeholder.JobName
+              this.BusinessLanguage.AssetMent.Placeholder.AssetMentCode
             ),
             trigger: 'blur'
           },
           {
             min: 0,
-            max: 128,
+            max: 255,
             message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Rule.MinLength128
-            ),
-            trigger: 'blur'
-          }
-        ],
-        jobDescription: [
-          {
-            min: 0,
-            max: 512,
-            message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Rule.MinLength512
-            ),
-            trigger: 'blur'
-          }
-        ],
-        nameSpace: [
-          {
-            required: true,
-            message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Placeholder.NameSpace
-            ),
-            trigger: 'blur'
-          },
-          {
-            min: 0,
-            max: 512,
-            message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Rule.MinLength512
-            ),
-            trigger: 'blur'
-          }
-        ],
-        jobImplement: [
-          {
-            required: true,
-            message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Placeholder.JobImplement
-            ),
-            trigger: 'blur'
-          },
-          {
-            min: 0,
-            max: 128,
-            message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Rule.MinLength128
-            ),
-            trigger: 'blur'
-          }
-        ],
-        cronExpression: [
-          {
-            required: true,
-            message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Placeholder.CronExpression
-            ),
-            trigger: 'blur'
-          },
-          {
-            min: 0,
-            max: 128,
-            message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Rule.MinLength128
+              this.BusinessLanguage.ScheduleJob.Form.Rule.MinLength255
             ),
             trigger: 'blur'
           }
         ]
+
       }
     }
   },
   watch: {},
   created() {
     // window.addEventListener('storage', this.afterQRScan)
-    this.url.queryList = 'ScheduleJobManagement/Post'
+    this.url.queryList = 'AssetMent/Post'
     this.url.queryEntity = 'ScheduleJobManagement/GetById/'
     this.url.addEntity = 'ScheduleJobManagement/Add'
     this.url.editEntity = 'ScheduleJobManagement/Put'
     this.url.deleteEntity = 'ScheduleJobManagement/Delete/'
-    this.queryCondition.Sort = 'SerialNumber ASC'
+    this.queryCondition.Sort = 'Id ASC'
   },
   mounted() {},
   destroyed() {
@@ -635,13 +569,13 @@ export default {
     searchData: function() {
       this.queryCondition.PageIndex = 0
       this.queryCondition.QueryItems = []
-      if (this.queryForm.jobName) {
+      if (this.queryForm.AssetCode) {
         this.queryCondition.QueryItems.push(
           generateQueryItem(
-            'JobName',
+            'AssetCode',
             this.DataType.String,
             this.QueryMethod.Like,
-            this.queryForm.jobName
+            this.queryForm.AssetCode
           )
         )
       }
@@ -652,13 +586,6 @@ export default {
       this.title = this.BusinessLanguage.GetMenuName(
         this.BusinessLanguage.ScheduleJob.DialogTitle.Add
       )
-      this.form.id = this.Guid.Empty
-      this.form.isDel = this.DeletionType.Undeleted
-      this.form.creator = this.Guid.Empty
-      this.form.createTime = this.DateTime.Default
-      this.form.modifier = this.Guid.Empty
-      this.form.modifyTime = this.DateTime.Default
-      this.dialogFormVisible = true
     },
     edit: function() {
       this.loading = true
@@ -675,91 +602,15 @@ export default {
     },
     resetForm: function() {
       this.form.id = null
-      this.form.jobName = null
-      this.form.jobDescription = null
-      this.form.nameSpace = null
-      this.form.jobImplement = null
-      this.form.cronExpression = null
-      this.form.startTime = null
-      this.form.endTime = null
-      this.form.serialNumber = null
-      this.form.groupId = null
-      this.form.remark = null
-      this.form.isDel = null
-      this.form.creator = null
-      this.form.createTime = null
-      this.form.modifier = null
-      this.form.modifyTime = null
-    },
-    start: function() {
-      const row = this.multipleSelection[0]
-      if (row.jobStatus === this.JobStatus.Running) {
-        this.$message({
-          showClose: true,
-          message: this.BusinessLanguage.GetMenuName(
-            this.BusinessLanguage.ScheduleJob.Grid.Tooltip.Running
-          ),
-          type: 'warning'
-        })
-        return
-      }
-      if (row.jobStatus === this.JobStatus.Stopped) {
-        this.$message({
-          showClose: true,
-          message: this.BusinessLanguage.GetMenuName(
-            this.BusinessLanguage.ScheduleJob.Grid.Tooltip.Reset
-          ),
-          type: 'warning'
-        })
-        return
-      }
-      this.RuYiAdmin.Get(
-        'ScheduleJobManagement/StartScheduleJob/' + row.id,
-        null
-      ).then((response) => {
-        this.$message({
-          showClose: true,
-          message: this.BusinessLanguage.GetMenuName(
-            this.BusinessLanguage.ScheduleJob.Grid.Message.Start
-          ),
-          type: 'success'
-        })
-        this.editDisabled = true
-        this.delDisabled = true
-        setTimeout(() => {
-          this.InitData()
-        }, 1000)
-      })
-    },
-    pause: function() {
-      const row = this.multipleSelection[0]
-      if (row.jobStatus !== this.JobStatus.Running) {
-        this.$message({
-          showClose: true,
-          message: this.BusinessLanguage.GetMenuName(
-            this.BusinessLanguage.ScheduleJob.Grid.Tooltip.Stopping
-          ),
-          type: 'warning'
-        })
-        return
-      }
-      this.RuYiAdmin.Get(
-        'ScheduleJobManagement/PauseScheduleJob/' + row.id,
-        null
-      ).then((response) => {
-        this.$message({
-          showClose: true,
-          message: this.BusinessLanguage.GetMenuName(
-            this.BusinessLanguage.ScheduleJob.Grid.Message.Pause
-          ),
-          type: 'success'
-        })
-        this.editDisabled = true
-        this.delDisabled = true
-        setTimeout(() => {
-          this.InitData()
-        }, 1000)
-      })
+      this.form.AssetCode = null
+      this.form.BuildDate = null
+      this.form.PersonId = null
+      this.form.PersonName = null
+      this.form.DepartmentId = null
+      this.form.DepartName = null
+      this.form.MAEPName = null
+      this.form.Money = null
+      this.form.MAEPFileGroupId = null
     },
     resume: function() {
       const row = this.multipleSelection[0]

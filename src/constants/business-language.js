@@ -1034,6 +1034,11 @@ export const BusinessLanguage = {
           EN: 'length less than or equal 128',
           RU: 'length less than or equal 128'
         },
+        MinLength255: {
+          CN: '长度在 0 到 255个字符',
+          EN: 'length less than or equal 255',
+          RU: 'length less than or equal 255'
+        },
         MinLength512: {
           CN: '长度在 0 到 512 个字符',
           EN: 'length less than or equal 512',
