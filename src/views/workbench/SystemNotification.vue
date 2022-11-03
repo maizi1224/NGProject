@@ -126,9 +126,9 @@
             <el-row>
               <el-col :span="24">
                 <div>
-                  <div style="text-align: center">{{ this.form.title }}</div>
+                  <div style="text-align: center">{{ form.title }}</div>
                   <el-divider />
-                  <div v-html="this.form.content" />
+                  <div v-html="form.content" />
                 </div>
               </el-col>
             </el-row>

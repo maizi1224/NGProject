@@ -1297,6 +1297,11 @@ export const BusinessLanguage = {
         EN: '',
         RU: ''
       },
+      Adress: {
+        CN: '地址',
+        EN: '',
+        RU: ''
+      },
       AssetCode: {
         CN: '资产编号',
         EN: '',
