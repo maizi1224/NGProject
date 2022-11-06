@@ -1322,7 +1322,68 @@ export const BusinessLanguage = {
         CN: '评估报告时间',
         EN: '',
         RU: ''
+      },
+      AssetsCode: {
+        CN: '资产编号',
+        EN: '',
+        RU: ''
+      },
+      AssetsType: {
+        CN: '资产类型',
+        EN: '',
+        RU: ''
+      },
+      AssetsState: {
+        CN: '资产状态',
+        EN: '',
+        RU: ''
+      },
+      AssetsArea: {
+        CN: '面积(m²)',
+        EN: '',
+        RU: ''
+      },
+      AssetsAdress: {
+        CN: '地址',
+        EN: '',
+        RU: ''
+      },
+      lessee: {
+        CN: '承租单位',
+        EN: '',
+        RU: ''
+      },
+      lesseePhone: {
+        CN: '联系电话',
+        EN: '',
+        RU: ''
+      },
+      ContracStartDate: {
+        CN: '租期起始日期',
+        EN: '',
+        RU: ''
+      },
+      ContractEndDate: {
+        CN: '租期结束日期',
+        EN: '',
+        RU: ''
+      },
+      ContractPrice: {
+        CN: '年租金',
+        EN: '',
+        RU: ''
+      },
+      ContractMoney: {
+        CN: '合同总额',
+        EN: '',
+        RU: ''
+      },
+      AssetUseType: {
+        CN: '资产处置方式',
+        EN: '',
+        RU: ''
       }
+
     }
   },
   GetMenuName: function(type) {
