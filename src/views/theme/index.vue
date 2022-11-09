@@ -105,9 +105,8 @@ export default {
   vertical-align: middle;
 }
 .box-card {
-  width: 400px;
-  max-width: 100%;
-  margin: 20px auto;
+  width: 1200px;
+  margin: auto;
 }
 
 .block {

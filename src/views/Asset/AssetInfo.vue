@@ -332,166 +332,114 @@
       modal="true"
       modal-append-to-body="true"
       class="demo-ruleForm"
+      center
     >
       <el-card class="box-card">
         <el-form
           ref="form"
           :model="form"
           :rules="rules"
-          label-width="100px"
+          label-width="auto"
           label-position="left"
         >
           <el-row>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.AssetMent.Grid.AssetMentCode
-                  )
-                "
-                prop="AssetsCode"
+                label="资产编号"
+                prop="id"
               >
                 <el-input
-                  v-model="form.AssetCode"
+                  v-model="form.id"
                   prefix-icon="el-icon-search"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.AssetMent.Grid.AssetMentCode
-                    )
-                  "
+                  placeholder="请输入资产编号"
                   class="colWidth"
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.ScheduleJob.Form.Field.JobDescription
-                  )
-                "
-                prop="jobDescription"
+                label="档案编号"
+                prop="assetsCode"
               >
                 <el-input
-                  v-model="form.jobDescription"
+                  v-model="form.assetsCode"
                   prefix-icon="el-icon-search"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.ScheduleJob.Form.Placeholder
-                        .JobDescription
-                    )
-                  "
+                  placeholder="请输入档案编号"
                   class="colWidth"
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.ScheduleJob.Form.Field.NameSpace
-                  )
-                "
-                prop="nameSpace"
-              >
-                <el-input
-                  v-model="form.nameSpace"
-                  prefix-icon="el-icon-search"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.ScheduleJob.Form.Placeholder.NameSpace
-                    )
-                  "
-                  class="colWidth"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.ScheduleJob.Form.Field.JobImplement
-                  )
-                "
-                prop="jobImplement"
-              >
-                <el-input
-                  v-model="form.jobImplement"
-                  prefix-icon="el-icon-search"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.ScheduleJob.Form.Placeholder.JobImplement
-                    )
-                  "
-                  class="colWidth"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.ScheduleJob.Form.Field.CronExpression
-                  )
-                "
-                prop="cronExpression"
-              >
-                <el-input
-                  v-model="form.cronExpression"
-                  prefix-icon="el-icon-search"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.ScheduleJob.Form.Placeholder
-                        .CronExpression
-                    )
-                  "
-                  class="colWidth"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.ScheduleJob.Form.Field.GroupId
-                  )
-                "
-                prop="groupId"
-              >
-                <el-input
-                  v-model="form.groupId"
-                  prefix-icon="el-icon-search"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.ScheduleJob.Form.Placeholder.GroupId
-                    )
-                  "
-                  class="colWidth"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.ScheduleJob.Form.Field.StartTime
-                  )
-                "
-                prop="StartTime"
+                label="资产取得时间"
+                prop="assetsGetDate"
               >
                 <el-date-picker
-                  v-model="form.startTime"
-                  type="datetime"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.ScheduleJob.Form.Placeholder.StartTime
-                    )
-                  "
-                  class="colWidth"
+                  v-model="form.assetsGetDate"
+                  type="date"
+                  placeholder="请输入资产取得时间"
+                  :picker-options="pickerOptions"
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
+              <el-form-item
+                label="资产类型"
+                prop="assetsTypeId"
+              >
+                <el-select v-model="form.assetsTypeId" placeholder="请选择资产类型">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="资产来源"
+                prop="assetsSourceId"
+              >
+                <el-select v-model="form.assetsSourceId" placeholder="请选择资产来源">
+                  <el-option
+                    v-for="item in options2"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="资产状态"
+                prop="assetsState"
+              >
+                <el-select v-model="form.assetsState" placeholder="请选择资产状态">
+                  <el-option
+                    v-for="item in options3"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="16">
+              <el-form-item
+                label="资产地址"
+                prop="assetsAdress"
+              >
+                <el-input
+                  v-model="form.assetsAdress"
+                  prefix-icon="el-icon-search"
+                  placeholder="请输入资产地址"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item
                 :label="
                   BusinessLanguage.GetMenuName(
@@ -634,7 +582,80 @@ export default {
           }
         ]
 
-      }
+      },
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        },
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      options: [{
+        value: -1,
+        label: ''
+      }, {
+        value: 0,
+        label: '租赁型住宅'
+      }, {
+        value: 1,
+        label: '租赁型门面房'
+      }, {
+        value: 2,
+        label: '土地'
+      }, {
+        value: 3,
+        label: '经营性用房'
+      },
+      {
+        value: 4,
+        label: '商服用房'
+      },
+      {
+        value: 5,
+        label: '工厂用房'
+      }, {
+        value: 6,
+        label: '沿街商铺'
+      }],
+      options2: [
+        {
+          value: -1,
+          label: ''
+        },
+        {
+          value: 0,
+          label: '代管'
+
+        },
+        {
+          value: 1,
+          label: '自购'
+
+        }
+      ],
+      options3: [
+        {
+          value: 0,
+          label: '闲置中'
+
+        },
+        {
+          value: 1,
+          label: '出租中'
+
+        }
+      ]
     }
   },
   watch: {},
@@ -717,6 +738,7 @@ export default {
       this.form.id = null
       this.form.assetsCode = null
       this.form.assetsAdress = null
+      this.form.assetsState = 0
     },
     resume: function() {
       const row = this.multipleSelection[0]
@@ -753,4 +775,13 @@ export default {
 </script>
 
   <style scoped>
+  .box-card {
+  width: 1000px;
+  margin: auto;
+}
+.colWidth
+{
+width: 200px;
+}
+
 </style>
