@@ -325,27 +325,24 @@
         @current-change="HandleCurrentChange"
       />
     </div>
-    <el-dialog
-      :title="title"
-      :visible.sync="dialogFormVisible"
-      fullscreen="true"
-      modal="true"
-      modal-append-to-body="true"
-      class="demo-ruleForm"
-      center
-    >
+    <el-drawer ref="drawer" title="新增资产" :visible.sync="dialogFormVisible" direction="ttb" :before-close="handleClose" size="100%" class="Maindrawer">
+
       <el-card class="box-card">
+
         <el-form
           ref="form"
           :model="form"
           :rules="rules"
           label-width="auto"
           label-position="left"
+          size="small"
+          class="overflowauto"
         >
           <el-row>
             <el-col :span="8">
               <el-form-item
                 label="资产编号"
+                label-width="auto"
                 prop="id"
               >
                 <el-input
@@ -382,6 +379,9 @@
                 />
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item
                 label="资产类型"
@@ -417,7 +417,7 @@
                 label="资产状态"
                 prop="assetsState"
               >
-                <el-select v-model="form.assetsState" placeholder="请选择资产状态">
+                <el-select v-model="form.assetsState" class="colWidth2" placeholder="请选择资产状态">
                   <el-option
                     v-for="item in options3"
                     :key="item.value"
@@ -427,6 +427,8 @@
                 </el-select>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="16">
               <el-form-item
                 label="资产地址"
@@ -441,100 +443,256 @@
             </el-col>
             <el-col :span="8">
               <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.ScheduleJob.Form.Field.EndTime
-                  )
-                "
-                prop="EndTime"
-              >
-                <el-date-picker
-                  v-model="form.endTime"
-                  type="datetime"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.ScheduleJob.Form.Placeholder.EndTime
-                    )
-                  "
-                  class="colWidth"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.Common.Grid.Index
-                  )
-                "
-                prop="SerialNumber"
-              >
-                <el-input-number
-                  v-model="form.serialNumber"
-                  :min="0"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.Common.Form.Placeholder.SerialNumber
-                    )
-                  "
-                  :label="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.Common.Form.Placeholder.SerialNumber
-                    )
-                  "
-                  class="colWidth"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item
-                :label="
-                  BusinessLanguage.GetMenuName(
-                    BusinessLanguage.Common.Grid.Remark
-                  )
-                "
-                prop="Remark"
+                label="地图标注"
+                prop="mapInfo"
               >
                 <el-input
-                  v-model="form.remark"
-                  type="text"
+                  v-model="form.mapInfo"
                   prefix-icon="el-icon-search"
-                  :placeholder="
-                    BusinessLanguage.GetMenuName(
-                      BusinessLanguage.Common.Form.Placeholder.Remark
-                    )
-                  "
+                  placeholder="请输入地图标注"
                 />
               </el-form-item>
             </el-col>
           </el-row>
+          <el-col :span="24">
+            <el-form-item
+              label="产权人"
+              prop="propertyOwner"
+            >
+              <el-autocomplete
+                v-model="form.propertyOwner"
+                type="textarea"
+                :fetch-suggestions="querySearch"
+                placeholder="请输入产权人"
+                class="colWidth2"
+              />
+            </el-form-item>
+          </el-col>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item
+                label="资产用途描述"
+                prop="assetsFor"
+              >
+                <el-input
+                  v-model="form.assetsFor"
+                  type="textarea"
+                  class="colWidth2"
+                  placeholder="请输入资产用途描述"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item
+                label="相关资料附件"
+                prop="assetsFor"
+              >
+                <el-upload
+                  class="upload-demo"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :before-remove="beforeRemove"
+                  multiple
+                  :limit="5"
+                  :on-exceed="handleExceed"
+                  :file-list="fileList"
+                >
+                  <el-button size="small" type="primary">点击上传</el-button>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item
+                label="评估基准日期"
+                prop="assetsGetDate"
+              >
+                <el-date-picker
+                  v-model="form.assetsGetDate"
+                  type="date"
+                  placeholder="请输入评估基准日期"
+                  :picker-options="pickerOptions"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="评估面积"
+                prop="assetsCode"
+              >
+                <el-input v-model="form.assetsCode" placeholder="评估面积"><template slot="append">m²</template></el-input>
+
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="评估价值"
+                prop="assetsCode"
+              >
+                <el-input v-model="form.assetsCode" placeholder="评估租赁价值"><template slot="append">元/年</template></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="房产证号" prop="assetsGetDate">
+                <el-input v-model="form.assetsCode" placeholder="请输入房产证号" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="土地证号" prop="assetsCode">
+                <el-input v-model="form.assetsCode" placeholder="请输入土地证号" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="不动产权号" prop="assetsCode">
+                <el-input v-model="form.assetsCode" placeholder="请输入不动产权号" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="24">
+              <el-form-item
+                label="产权资料附件"
+                prop="assetsFor"
+              >
+                <el-upload
+                  class="upload-demo"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :before-remove="beforeRemove"
+                  multiple
+                  :limit="5"
+                  :on-exceed="handleExceed"
+                  :file-list="fileList"
+                >
+                  <el-button size="small" type="primary">点击上传</el-button>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="16">
+              <el-form-item label="合同编号" prop="assetsGetDate">
+                <el-input v-model="form.assetsCode" placeholder="请输入合同编号" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="合同类型"
+                prop="assetsState"
+              >
+                <el-select v-model="form.assetsState" class="colWidth2" placeholder="请选择合同类型">
+                  <el-option
+                    v-for="item in options5"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="16">
+              <el-form-item label="承租人" prop="assetsGetDate">
+                <el-input v-model="form.assetsCode" placeholder="承租人(单位)" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="联系电话" prop="assetsGetDate">
+                <el-input v-model="form.assetsCode" placeholder="" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item
+                label="承租起始日期"
+                prop="assetsGetDate"
+              >
+                <el-date-picker
+                  v-model="form.assetsGetDate"
+                  type="date"
+                  placeholder=""
+                  :picker-options="pickerOptions"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="终止日期"
+                prop="assetsGetDate"
+              >
+                <el-date-picker
+                  v-model="form.assetsGetDate"
+                  type="date"
+                  placeholder=""
+                  :picker-options="pickerOptions"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="总租期" prop="assetsGetDate">
+                <el-input v-model="form.assetsCode" placeholder="">
+                  <template slot="append">年</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="保证金" prop="assetsGetDate">
+                <el-input v-model="form.assetsCode" placeholder="">
+                  <template slot="append">元/年</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="年租金" prop="assetsGetDate">
+                <el-input v-model="form.assetsCode" placeholder="">
+                  <template slot="append">元/年</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="合同总金额" prop="assetsGetDate">
+                <el-input v-model="form.assetsCode" placeholder="">
+                  <template slot="append">元</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item
+                label="处置方式"
+                prop="assetsSourceId"
+              >
+                <el-select v-model="form.assetsSourceId" placeholder="请选择资产来源">
+                  <el-option
+                    v-for="item in options6"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
         </el-form>
+
       </el-card>
-      <div slot="footer" class="dialog-footer">
-        <el-button
-          icon="el-icon-circle-check"
-          plain
-          size="mini"
-          type="success"
-          @click="SubmitForm"
-        >
-          {{
-            BusinessLanguage.GetMenuName(BusinessLanguage.Common.Dialog.Sure)
-          }}
-        </el-button>
-        <el-button
-          icon="el-icon-close"
-          plain
-          size="mini"
-          type="danger"
-          @click="dialogFormVisible = false"
-        >
-          {{
-            BusinessLanguage.GetMenuName(BusinessLanguage.Common.Dialog.Cancel)
-          }}
-        </el-button>
+      <div class="demo-drawer__footer">
+        <el-button @click="cancelForm">取 消</el-button>
+        <el-button type="primary" :loading="loading" @click="$refs.drawer.closeDrawer()">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
       </div>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
@@ -547,14 +705,20 @@ export default {
   extends: RuYiAdminBasePage,
   data() {
     return {
+      timer: null,
+      loading: false,
+      restaurants: [],
+      fileList: [],
       queryForm: {
         AssetCode: null,
         assetsAdress: null
+
       },
       form: {
         id: null,
         AssetCode: null,
         assetsAdress: null,
+        propertyOwner: '',
         PersonId: null,
         PersonName: null,
         DepartmentId: null,
@@ -655,6 +819,48 @@ export default {
           label: '出租中'
 
         }
+      ],
+      options4: [
+        { 'value': '宁国市燕津投资管理有限公司' },
+        { 'value': '宁国市国有资产投资运营公司' },
+        { 'value': '宁国市新城镇化建设有限公司' }
+      ],
+      options5: [
+        {
+          value: 0,
+          label: '公开租拍合同'
+        },
+        {
+          value: 1,
+          label: '协议租赁合同'
+        },
+        {
+          value: 3,
+          label: '出借协议'
+        }
+      ],
+      options6: [
+        {
+          value: 0,
+          label: '移交'
+        },
+        {
+          value: 1,
+          label: '拆迁'
+        },
+        {
+          value: 2,
+          label: '出借'
+        },
+        {
+          value: 3,
+          label: '停用'
+        },
+        {
+          value: 4,
+          label: '正常管理'
+        }
+
       ]
     }
   },
@@ -668,11 +874,74 @@ export default {
     this.url.deleteEntity = 'ScheduleJobManagement/Delete/'
     this.queryCondition.Sort = 'Id ASC'
   },
-  mounted() {},
+  mounted() {
+
+  },
   destroyed() {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    cancelForm() {
+      this.$confirm('是否在离开前保存资产信息?', '确认信息', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '保存',
+        cancelButtonText: '放弃修改'
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '保存成功'
+          })
+          this.loading = false
+          this.dialogFormVisible = false
+          clearTimeout(this.timer)
+        })
+        .catch(action => {
+          this.$message({
+            type: 'info',
+            message: action === 'cancel'
+              ? '放弃保存并离开页面'
+              : '停留在当前页面'
+          })
+          this.loading = false
+          this.dialogFormVisible = false
+          clearTimeout(this.timer)
+        })
+    },
+    handleClose(done) {
+      if (this.loading) {
+        return
+      }
+      this.loading = true
+      this.timer = setTimeout(() => {
+        this.$message({
+          type: 'success',
+          message: '保存成功'
+        })
+        // 动画关闭需要一定的时间
+        setTimeout(() => {
+          this.loading = false
+          this.dialogFormVisible = false
+          clearTimeout(this.timer)
+        }, 400)
+      }, 2000)
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`)
+    },
+    querySearch(queryString, cb) {
+      var results = queryString ? this.options4.filter(this.createFilter(queryString)) : this.options4
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
+    },
     searchData: function() {
       this.queryCondition.PageIndex = 0
       this.queryCondition.QueryItems = []
@@ -783,5 +1052,32 @@ export default {
 {
 width: 200px;
 }
+.colWidth2
+{
+  width: 100%;
+}
+.upload-demo
+{
+  width:100%;
 
+}
+.Maindrawer  {
+  text-align: center;
+}
+.overflowauto{
+    overflow-y: auto;
+    width: 100%;
+    height: 750px;
+}
+.overflowauto::-webkit-scrollbar
+{
+  height: 6px;
+  width: 6px;
+}
+.overflowauto::-webkit-scrollbar-thumb{
+  background: rgb(224, 214, 235);
+}
+.demo-drawer__footer{
+  margin-top: 10px;
+}
 </style>
