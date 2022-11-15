@@ -153,7 +153,7 @@
     >
       <el-table-column align="center" type="selection" />
       <el-table-column
-        prop="assetsCode"
+        prop="id"
         align="center"
         :label="
           BusinessLanguage.GetMenuName(BusinessLanguage.AssetMent.Grid.AssetsCode)
@@ -339,6 +339,11 @@
           class="overflowauto"
         >
           <el-row>
+            <el-col :span="24">
+              <el-divider content-position="center">资产基本信息</el-divider>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="8">
               <el-form-item
                 label="资产编号"
@@ -348,7 +353,7 @@
                 <el-input
                   v-model="form.id"
                   prefix-icon="el-icon-search"
-                  placeholder="请输入资产编号"
+                  :disabled="true"
                   class="colWidth"
                 />
               </el-form-item>
@@ -387,7 +392,7 @@
                 label="资产类型"
                 prop="assetsTypeId"
               >
-                <el-select v-model="form.assetsTypeId" placeholder="请选择资产类型">
+                <el-select v-model="form.assetsTypeId" class="colWidth" placeholder="请选择资产类型">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -402,7 +407,7 @@
                 label="资产来源"
                 prop="assetsSourceId"
               >
-                <el-select v-model="form.assetsSourceId" placeholder="请选择资产来源">
+                <el-select v-model="form.assetsSourceId" class="colWidth" placeholder="请选择资产来源">
                   <el-option
                     v-for="item in options2"
                     :key="item.value"
@@ -429,16 +434,35 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="16">
+
+            <el-col :span="8">
               <el-form-item
-                label="资产地址"
-                prop="assetsAdress"
+                label="产权人"
+                prop="propertyOwner"
               >
-                <el-input
-                  v-model="form.assetsAdress"
-                  prefix-icon="el-icon-search"
-                  placeholder="请输入资产地址"
-                />
+                <el-select v-model="form.propertyOwner" class="colWidth">
+                  <el-option
+                    v-for="item in options4"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="处置方式"
+                prop="assetsSourceId"
+              >
+                <el-select v-model="form.assetUseType" class="colWidth" placeholder="请选择资产来源">
+                  <el-option
+                    v-for="item in options6"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -454,20 +478,15 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-col :span="24">
-            <el-form-item
-              label="产权人"
-              prop="propertyOwner"
-            >
-              <el-autocomplete
-                v-model="form.propertyOwner"
-                type="textarea"
-                :fetch-suggestions="querySearch"
-                placeholder="请输入产权人"
-                class="colWidth2"
-              />
-            </el-form-item>
-          </el-col>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="资产地址" prop="assetsAdress">
+                <el-input v-model="form.assetsAdress" type="textarea" prefix-icon="el-icon-search" placeholder="请输入资产地址" />
+              </el-form-item>
+            </el-col>
+
+          </el-row>
+
           <el-row>
             <el-col :span="24">
               <el-form-item
@@ -483,6 +502,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="24">
               <el-form-item
@@ -491,12 +511,15 @@
               >
                 <el-upload
                   class="upload-demo"
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :action="importUrl0"
+                  :headers="headers"
                   :before-remove="beforeRemove"
                   multiple
-                  :limit="5"
+                  :limit="limit"
                   :on-exceed="handleExceed"
-                  :file-list="fileList"
+                  :on-success="handleSuccess"
+                  :before-upload="beforeUpload"
+                  :file-list="form.assetsFileGroupFiles"
                 >
                   <el-button size="small" type="primary">点击上传</el-button>
                 </el-upload>
@@ -504,13 +527,60 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="24">
+              <el-divider content-position="center">产权信息</el-divider>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="房产证号" prop="assetsGetDate">
+                <el-input v-model="form.propertyCode" placeholder="请输入房产证号" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="土地证号" prop="assetsCode">
+                <el-input v-model="form.landCode" placeholder="请输入土地证号" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="不动产权号" prop="assetsCode">
+                <el-input v-model="form.landPropertyInfo" placeholder="请输入不动产权号" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="24">
+              <el-form-item
+                label="产权资料附件"
+              >
+                <el-upload
+                  class="upload-demo"
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :before-remove="beforeRemove"
+                  multiple
+                  :limit="5"
+                  :on-exceed="handleExceed"
+                  :before-upload="beforeUpload"
+                  :file-list="form.propertyFileGroupFiles"
+                >
+                  <el-button size="small" type="primary">点击上传</el-button>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-divider content-position="center">资产评估信息</el-divider>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="8">
               <el-form-item
                 label="评估基准日期"
-                prop="assetsGetDate"
               >
                 <el-date-picker
-                  v-model="form.assetsGetDate"
+                  v-model="form.assetsMent.buildDate"
                   type="date"
                   placeholder="请输入评估基准日期"
                   :picker-options="pickerOptions"
@@ -520,64 +590,28 @@
             <el-col :span="8">
               <el-form-item
                 label="评估面积"
-                prop="assetsCode"
               >
-                <el-input v-model="form.assetsCode" placeholder="评估面积"><template slot="append">m²</template></el-input>
+                <el-input v-model="form.assetsMent.assessArea" placeholder="评估面积"><template slot="append">m²</template></el-input>
 
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item
                 label="评估价值"
-                prop="assetsCode"
               >
-                <el-input v-model="form.assetsCode" placeholder="评估租赁价值"><template slot="append">元/年</template></el-input>
+                <el-input v-model="form.assetsMent.assetPriceOneYear" placeholder="评估租赁价值"><template slot="append">元/年</template></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="房产证号" prop="assetsGetDate">
-                <el-input v-model="form.assetsCode" placeholder="请输入房产证号" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="土地证号" prop="assetsCode">
-                <el-input v-model="form.assetsCode" placeholder="请输入土地证号" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="不动产权号" prop="assetsCode">
-                <el-input v-model="form.assetsCode" placeholder="请输入不动产权号" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
           <el-row>
             <el-col :span="24">
-              <el-form-item
-                label="产权资料附件"
-                prop="assetsFor"
-              >
-                <el-upload
-                  class="upload-demo"
-                  action="https://jsonplaceholder.typicode.com/posts/"
-                  :before-remove="beforeRemove"
-                  multiple
-                  :limit="5"
-                  :on-exceed="handleExceed"
-                  :file-list="fileList"
-                >
-                  <el-button size="small" type="primary">点击上传</el-button>
-                </el-upload>
-              </el-form-item>
+              <el-divider content-position="center">最近合同信息</el-divider>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="16">
               <el-form-item label="合同编号" prop="assetsGetDate">
-                <el-input v-model="form.assetsCode" placeholder="请输入合同编号" />
+                <el-input v-model="form.contractinfo.contractCode" placeholder="请输入合同编号" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -585,7 +619,7 @@
                 label="合同类型"
                 prop="assetsState"
               >
-                <el-select v-model="form.assetsState" class="colWidth2" placeholder="请选择合同类型">
+                <el-select v-model="form.contractinfo.contractType" class="colWidth2" placeholder="请选择合同类型">
                   <el-option
                     v-for="item in options5"
                     :key="item.value"
@@ -599,12 +633,12 @@
           <el-row>
             <el-col :span="16">
               <el-form-item label="承租人" prop="assetsGetDate">
-                <el-input v-model="form.assetsCode" placeholder="承租人(单位)" />
+                <el-input v-model="form.contractinfo.lessee" placeholder="承租人(单位)" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="联系电话" prop="assetsGetDate">
-                <el-input v-model="form.assetsCode" placeholder="" />
+                <el-input v-model="form.contractinfo.lesseePhone" placeholder="" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -616,7 +650,7 @@
                 prop="assetsGetDate"
               >
                 <el-date-picker
-                  v-model="form.assetsGetDate"
+                  v-model="form.contractinfo.contracStartDate"
                   type="date"
                   placeholder=""
                   :picker-options="pickerOptions"
@@ -629,7 +663,7 @@
                 prop="assetsGetDate"
               >
                 <el-date-picker
-                  v-model="form.assetsGetDate"
+                  v-model="form.contractinfo.contractEndDate"
                   type="date"
                   placeholder=""
                   :picker-options="pickerOptions"
@@ -638,7 +672,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="总租期" prop="assetsGetDate">
-                <el-input v-model="form.assetsCode" placeholder="">
+                <el-input v-model="form.contractinfo.contractLife" placeholder="">
                   <template slot="append">年</template>
                 </el-input>
               </el-form-item>
@@ -647,40 +681,23 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="保证金" prop="assetsGetDate">
-                <el-input v-model="form.assetsCode" placeholder="">
+                <el-input v-model="form.contractinfo.contractPrice" placeholder="">
                   <template slot="append">元/年</template>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="年租金" prop="assetsGetDate">
-                <el-input v-model="form.assetsCode" placeholder="">
+                <el-input v-model="form.contractinfo.contractPromiseMoney" placeholder="">
                   <template slot="append">元/年</template>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="合同总金额" prop="assetsGetDate">
-                <el-input v-model="form.assetsCode" placeholder="">
+                <el-input v-model="form.contractinfo.contractMoney" placeholder="">
                   <template slot="append">元</template>
                 </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item
-                label="处置方式"
-                prop="assetsSourceId"
-              >
-                <el-select v-model="form.assetsSourceId" placeholder="请选择资产来源">
-                  <el-option
-                    v-for="item in options6"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -690,7 +707,7 @@
       </el-card>
       <div class="demo-drawer__footer">
         <el-button @click="cancelForm">取 消</el-button>
-        <el-button type="primary" :loading="loading" @click="$refs.drawer.closeDrawer()">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
+        <el-button type="primary" :loading="loading" @click="SubmitForm">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
       </div>
     </el-drawer>
   </div>
@@ -705,6 +722,10 @@ export default {
   extends: RuYiAdminBasePage,
   data() {
     return {
+      limit: 5,
+      headers: null,
+      importUrl0: process.env.VUE_APP_BASE_API + '/Files/UploadFiles?businessId=0',
+      importUrl1: process.env.VUE_APP_BASE_API + '/Files/UploadFiles?businessId=1',
       timer: null,
       loading: false,
       restaurants: [],
@@ -715,17 +736,40 @@ export default {
 
       },
       form: {
-        id: null,
-        AssetCode: null,
-        assetsAdress: null,
+        id: '',
+        assetsCode: '',
+        assetsGetDate: null,
+        assetsTypeId: -1,
+        assetsSourceId: -1,
+        assetsState: 0,
+        assetsAdress: '',
         propertyOwner: '',
-        PersonId: null,
-        PersonName: null,
-        DepartmentId: null,
-        DepartName: null,
-        MAEPName: null,
-        Money: null,
-        MAEPFileGroupId: null
+        assetsFor: '',
+        assetsFileGroupId: '',
+        assetsFileGroupFiles: [],
+        assetsMent: {
+          buildDate: null,
+          assessArea: null,
+          assetPriceOneYear: null
+        },
+        propertyCode: '',
+        landCode: null,
+        landPropertyInfo: null,
+        propertyFileGroupId: '',
+        propertyFileGroupFiles: [],
+        contractinfo: {
+          contractCode: '',
+          contractType: -1,
+          lessee: '',
+          lesseePhone: '',
+          contracStartDate: null,
+          contractEndDate: null,
+          contractLife: null,
+          contractPrice: null,
+          contractPromiseMoney: null,
+          contractMoney: null
+        },
+        assetUseType: -1
       },
       rules: {
         AssetCode: [
@@ -767,7 +811,7 @@ export default {
       },
       options: [{
         value: -1,
-        label: ''
+        label: ' '
       }, {
         value: 0,
         label: '租赁型住宅'
@@ -795,7 +839,7 @@ export default {
       options2: [
         {
           value: -1,
-          label: ''
+          label: ' '
         },
         {
           value: 0,
@@ -827,6 +871,10 @@ export default {
       ],
       options5: [
         {
+          value: -1,
+          label: ' '
+        },
+        {
           value: 0,
           label: '公开租拍合同'
         },
@@ -840,6 +888,10 @@ export default {
         }
       ],
       options6: [
+        {
+          value: -1,
+          label: ' '
+        },
         {
           value: 0,
           label: '移交'
@@ -869,10 +921,11 @@ export default {
     // window.addEventListener('storage', this.afterQRScan)
     this.url.queryList = 'Asset/Post'
     this.url.queryEntity = 'ScheduleJobManagement/GetById/'
-    this.url.addEntity = 'ScheduleJobManagement/Add'
+    this.url.addEntity = 'Asset/Add'
     this.url.editEntity = 'ScheduleJobManagement/Put'
     this.url.deleteEntity = 'ScheduleJobManagement/Delete/'
     this.queryCondition.Sort = 'Id ASC'
+    this.refreshLocalToken()
   },
   mounted() {
 
@@ -881,6 +934,58 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    SubmitForm: function() {
+      this.$refs.drawer.closeDrawer()
+      if (this.form.id === '') {
+        this.AddEntity(this.form).then(response => {
+          this.$message({
+            showClose: true,
+            message: '资产档案新建成功',
+            type: 'success'
+          })
+          this.loading = false
+          this.dialogFormVisible = false
+          this.InitData()
+        })
+      } else {
+        this.EditEntity(this.form).then(response => {
+          this.$message({
+            showClose: true,
+            message: this.BusinessLanguage.GetMenuName(this.BusinessLanguage.Common.Dialog.Message.Edit),
+            type: 'success'
+          })
+          this.dialogFormVisible = false
+          this.editDisabled = true
+          this.delDisabled = true
+          this.InitData()
+        })
+      }
+    },
+    refreshLocalToken: function() {
+      this.RuYiAdmin.RefreshLocalToken()
+      this.headers = {
+        'Authorization': 'Bearer ' + sessionStorage.getItem('access-token'),
+        'RefreshToken': sessionStorage.getItem('refresh-token'),
+        'token': sessionStorage.getItem('EncryptUserToken'),
+        'ts': sessionStorage.getItem('ts')
+      }
+    },
+    handleSuccess: function(response, file, fileList) {
+      this.refreshLocalToken()
+      if (response.message === 'OK') {
+        this.form.assetsFileGroupId = response.object[0].fileId
+      }
+    },
+    beforeUpload: function(file) {
+      this.refreshLocalToken()
+      // 获取上传文件大小
+      const imgSize = Number(file.size / 1024 / 1024)
+      if (imgSize > 20) {
+        this.$msgbox({ title: '', message: '文件大小不能超过20MB', type: 'warning' })
+        return false
+      }
+      return true
+    },
     cancelForm() {
       this.$confirm('是否在离开前保存资产信息?', '确认信息', {
         distinguishCancelAndClose: true,
@@ -1004,10 +1109,36 @@ export default {
       })
     },
     resetForm: function() {
-      this.form.id = null
-      this.form.assetsCode = null
-      this.form.assetsAdress = null
+      this.form.id = ''
+      this.form.assetsCode = ''
+      this.form.assetsGetDate = new Date()
+      this.form.assetsTypeId = -1
+      this.form.assetsSourceId = -1
       this.form.assetsState = 0
+      this.form.assetsAdress = ''
+      this.form.propertyOwner = ''
+      this.form.assetsFor = ''
+      this.form.assetsFileGroupId = ''
+      this.form.assetsFileGroupFiles = []
+      this.form.assetsMent.buildDate = null
+      this.form.assetsMent.assessArea = null
+      this.form.assetsMent.assetPriceOneYear = null
+      this.form.propertyCode = ''
+      this.form.landCode = ''
+      this.form.landPropertyInfo = ''
+      this.form.propertyFileGroupId = ''
+      this.form.propertyFileGroupFiles = []
+      this.form.contractinfo.contractCode = ''
+      this.form.contractinfo.contractType = -1
+      this.form.contractinfo.lessee = ''
+      this.form.contractinfo.lesseePhone = ''
+      this.form.contractinfo.contracStartDate = null
+      this.form.contractinfo.contractEndDate = null
+      this.form.contractinfo.contractLife = null
+      this.form.contractinfo.contractPrice = null
+      this.form.contractinfo.contractPromiseMoney = null
+      this.form.contractinfo.contractMoney = null
+      this.form.assetUseType = -1
     },
     resume: function() {
       const row = this.multipleSelection[0]
@@ -1059,7 +1190,7 @@ width: 200px;
 .upload-demo
 {
   width:100%;
-
+  text-align: left;
 }
 .Maindrawer  {
   text-align: center;
@@ -1068,11 +1199,13 @@ width: 200px;
     overflow-y: auto;
     width: 100%;
     height: 750px;
+    padding-right: 15px;
 }
 .overflowauto::-webkit-scrollbar
 {
   height: 6px;
   width: 6px;
+  margin-left: 10px;
 }
 .overflowauto::-webkit-scrollbar-thumb{
   background: rgb(224, 214, 235);
