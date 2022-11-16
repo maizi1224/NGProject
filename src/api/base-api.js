@@ -44,9 +44,8 @@ export const RuYiAdmin = {
   },
   DownloadFile: function(url, param) {
     return request({
-      url: url,
+      url: url + param,
       method: 'get',
-      param: param,
       responseType: 'blob'
     })
   },

@@ -518,6 +518,7 @@
                   :limit="limit"
                   :on-exceed="handleExceed"
                   :on-success="handleSuccess"
+                  :on-preview="handlePreview"
                   :before-upload="beforeUpload"
                   :file-list="form.assetsFileGroupFiles"
                 >
@@ -611,7 +612,7 @@
           <el-row>
             <el-col :span="16">
               <el-form-item label="合同编号" prop="assetsGetDate">
-                <el-input v-model="form.contractinfo.contractCode" placeholder="请输入合同编号" />
+                <el-input v-model="form.contractinfo.contractCode" :disabled="true" placeholder="请输入合同编号" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -935,7 +936,6 @@ export default {
   },
   methods: {
     SubmitForm: function() {
-      this.$refs.drawer.closeDrawer()
       if (this.form.id === '') {
         this.AddEntity(this.form).then(response => {
           this.$message({
@@ -970,10 +970,16 @@ export default {
         'ts': sessionStorage.getItem('ts')
       }
     },
+    handlePreview: function(file) {
+      this.DownloadFile(
+        'Files/DownloadFiles/', file.id, file.name
+      )
+    },
     handleSuccess: function(response, file, fileList) {
       this.refreshLocalToken()
       if (response.message === 'OK') {
         this.form.assetsFileGroupId = response.object[0].fileId
+        this.form.assetsFileGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
       }
     },
     beforeUpload: function(file) {

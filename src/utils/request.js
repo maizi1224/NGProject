@@ -99,6 +99,7 @@ service.interceptors.response.use(
   },
   error => {
     if (error.response && error.response.status === 401) {
+      console.log(error.request.responseURL)
       if (error.response.headers.act && error.response.headers.act === 'expired') {
         RuYiAdmin.RefreshToken().then(res => {
           sessionStorage.setItem('access-token', res.object.accessToken)
