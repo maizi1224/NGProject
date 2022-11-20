@@ -9,6 +9,7 @@
       label-width="100px"
       :inline="true"
       border
+      size="mini"
     >
       <el-form-item
         :label="
@@ -84,7 +85,7 @@
     <el-row style="margin-bottom: 5px">
       <el-col>
         <el-button
-          v-if="ButtonPermission('job:add:entity')"
+          v-if="ButtonPermission('assetinfo:add:entity')"
           :disabled="addDisabled"
           icon="el-icon-circle-plus-outline"
           plain
@@ -95,7 +96,7 @@
           {{ BusinessLanguage.GetMenuName(BusinessLanguage.Common.Button.Add) }}
         </el-button>
         <el-button
-          v-if="ButtonPermission('job:edit:entity')"
+          v-if="ButtonPermission('asset:edit:entity')"
           :disabled="editDisabled"
           icon="el-icon-edit"
           plain
@@ -230,7 +231,7 @@
         "
       />
       <el-table-column
-        prop="currentcontract.lessee"
+        prop="contractinfo.lessee"
         align="center"
         :label="
           BusinessLanguage.GetMenuName(
@@ -239,7 +240,7 @@
         "
       />
       <el-table-column
-        prop="currentcontract.lesseePhone"
+        prop="contractinfo.lesseePhone"
         align="center"
         :label="
           BusinessLanguage.GetMenuName(
@@ -248,7 +249,7 @@
         "
       />
       <el-table-column
-        prop="currentcontract.contracStartDate"
+        prop="contractinfo.contracStartDate"
         align="center"
         :formatter="formatterDate"
         :label="
@@ -258,7 +259,7 @@
         "
       />
       <el-table-column
-        prop="currentcontract.contractEndDate"
+        prop="contractinfo.contractEndDate"
         align="center"
         :formatter="formatterDate"
         :label="
@@ -268,7 +269,7 @@
         "
       />
       <el-table-column
-        prop="currentcontract.contractPrice"
+        prop="contractinfo.contractPrice"
         align="center"
         :label="
           BusinessLanguage.GetMenuName(
@@ -277,7 +278,7 @@
         "
       />
       <el-table-column
-        prop="currentcontract.contractMoney"
+        prop="contractinfo.contractMoney"
         align="center"
         :label="
           BusinessLanguage.GetMenuName(
@@ -325,7 +326,7 @@
         @current-change="HandleCurrentChange"
       />
     </div>
-    <el-drawer ref="drawer" title="新增资产" :visible.sync="dialogFormVisible" direction="ttb" :before-close="handleClose" size="100%" class="Maindrawer">
+    <el-drawer ref="drawer" :title="title" :visible.sync="dialogFormVisible" direction="ttb" :before-close="handleClose" size="100%" class="Maindrawer">
 
       <el-card class="box-card">
 
@@ -354,6 +355,7 @@
                   v-model="form.id"
                   prefix-icon="el-icon-search"
                   :disabled="true"
+                  placeholder="自动生成无需输入"
                   class="colWidth"
                 />
               </el-form-item>
@@ -373,11 +375,12 @@
             </el-col>
             <el-col :span="8">
               <el-form-item
-                label="资产取得时间"
+                label="建档日期"
                 prop="assetsGetDate"
               >
                 <el-date-picker
                   v-model="form.assetsGetDate"
+                  class="colWidth"
                   type="date"
                   placeholder="请输入资产取得时间"
                   :picker-options="pickerOptions"
@@ -422,7 +425,7 @@
                 label="资产状态"
                 prop="assetsState"
               >
-                <el-select v-model="form.assetsState" class="colWidth2" placeholder="请选择资产状态">
+                <el-select v-model="form.assetsState" class="colWidth" placeholder="请选择资产状态">
                   <el-option
                     v-for="item in options3"
                     :key="item.value"
@@ -474,10 +477,31 @@
                   v-model="form.mapInfo"
                   prefix-icon="el-icon-search"
                   placeholder="请输入地图标注"
+                  class="colWidth"
                 />
               </el-form-item>
             </el-col>
           </el-row>
+
+          <el-row>
+
+            <el-col :span="8">
+              <el-form-item label="面积">
+                <el-input v-model="form.assetsArea" class="colWidth" placeholder="请输入面积" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="资产原值">
+                <el-input v-model="form.assetsBefore" placeholder="请输入固定资产原值" class="colWidth" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="资产现值">
+                <el-input v-model="form.assetsValue" class="colWidth" prefix-icon="el-icon-search" placeholder="请输入固定资产现值" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
           <el-row>
             <el-col :span="24">
               <el-form-item label="资产地址" prop="assetsAdress">
@@ -490,13 +514,12 @@
           <el-row>
             <el-col :span="24">
               <el-form-item
-                label="资产用途描述"
+                label="资产用途"
                 prop="assetsFor"
               >
                 <el-input
                   v-model="form.assetsFor"
                   type="textarea"
-                  class="colWidth2"
                   placeholder="请输入资产用途描述"
                 />
               </el-form-item>
@@ -511,7 +534,7 @@
               >
                 <el-upload
                   class="upload-demo"
-                  :action="importUrl0"
+                  :action="importUrl"
                   :headers="headers"
                   :before-remove="beforeRemove"
                   multiple
@@ -534,18 +557,18 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="房产证号" prop="assetsGetDate">
-                <el-input v-model="form.propertyCode" placeholder="请输入房产证号" />
+              <el-form-item label="房产证号" prop="propertyCode">
+                <el-input v-model="form.propertyCode" class="colWidth" placeholder="请输入房产证号" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="土地证号" prop="assetsCode">
-                <el-input v-model="form.landCode" placeholder="请输入土地证号" />
+                <el-input v-model="form.landCode" class="colWidth" placeholder="请输入土地证号" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="不动产权号" prop="assetsCode">
-                <el-input v-model="form.landPropertyInfo" placeholder="请输入不动产权号" />
+                <el-input v-model="form.landPropertyInfo" class="colWidth" placeholder="请输入不动产权号" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -557,11 +580,14 @@
               >
                 <el-upload
                   class="upload-demo"
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :action="importUrl"
                   :before-remove="beforeRemove"
+                  :headers="headers"
                   multiple
                   :limit="5"
                   :on-exceed="handleExceed"
+                  :on-success="handleSuccess2"
+                  :on-preview="handlePreview"
                   :before-upload="beforeUpload"
                   :file-list="form.propertyFileGroupFiles"
                 >
@@ -570,139 +596,248 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-divider content-position="center">资产评估信息</el-divider>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item
-                label="评估基准日期"
-              >
-                <el-date-picker
-                  v-model="form.assetsMent.buildDate"
-                  type="date"
-                  placeholder="请输入评估基准日期"
-                  :picker-options="pickerOptions"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item
-                label="评估面积"
-              >
-                <el-input v-model="form.assetsMent.assessArea" placeholder="评估面积"><template slot="append">m²</template></el-input>
+          <el-collapse accordion>
+            <el-collapse-item>
+              <template slot="title">
+                <p>资产评估  </p><i class="header-icon el-icon-school" />
 
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item
-                label="评估价值"
-              >
-                <el-input v-model="form.assetsMent.assetPriceOneYear" placeholder="评估租赁价值"><template slot="append">元/年</template></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-divider content-position="center">最近合同信息</el-divider>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="16">
-              <el-form-item label="合同编号" prop="assetsGetDate">
-                <el-input v-model="form.contractinfo.contractCode" :disabled="true" placeholder="请输入合同编号" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item
-                label="合同类型"
-                prop="assetsState"
-              >
-                <el-select v-model="form.contractinfo.contractType" class="colWidth2" placeholder="请选择合同类型">
-                  <el-option
-                    v-for="item in options5"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="16">
-              <el-form-item label="承租人" prop="assetsGetDate">
-                <el-input v-model="form.contractinfo.lessee" placeholder="承租人(单位)" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="联系电话" prop="assetsGetDate">
-                <el-input v-model="form.contractinfo.lesseePhone" placeholder="" />
-              </el-form-item>
-            </el-col>
-          </el-row>
+              </template>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item
+                    label="评估基准日期"
+                  >
+                    <el-date-picker
+                      v-model="form.assetsMent.buildDate"
+                      class="colWidth"
+                      type="date"
+                      placeholder="请输入评估基准日期"
+                      :picker-options="pickerOptions"
+                    />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item
+                    label="评估面积"
+                  >
+                    <el-input v-model="form.assetsMent.assessArea" class="colWidth" placeholder="评估面积"><template slot="append">m²</template></el-input>
 
-          <el-row>
-            <el-col :span="8">
-              <el-form-item
-                label="承租起始日期"
-                prop="assetsGetDate"
-              >
-                <el-date-picker
-                  v-model="form.contractinfo.contracStartDate"
-                  type="date"
-                  placeholder=""
-                  :picker-options="pickerOptions"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item
-                label="终止日期"
-                prop="assetsGetDate"
-              >
-                <el-date-picker
-                  v-model="form.contractinfo.contractEndDate"
-                  type="date"
-                  placeholder=""
-                  :picker-options="pickerOptions"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="总租期" prop="assetsGetDate">
-                <el-input v-model="form.contractinfo.contractLife" placeholder="">
-                  <template slot="append">年</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="保证金" prop="assetsGetDate">
-                <el-input v-model="form.contractinfo.contractPrice" placeholder="">
-                  <template slot="append">元/年</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="年租金" prop="assetsGetDate">
-                <el-input v-model="form.contractinfo.contractPromiseMoney" placeholder="">
-                  <template slot="append">元/年</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="合同总金额" prop="assetsGetDate">
-                <el-input v-model="form.contractinfo.contractMoney" placeholder="">
-                  <template slot="append">元</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item
+                    label="评估价值"
+                  >
+                    <el-input v-model="form.assetsMent.assetPriceOneYear" class="colWidth" placeholder="评估租赁价值"><template slot="append">元/年</template></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-collapse-item>
 
+            <el-collapse-item>
+              <template slot="title">
+                <p>合同信息  </p><i class="header-icon el-icon-notebook-2" />
+
+              </template>
+              <el-collapse value="1">
+                <el-collapse-item title="当前合同信息" name="1">
+                  <el-row>
+                    <el-col :span="8">
+                      <el-form-item label="合同编号" label-width="90px">
+                        <el-input v-model="form.contractinfo.id" :disabled="true" placeholder="合同编号自动生成" class="col3" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="签订日期" label-width="90px">
+                        <el-date-picker v-model="form.contractinfo.contractDate" type="date" placeholder="选择签订日期" :picker-options="pickerOptions" class="col3" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item
+                        label="合同类型"
+                        prop="assetsState"
+                        label-width="90px"
+                      >
+                        <el-select v-model="form.contractinfo.contractType" class="col3" placeholder="请选择合同类型">
+                          <el-option
+                            v-for="item in options5"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="8">
+                      <el-form-item label="起始日期" label-width="90px">
+                        <el-date-picker v-model="form.contractinfo.contracStartDate" type="date" placeholder="" :picker-options="pickerOptions" class="col3" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item
+                        label="终止日期"
+                        label-width="90px"
+                      >
+                        <el-date-picker
+                          v-model="form.contractinfo.contractEndDate"
+                          type="date"
+                          placeholder=""
+                          :picker-options="pickerOptions"
+                          class="col3"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="总租期" label-width="90px">
+                        <el-input v-model="form.contractinfo.contractLife" class="col3" placeholder="">
+                          <template slot="append">年</template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="8">
+                      <el-form-item label="保证金" label-width="90px">
+                        <el-input v-model="form.contractinfo.contractPrice" class="col3" placeholder="">
+                          <template slot="append">元/年</template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="年租金" label-width="90px">
+                        <el-input v-model="form.contractinfo.contractPromiseMoney" class="col3" placeholder="">
+                          <template slot="append">元/年</template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="合同总金额" label-width="90px">
+                        <el-input v-model="form.contractinfo.contractMoney" class="col3" placeholder="">
+                          <template slot="append">元</template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="8">
+                      <el-form-item label="缴纳方式" label-width="90px">
+                        <el-select v-model="form.contractinfo.contractPayment" class="col3" placeholder="请选择资产来源">
+                          <el-option
+                            v-for="item in options7"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="合同状态" label-width="90px">
+                        <el-select v-model="form.contractinfo.contractState" class="col3" placeholder="请选择资产来源">
+                          <el-option
+                            v-for="item in options8"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-form-item label="合同备注" label-width="90px" class="nowrap">
+                      <el-col :span="24">
+                        <el-input
+                          v-model="form.contractinfo.remark"
+                          class="htbz"
+                          type="textarea"
+                          placeholder="请输入合同备注"
+                        />
+                      </el-col>
+                    </el-form-item>
+
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="出租方(甲方) " class="nowrap" label-width="90px">
+                        <el-input v-model="form.contractinfo.lessor" placeholder="请输入出租方(甲方) " class="colWidth2" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="承租方(乙方) " class="nowrap" label-width="90px">
+                        <el-input v-model="form.contractinfo.lessee" placeholder="请输入承租方(乙方)" class="colWidth2" />
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="甲方联系方式" label-width="90px" class="nowrap">
+                        <el-input v-model="form.contractinfo.lessorPhone" placeholder="请输入甲方联系方式" class="colWidth2" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="乙方联系方式" class="nowrap" label-width="90px">
+                        <el-input v-model="form.contractinfo.lesseePhone" placeholder="请输入乙方联系方式" class="colWidth2" />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="甲方地址" label-width="90px" class="nowrap">
+                        <el-input v-model="form.contractinfo.lessorAdress" placeholder="请输入甲方地址" class="colWidth2" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="乙方地址" class="nowrap" label-width="90px">
+                        <el-input v-model="form.contractinfo.lesseeAdress" placeholder="请输入乙方地址" class="colWidth2" />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="甲方统一社会信用代码" label-width="160px">
+                        <el-input v-model="form.contractinfo.lessorId" placeholder="请输入甲方统一社会信用代码" class="colWidth2" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="乙方统一社会信用代码" label-width="160px">
+                        <el-input v-model="form.contractinfo.lesseeId" placeholder="请输入乙方统一社会信用代码" class="colWidth2" />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="24">
+                      <el-form-item
+                        label="纸质合同附件"
+                        label-width="100px"
+                      >
+                        <el-upload
+                          class="upload-demo"
+                          :action="importUrl"
+                          :before-remove="beforeRemove"
+                          :headers="headers"
+                          multiple
+                          :limit="5"
+                          :on-exceed="handleExceed"
+                          :on-success="handleSuccess3"
+                          :on-preview="handlePreview"
+                          :before-upload="beforeUpload"
+                          :file-list="form.contractinfo.contractPdfGroupFiles"
+                        >
+                          <el-button size="small" type="primary">点击上传</el-button>
+                        </el-upload>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-collapse-item>
+                <el-collapse-item title="历史合同信息" />
+              </el-collapse>
+
+            </el-collapse-item>
+          </el-collapse>
         </el-form>
 
       </el-card>
@@ -723,10 +858,12 @@ export default {
   extends: RuYiAdminBasePage,
   data() {
     return {
+      title: '',
+      activeNames: ['1'],
+      uploadParam: {},
       limit: 5,
       headers: null,
-      importUrl0: process.env.VUE_APP_BASE_API + '/Files/UploadFiles?businessId=0',
-      importUrl1: process.env.VUE_APP_BASE_API + '/Files/UploadFiles?businessId=1',
+      importUrl: process.env.VUE_APP_BASE_API + '/Files/UploadFiles',
       timer: null,
       loading: false,
       restaurants: [],
@@ -742,6 +879,8 @@ export default {
         assetsGetDate: null,
         assetsTypeId: -1,
         assetsSourceId: -1,
+        assetsBefore: null,
+        assetsValue: null,
         assetsState: 0,
         assetsAdress: '',
         propertyOwner: '',
@@ -759,16 +898,29 @@ export default {
         propertyFileGroupId: '',
         propertyFileGroupFiles: [],
         contractinfo: {
+          id: null,
           contractCode: '',
           contractType: -1,
+          contractDate: new Date(),
           lessee: '',
           lesseePhone: '',
+          lessorPhone: '',
+          lessorAdress: '',
+          lessor: '',
+          lessorId: '',
+          lesseeAdress: '',
+          lesseeId: '',
+          contractPdfGroupFiles: [],
+          ContractPdfGroupId: '',
+          contractPayment: -1,
           contracStartDate: null,
           contractEndDate: null,
           contractLife: null,
           contractPrice: null,
           contractPromiseMoney: null,
-          contractMoney: null
+          contractState: 2,
+          contractMoney: null,
+          remark: ''
         },
         assetUseType: -1
       },
@@ -914,6 +1066,36 @@ export default {
           label: '正常管理'
         }
 
+      ],
+      options7: [
+        {
+          value: -1,
+          label: ' '
+        },
+        {
+          value: 0,
+          label: '半年一交'
+        },
+        {
+          value: 1,
+          label: '一年一交'
+        }
+
+      ],
+      options8: [
+        {
+          value: 2,
+          label: '不存在逾期'
+        },
+        {
+          value: 1,
+          label: '合同逾期'
+        },
+        {
+          value: 0,
+          label: '合同完结'
+        }
+
       ]
     }
   },
@@ -921,7 +1103,7 @@ export default {
   created() {
     // window.addEventListener('storage', this.afterQRScan)
     this.url.queryList = 'Asset/Post'
-    this.url.queryEntity = 'ScheduleJobManagement/GetById/'
+    this.url.queryEntity = 'Asset/GetById/'
     this.url.addEntity = 'Asset/Add'
     this.url.editEntity = 'ScheduleJobManagement/Put'
     this.url.deleteEntity = 'ScheduleJobManagement/Delete/'
@@ -980,6 +1162,20 @@ export default {
       if (response.message === 'OK') {
         this.form.assetsFileGroupId = response.object[0].fileId
         this.form.assetsFileGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
+      }
+    },
+    handleSuccess2: function(response, file, fileList) {
+      this.refreshLocalToken()
+      if (response.message === 'OK') {
+        this.form.propertyFileGroupId = response.object[0].fileId
+        this.form.propertyFileGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
+      }
+    },
+    handleSuccess3: function(response, file, fileList) {
+      this.refreshLocalToken()
+      if (response.message === 'OK') {
+        this.form.contractinfo.ContractPdfGroupId = response.object[0].fileId
+        this.form.contractinfo.contractPdfGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
       }
     },
     beforeUpload: function(file) {
@@ -1041,7 +1237,27 @@ export default {
       this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
     beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
+      return this.$confirm(`确定移除 ${file.name}？`, '确认删除', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消' }).then(() => {
+        this.DeleteFile('Files/DeleteFiles/', file.id).then(response => {
+          if (response.message === 'OK') {
+            this.$message({
+              showClose: true,
+              message: '删除成功',
+              type: 'success'
+            })
+            return true
+          } else {
+            this.$message({
+              showClose: true,
+              message: '删除失败',
+              type: 'error'
+            })
+            return false
+          }
+        })
+      })
     },
     querySearch(queryString, cb) {
       var results = queryString ? this.options4.filter(this.createFilter(queryString)) : this.options4
@@ -1105,11 +1321,8 @@ export default {
       this.loading = true
       this.resetForm()
       this.GetEntity(this.multipleSelection[0].id).then((response) => {
-        this.title = this.BusinessLanguage.GetMenuName(
-          this.BusinessLanguage.ScheduleJob.DialogTitle.Edit
-        )
+        this.title = '修改资产'
         Object.assign(this.form, response.object)
-        this.form.jobName = this.multipleSelection[0].jobName
         this.dialogFormVisible = true
         this.loading = false
       })
@@ -1117,6 +1330,8 @@ export default {
     resetForm: function() {
       this.form.id = ''
       this.form.assetsCode = ''
+      this.form.assetsBefore = null
+      this.form.assetsValue = null
       this.form.assetsGetDate = new Date()
       this.form.assetsTypeId = -1
       this.form.assetsSourceId = -1
@@ -1134,16 +1349,29 @@ export default {
       this.form.landPropertyInfo = ''
       this.form.propertyFileGroupId = ''
       this.form.propertyFileGroupFiles = []
+      this.form.contractinfo.id = null
       this.form.contractinfo.contractCode = ''
       this.form.contractinfo.contractType = -1
+      this.form.contractinfo.lessorAdress = ''
+      this.form.contractinfo.contractDate = new Date()
       this.form.contractinfo.lessee = ''
       this.form.contractinfo.lesseePhone = ''
+      this.form.contractinfo.lessorPhone = ''
+      this.form.contractinfo.lessor = ''
+      this.form.contractinfo.lessorId = ''
+      this.form.contractinfo.lesseeAdress = ''
+      this.form.contractinfo.lesseeId = ''
+      this.form.contractinfo.contractPdfGroupFiles = []
+      this.form.contractinfo.ContractPdfGroupId = ''
+      this.form.contractinfo.contractPayment = -1
       this.form.contractinfo.contracStartDate = null
       this.form.contractinfo.contractEndDate = null
       this.form.contractinfo.contractLife = null
       this.form.contractinfo.contractPrice = null
       this.form.contractinfo.contractPromiseMoney = null
+      this.form.contractinfo.contractState = 2
       this.form.contractinfo.contractMoney = null
+      this.form.contractinfo.remark = ''
       this.form.assetUseType = -1
     },
     resume: function() {
@@ -1182,16 +1410,17 @@ export default {
 
   <style scoped>
   .box-card {
-  width: 1000px;
+  width: 1200px;
   margin: auto;
 }
 .colWidth
 {
 width: 200px;
+
 }
 .colWidth2
 {
-  width: 100%;
+  width: 92%;
 }
 .upload-demo
 {
@@ -1218,5 +1447,27 @@ width: 200px;
 }
 .demo-drawer__footer{
   margin-top: 10px;
+}
+/deep/ .el-collapse-item__header{
+  font-weight: 700;
+  padding-left: 45%;
+}
+/deep/ .el-form-item__label-wrap
+{
+  margin-left: 15px;
+}
+.header-icon{
+  margin-left: 5px;
+}
+.nowrap{
+  white-space: nowrap;
+}
+.col3{
+  margin-left: -60px;
+  width: 200px;
+}
+.htbz{
+  margin-left: -50px;
+  width: 92%;
 }
 </style>

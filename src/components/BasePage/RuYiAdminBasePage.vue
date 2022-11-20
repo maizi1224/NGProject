@@ -97,6 +97,9 @@ export default {
     DeleteEntities: function(param) {
       return this.RuYiAdmin.DeleteEntities(this.url.deleteEntities, param)
     },
+    DeleteFile: function(url, param) {
+      return this.RuYiAdmin.GetEntity(url, param)
+    },
     ResetQueryFrom: function() {
       this.$refs.queryForm.resetFields()
       this.queryCondition.QueryItems = []
