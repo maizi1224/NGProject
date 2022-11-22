@@ -169,36 +169,36 @@ const actions = {
       }
 
       // 添加代码生成器
-      asyncRoutes.push({
-        path: '/SystemHelp',
-        component: Layout,
-        redirect: 'noRedirect',
-        name: 'SystemHelp',
-        meta: {
-          title: '系统工具',
-          icon: 'table'
-        },
-        children: [
-          {
-            path: 'FormDesigner',
-            component: () => import('@/views/system/FormDesigner'),
-            name: 'FormDesigner',
-            meta: { title: '表单设计器', icon: 'table' }
-          },
-          {
-            path: 'CodeGenerator',
-            component: () => import('@/views/system/CodeGenerator'),
-            name: 'CodeGenerator',
-            meta: { title: '代码生成器', icon: 'table' }
-          },
-          {
-            path: 'SystemWebAPI',
-            component: () => import('@/views/system/SystemWebAPI'),
-            name: 'SystemWebAPI',
-            meta: { title: '系统WebAPI', icon: 'table' }
-          }
-        ]
-      })
+      // asyncRoutes.push({
+      //   path: '/SystemHelp',
+      //   component: Layout,
+      //   redirect: 'noRedirect',
+      //   name: 'SystemHelp',
+      //   meta: {
+      //     title: '系统工具',
+      //     icon: 'table'
+      //   },
+      //   children: [
+      //     {
+      //       path: 'FormDesigner',
+      //       component: () => import('@/views/system/FormDesigner'),
+      //       name: 'FormDesigner',
+      //       meta: { title: '表单设计器', icon: 'table' }
+      //     },
+      //     {
+      //       path: 'CodeGenerator',
+      //       component: () => import('@/views/system/CodeGenerator'),
+      //       name: 'CodeGenerator',
+      //       meta: { title: '代码生成器', icon: 'table' }
+      //     },
+      //     {
+      //       path: 'SystemWebAPI',
+      //       component: () => import('@/views/system/SystemWebAPI'),
+      //       name: 'SystemWebAPI',
+      //       meta: { title: '系统WebAPI', icon: 'table' }
+      //     }
+      //   ]
+      // })
 
       // 添加大屏幕
       // asyncRoutes.push({

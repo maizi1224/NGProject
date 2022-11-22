@@ -31,7 +31,7 @@
       >
 
         <div class="title-container">
-          <h3 class="title">宁国国控</h3>
+          <h3 class="title">宁国市乡村振兴投资集团有限公司</h3>
         </div>
 
         <el-form-item prop="username">
@@ -41,7 +41,7 @@
           <el-input
             ref="username"
             v-model="loginForm.username"
-            placeholder="UserName"
+            placeholder="请输入用户名"
             name="username"
             type="text"
             tabindex="1"
@@ -59,7 +59,7 @@
               ref="password"
               v-model="loginForm.password"
               :type="passwordType"
-              placeholder="Password"
+              placeholder="请输入密码"
               name="password"
               tabindex="2"
               autocomplete="on"
@@ -79,7 +79,7 @@
           <el-input
             v-model="loginForm.code"
             auto-complete="off"
-            placeholder="Captcha"
+            placeholder="请输入验证码"
             style="width: 50%;"
             tabindex="3"
             type="text"
@@ -111,7 +111,7 @@
         <el-button
           :loading="loading"
           type="info"
-          style="width:100%;margin-bottom:30px;background: rgba(11,26,50,0.2);color: rgb(186, 205, 224);"
+          style="width:100%;margin-bottom:30px;background: red;color:white;"
           tabindex="5"
           @click.native.prevent="handleLogin"
         ><span>登 录</span>
@@ -120,7 +120,7 @@
     </div>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>宁国市燕津投资管理有限公司</span>
+      <span>宁国市乡村振兴投资集团有限公司</span>
     </div>
   </div>
 </template>
@@ -300,7 +300,7 @@ export default {
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg: #283443;
-$light_gray: #fff;
+$light_gray: rgb(12, 1, 1);
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -334,8 +334,7 @@ $cursor: #fff;
   }
 
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgb(83, 74, 74);
     border-radius: 5px;
     color: #454545;
   }
@@ -345,7 +344,7 @@ $cursor: #fff;
 <style lang="scss" scoped>
 $bg: #2d3a4b;
 $dark_gray: #889aa4;
-$light_gray: #eee;
+$light_gray: rgb(12, 1, 1);
 
 .login-container {
   z-index: 999;
@@ -387,7 +386,7 @@ $light_gray: #eee;
     position: relative;
 
     .title {
-      font-size: 26px;
+      font-size: 20px;
       color: $light_gray;
       margin: 10px auto 10px auto;
       text-align: center;
@@ -498,7 +497,7 @@ $light_gray: #eee;
   bottom: 0;
   margin: auto; /* 有了这个就自动居中了 */
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.1);
+  background: rgb(255, 255, 255);
   border-radius: 5px;
 }
 
