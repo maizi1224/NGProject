@@ -26,7 +26,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="8">
+    <el-row :gutter="8" style="display:none">
       <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
         <transaction-table />
       </el-col>
@@ -53,8 +53,8 @@ import BoxCard from './components/BoxCard'
 
 const lineChartData = {
   newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
+    expectedData: [6, 8, 9, 3, 1, 5, 11, 13, 2, 15, 8, 7],
+    actualData: [3, 1, 2, 4, 2, 4, 5, 9, 10, 5, 7, 3]
   },
   messages: {
     expectedData: [200, 192, 120, 144, 160, 130, 140],
@@ -106,6 +106,7 @@ export default {
     position: absolute;
     top: 0px;
     border: 0;
+    display: none;
     right: 0;
   }
 

@@ -22,7 +22,7 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: '400px'
     }
   },
   data() {
@@ -53,6 +53,10 @@ export default {
             type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           }
         },
+        title: {
+          text: '未来6个月资产预计收益',
+          left: 'center'
+        },
         grid: {
           top: 10,
           left: '2%',
@@ -62,7 +66,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: ['12月', '1月', '2月', '3月', '4月', '5月'],
           axisTick: {
             alignWithLabel: true
           }
@@ -74,25 +78,25 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '租赁型门面房',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
+          data: [79, 52, 200, 188, 300, 240],
           animationDuration
         }, {
-          name: 'pageB',
+          name: '租赁型住宅',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
+          data: [188, 52, 255, 200, 300, 330],
           animationDuration
         }, {
-          name: 'pageC',
+          name: '沿街商铺',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          data: [30, 52, 144, 334, 300, 330],
           animationDuration
         }]
       })
