@@ -109,25 +109,23 @@
           }}
         </el-button>
         <el-button
-          v-if="ButtonPermission('job:del:entity')"
+          v-if="ButtonPermission('asset:delete:entity')"
           :disabled="editDisabled"
           icon="el-icon-circle-close"
           plain
           size="mini"
           type="danger"
-          @click="Delete"
+          @click="del"
         >{{
           BusinessLanguage.GetMenuName(BusinessLanguage.Common.Button.Delete)
         }}
         </el-button>
         <el-button
-          v-if="ButtonPermission('schedule:job:resume')"
           type="success"
-          :disabled="editDisabled"
           icon="el-icon-refresh-left"
           plain
           size="mini"
-          @click="resume"
+          @click="refresh"
         >
           {{
             BusinessLanguage.GetMenuName(
@@ -150,6 +148,7 @@
       row-key="id"
       border
       :header-cell-style="{ textAlign: 'center' }"
+      @row-dblclick="dbclick"
       @selection-change="HandleSelectionChange"
     >
       <el-table-column align="center" type="selection" />
@@ -338,6 +337,7 @@
           label-position="left"
           size="small"
           class="overflowauto"
+          :disabled="Isdisabled"
         >
           <el-row>
             <el-col :span="24">
@@ -345,10 +345,11 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="8">
+            <el-col :span="8" style="display:none">
               <el-form-item
                 label="资产编号"
-                label-width="auto"
+                label-width="90px"
+
                 prop="id"
               >
                 <el-input
@@ -356,6 +357,7 @@
                   prefix-icon="el-icon-search"
                   :disabled="true"
                   placeholder="自动生成无需输入"
+                  style="margin-left:-80px;"
                   class="colWidth"
                 />
               </el-form-item>
@@ -364,11 +366,13 @@
               <el-form-item
                 label="档案编号"
                 prop="assetsCode"
+                label-width="90px"
               >
                 <el-input
                   v-model="form.assetsCode"
                   prefix-icon="el-icon-search"
                   placeholder="请输入档案编号"
+                  style="margin-left:-80px;"
                   class="colWidth"
                 />
               </el-form-item>
@@ -377,13 +381,30 @@
               <el-form-item
                 label="建档日期"
                 prop="assetsGetDate"
+                label-width="90px"
               >
                 <el-date-picker
                   v-model="form.assetsGetDate"
                   class="colWidth"
                   type="date"
                   placeholder="请输入资产取得时间"
+                  style="margin-left:-80px;"
                   :picker-options="pickerOptions"
+                />
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="8">
+              <el-form-item
+                label="资产用途"
+                prop="assetsFor"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="form.assetsFor"
+                  style="margin-left:-80px;"
+                  class="colWidth"
+                  placeholder="请输入资产用途描述"
                 />
               </el-form-item>
             </el-col>
@@ -394,8 +415,9 @@
               <el-form-item
                 label="资产类型"
                 prop="assetsTypeId"
+                label-width="90px"
               >
-                <el-select v-model="form.assetsTypeId" class="colWidth" placeholder="请选择资产类型">
+                <el-select v-model="form.assetsTypeId" class="colWidth" style="margin-left:-80px;" placeholder="请选择资产类型">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -407,10 +429,11 @@
             </el-col>
             <el-col :span="8">
               <el-form-item
-                label="资产来源"
+                label="共有情况"
                 prop="assetsSourceId"
+                label-width="90px"
               >
-                <el-select v-model="form.assetsSourceId" class="colWidth" placeholder="请选择资产来源">
+                <el-select v-model="form.assetsSourceId" style="margin-left:-80px;" class="colWidth" placeholder="请选择资产来源">
                   <el-option
                     v-for="item in options2"
                     :key="item.value"
@@ -424,8 +447,9 @@
               <el-form-item
                 label="资产状态"
                 prop="assetsState"
+                label-width="90px"
               >
-                <el-select v-model="form.assetsState" class="colWidth" placeholder="请选择资产状态">
+                <el-select v-model="form.assetsState" style="margin-left:-80px;" class="colWidth" placeholder="请选择资产状态">
                   <el-option
                     v-for="item in options3"
                     :key="item.value"
@@ -442,23 +466,24 @@
               <el-form-item
                 label="产权人"
                 prop="propertyOwner"
+                label-width="90px"
               >
-                <el-select v-model="form.propertyOwner" class="colWidth">
-                  <el-option
-                    v-for="item in options4"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
+                <el-input
+                  v-model="form.propertyOwner"
+                  prefix-icon="el-icon-search"
+                  placeholder="请输入产权人"
+                  style="margin-left:-80px;"
+                  class="colWidth"
+                />
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item
-                label="处置方式"
+                label="权利性质"
                 prop="assetsSourceId"
+                label-width="90px"
               >
-                <el-select v-model="form.assetUseType" class="colWidth" placeholder="请选择资产来源">
+                <el-select v-model="form.assetUseType" style="margin-left:-80px;" class="colWidth" placeholder="请选择资产来源">
                   <el-option
                     v-for="item in options6"
                     :key="item.value"
@@ -472,11 +497,13 @@
               <el-form-item
                 label="地图标注"
                 prop="mapInfo"
+                label-width="90px"
               >
                 <el-input
                   v-model="form.mapInfo"
                   prefix-icon="el-icon-search"
                   placeholder="请输入地图标注"
+                  style="margin-left:-80px;"
                   class="colWidth"
                 />
               </el-form-item>
@@ -484,44 +511,97 @@
           </el-row>
 
           <el-row>
+            <el-col :span="8">
+              <el-form-item label="期限" label-width="90px">
 
-            <el-col :span="8">
-              <el-form-item label="面积">
-                <el-input v-model="form.assetsArea" class="colWidth" placeholder="请输入面积" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="资产原值">
-                <el-input v-model="form.assetsBefore" placeholder="请输入固定资产原值" class="colWidth" />
+                <el-input v-model="form.assetsAdress" style="margin-left:-80px;" class="colWidth" prefix-icon="el-icon-search" placeholder="请输入期限" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="资产现值">
-                <el-input v-model="form.assetsValue" class="colWidth" prefix-icon="el-icon-search" placeholder="请输入固定资产现值" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="资产地址" prop="assetsAdress">
-                <el-input v-model="form.assetsAdress" type="textarea" prefix-icon="el-icon-search" placeholder="请输入资产地址" />
-              </el-form-item>
-            </el-col>
-
-          </el-row>
-
-          <el-row>
-            <el-col :span="24">
-              <el-form-item
-                label="资产用途"
-                prop="assetsFor"
-              >
-                <el-input
-                  v-model="form.assetsFor"
-                  type="textarea"
-                  placeholder="请输入资产用途描述"
+              <el-form-item label="起始日期" label-width="90px">
+                <el-date-picker
+                  v-model="form.assetsGetDate"
+                  class="colWidth"
+                  type="date"
+                  placeholder="请输入结束日期"
+                  style="margin-left:-80px;"
+                  :picker-options="pickerOptions"
                 />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="结束日期" label-width="90px">
+                <el-date-picker
+                  v-model="form.assetsGetDate"
+                  class="colWidth"
+                  type="date"
+                  placeholder="请输入结束日期"
+                  style="margin-left:-80px;"
+                  :picker-options="pickerOptions"
+                />
+              </el-form-item>
+            </el-col>
+
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-divider content-position="center">资产现状</el-divider>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="土地使用面积" label-width="90px" class="lineheight">
+                <el-input v-model="form.assetsArea" class="colWidth" style="margin-left:-80px;" placeholder="请输入土地使用面积" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="房屋建筑面积" label-width="90px" class="lineheight">
+                <el-input v-model="form.assetsBefore" placeholder="请输入房屋建筑面积" style="margin-left:-80px;" class="colWidth" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="资产地址" label-width="90px">
+                <el-input v-model="form.assetsAdress" style="margin-left:-80px;" prefix-icon="el-icon-search" class="colWidth" placeholder="请输入资产地址" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="层数" label-width="90px">
+                <el-input v-model="form.assetsArea" class="colWidth" style="margin-left:-80px;" placeholder="请输入层数" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="房屋结构形式/分类情况" label-width="90px" class="lineheight">
+                <el-input v-model="form.assetsBefore" placeholder="请输入房屋结构形式/分类情况" style="margin-left:-80px;" class="colWidth" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="建设年度" label-width="90px">
+                <el-input v-model="form.assetsAdress" style="margin-left:-80px;" prefix-icon="el-icon-search" class="colWidth" placeholder="请输入建设年度" />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-divider content-position="center">资产抵押情况</el-divider>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="抵押权人" label-width="90px">
+                <el-input v-model="form.assetsArea" class="colWidth" style="margin-left:-80px;" placeholder="请输入抵押权人" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="抵押金额" label-width="90px">
+                <el-input v-model="form.assetsBefore" placeholder="请输入抵押金额" style="margin-left:-80px;" class="colWidth" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="抵押期限" label-width="90px">
+                <el-input v-model="form.assetsAdress" style="margin-left:-80px;" prefix-icon="el-icon-search" class="colWidth" placeholder="请输入抵押期限" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -557,18 +637,18 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="房产证号" prop="propertyCode">
-                <el-input v-model="form.propertyCode" class="colWidth" placeholder="请输入房产证号" />
+              <el-form-item label="房产证号" prop="propertyCode" label-width="90px">
+                <el-input v-model="form.propertyCode" style="margin-left:-80px;" class="colWidth" placeholder="请输入房产证号" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="土地证号" prop="assetsCode">
-                <el-input v-model="form.landCode" class="colWidth" placeholder="请输入土地证号" />
+              <el-form-item label="土地证号" prop="assetsCode" label-width="90px">
+                <el-input v-model="form.landCode" style="margin-left:-80px;" class="colWidth" placeholder="请输入土地证号" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="不动产权号" prop="assetsCode">
-                <el-input v-model="form.landPropertyInfo" class="colWidth" placeholder="请输入不动产权号" />
+              <el-form-item label="不动产权号" prop="assetsCode" label-width="90px">
+                <el-input v-model="form.landPropertyInfo" style="margin-left:-80px;" class="colWidth" placeholder="请输入不动产权号" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -859,6 +939,7 @@ export default {
   data() {
     return {
       title: '',
+      Isdisabled: false,
       activeNames: ['1'],
       uploadParam: {},
       limit: 5,
@@ -967,28 +1048,30 @@ export default {
         label: ' '
       }, {
         value: 0,
-        label: '租赁型住宅'
-      }, {
-        value: 1,
-        label: '租赁型门面房'
-      }, {
-        value: 2,
-        label: '土地'
-      }, {
-        value: 3,
-        label: '经营性用房'
-      },
-      {
-        value: 4,
-        label: '商服用房'
-      },
-      {
-        value: 5,
-        label: '工厂用房'
-      }, {
-        value: 6,
-        label: '沿街商铺'
-      }],
+        label: '国有建设用地使用权房屋所有权'
+      }
+      // , {
+      //   value: 1,
+      //   label: '租赁型门面房'
+      // }, {
+      //   value: 2,
+      //   label: '土地'
+      // }, {
+      //   value: 3,
+      //   label: '经营性用房'
+      // },
+      // {
+      //   value: 4,
+      //   label: '商服用房'
+      // },
+      // {
+      //   value: 5,
+      //   label: '工厂用房'
+      // }, {
+      //   value: 6,
+      //   label: '沿街商铺'
+      // }]
+      ],
       options2: [
         {
           value: -1,
@@ -996,14 +1079,10 @@ export default {
         },
         {
           value: 0,
-          label: '代管'
-
-        },
-        {
-          value: 1,
-          label: '自购'
+          label: '单独所有'
 
         }
+
       ],
       options3: [
         {
@@ -1045,24 +1124,24 @@ export default {
         },
         {
           value: 0,
-          label: '移交'
+          label: '出让/自建房'
         },
         {
           value: 1,
-          label: '拆迁'
+          label: '出让'
         },
         {
           value: 2,
-          label: '出借'
-        },
-        {
-          value: 3,
-          label: '停用'
-        },
-        {
-          value: 4,
-          label: '正常管理'
+          label: '划拨/自建房'
         }
+        // {
+        //   value: 3,
+        //   label: '停用'
+        // },
+        // {
+        //   value: 4,
+        //   label: '正常管理'
+        // }
 
       ],
       options7: [
@@ -1104,7 +1183,7 @@ export default {
     this.url.queryEntity = 'Asset/GetById/'
     this.url.addEntity = 'Asset/Add'
     this.url.editEntity = 'ScheduleJobManagement/Put'
-    this.url.deleteEntity = 'ScheduleJobManagement/Delete/'
+    this.url.deleteEntity = 'Asset/DeleteById/'
     this.queryCondition.Sort = 'Id ASC'
     this.refreshLocalToken()
   },
@@ -1115,6 +1194,59 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    dbclick: function(row, column) {
+      this.loading = true
+      this.resetForm()
+      this.PostData('Asset/GetById', { id: row.id, contractinfo: { id: row.contractinfo.id }}).then((response) => {
+        this.title = '查看资产'
+        Object.assign(this.form, response.object)
+        this.dialogFormVisible = true
+        this.loading = false
+        this.Isdisabled = true
+      })
+    },
+    refresh: function() {
+      this.InitData()
+    },
+    del: function() {
+      this.$confirm(
+        '是否确认删除?',
+        '确认信息',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+        if (this.multipleSelection.length === 1) {
+          this.PostData('Asset/DeleteById', { id: this.multipleSelection[0].id, contractinfo: { id: this.multipleSelection[0].contractinfo.id }}).then(response => {
+            this.$message({
+              showClose: true,
+              message: this.BusinessLanguage.GetMenuName(this.BusinessLanguage.Common.Dialog.Message.Delete),
+              type: 'error'
+            })
+            this.editDisabled = true
+            this.delDisabled = true
+            this.InitData()
+          })
+        }
+        // else {
+        //   const ids = this.multipleSelection.map((item) => {
+        //     return item.id
+        //   })
+        //   this.DeleteEntities(ids.toString()).then(response => {
+        //     this.$message({
+        //       showClose: true,
+        //       message: this.BusinessLanguage.GetMenuName(this.BusinessLanguage.Common.Dialog.Message.Delete),
+        //       type: 'error'
+        //     })
+        //     this.editDisabled = true
+        //     this.delDisabled = true
+        //     this.getTreeNodes()
+        //     this.InitData()
+        //   })
+        // }
+      })
+    },
     SubmitForm: function() {
       if (this.form.id === '') {
         this.AddEntity(this.form).then(response => {
@@ -1314,15 +1446,16 @@ export default {
       this.resetForm()
       this.title = '新增资产'
       this.dialogFormVisible = true
+      this.Isdisabled = false
     },
     edit: function() {
       this.loading = true
-      this.resetForm()
-      this.GetEntity(this.multipleSelection[0].id).then((response) => {
+      this.PostData('Asset/GetById', { id: this.multipleSelection[0].id, contractinfo: { id: this.multipleSelection[0].contractinfo.id }}).then((response) => {
         this.title = '修改资产'
         Object.assign(this.form, response.object)
         this.dialogFormVisible = true
         this.loading = false
+        this.Isdisabled = false
       })
     },
     resetForm: function() {
@@ -1371,36 +1504,6 @@ export default {
       this.form.contractinfo.contractMoney = null
       this.form.contractinfo.remark = ''
       this.form.assetUseType = -1
-    },
-    resume: function() {
-      const row = this.multipleSelection[0]
-      if (row.jobStatus !== this.JobStatus.Stopped) {
-        this.$message({
-          showClose: true,
-          message: this.BusinessLanguage.GetMenuName(
-            this.BusinessLanguage.ScheduleJob.Grid.Tooltip.Unstopped
-          ),
-          type: 'warning'
-        })
-        return
-      }
-      this.RuYiAdmin.Get(
-        'ScheduleJobManagement/ResumeScheduleJob/' + row.id,
-        null
-      ).then((response) => {
-        this.$message({
-          showClose: true,
-          message: this.BusinessLanguage.GetMenuName(
-            this.BusinessLanguage.ScheduleJob.Grid.Message.Resume
-          ),
-          type: 'success'
-        })
-        this.editDisabled = true
-        this.delDisabled = true
-        setTimeout(() => {
-          this.InitData()
-        }, 1000)
-      })
     }
   }
 }
@@ -1413,7 +1516,7 @@ export default {
 }
 .colWidth
 {
-width: 200px;
+width: 240px;
 
 }
 .colWidth2
@@ -1454,6 +1557,10 @@ width: 200px;
 {
   margin-left: 15px;
 }
+/* /deep/ .el-form-item__label
+{
+    line-height: 20px;
+} */
 .header-icon{
   margin-left: 5px;
 }
@@ -1467,5 +1574,8 @@ width: 200px;
 .htbz{
   margin-left: -50px;
   width: 92%;
+}
+.lineheight /deep/ .el-form-item__label{
+  line-height: 20px;
 }
 </style>

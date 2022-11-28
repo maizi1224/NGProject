@@ -79,6 +79,9 @@ export default {
         this.loading = false
       })
     },
+    PostData: function(url, param) {
+      return this.RuYiAdmin.PostData(url, param)
+    },
     GetList: function(param) {
       return this.RuYiAdmin.GetList(this.url.queryList, param)
     },

@@ -3,6 +3,13 @@ import { getToken } from '@/utils/auth'
 import { encrypt } from '@/utils/rsa'
 
 export const RuYiAdmin = {
+  PostData: function(url, param) {
+    return request({
+      url: url,
+      method: 'post',
+      data: param
+    })
+  },
   GetList: function(url, param) {
     return request({
       url: url,
@@ -33,13 +40,13 @@ export const RuYiAdmin = {
   DeleteEntity: function(url, param) {
     return request({
       url: url + param,
-      method: 'delete'
+      method: 'get'
     })
   },
   DeleteEntities: function(url, param) {
     return request({
       url: url + param,
-      method: 'delete'
+      method: 'post'
     })
   },
   DownloadFile: function(url, param) {

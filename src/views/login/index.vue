@@ -19,7 +19,7 @@
         click-mode="push"
       />
     </div>
-    <img :src="img1" class="login-code-img">
+
     <div class="content">
       <el-form
         ref="loginForm"
