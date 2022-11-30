@@ -230,7 +230,7 @@
         "
       />
       <el-table-column
-        prop="contractinfo.lessee"
+        prop="contractinfo[0].lessee"
         align="center"
         :label="
           BusinessLanguage.GetMenuName(
@@ -239,7 +239,7 @@
         "
       />
       <el-table-column
-        prop="contractinfo.lesseePhone"
+        prop="contractinfo[0].lesseePhone"
         align="center"
         :label="
           BusinessLanguage.GetMenuName(
@@ -248,7 +248,7 @@
         "
       />
       <el-table-column
-        prop="contractinfo.contracStartDate"
+        prop="contractinfo[0].contracStartDate"
         align="center"
         :formatter="formatterDate"
         :label="
@@ -258,7 +258,7 @@
         "
       />
       <el-table-column
-        prop="contractinfo.contractEndDate"
+        prop="contractinfo[0].contractEndDate"
         align="center"
         :formatter="formatterDate"
         :label="
@@ -268,7 +268,7 @@
         "
       />
       <el-table-column
-        prop="contractinfo.contractPrice"
+        prop="contractinfo[0].contractPrice"
         align="center"
         :label="
           BusinessLanguage.GetMenuName(
@@ -277,7 +277,7 @@
         "
       />
       <el-table-column
-        prop="contractinfo.contractMoney"
+        prop="contractinfo[0].contractMoney"
         align="center"
         :label="
           BusinessLanguage.GetMenuName(
@@ -341,15 +341,14 @@
         >
           <el-row>
             <el-col :span="24">
-              <el-divider content-position="center">资产基本信息</el-divider>
+              <el-divider content-position="center">不动产登记情况</el-divider>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8" style="display:none">
               <el-form-item
-                label="资产编号"
+                label="资产id"
                 label-width="90px"
-
                 prop="id"
               >
                 <el-input
@@ -364,14 +363,25 @@
             </el-col>
             <el-col :span="8">
               <el-form-item
-                label="档案编号"
+                label="资产编号"
                 prop="assetsCode"
                 label-width="90px"
               >
                 <el-input
                   v-model="form.assetsCode"
-                  prefix-icon="el-icon-search"
-                  placeholder="请输入档案编号"
+
+                  style="margin-left:-80px;"
+                  class="colWidth"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="名称原用途"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="form.assetsName"
                   style="margin-left:-80px;"
                   class="colWidth"
                 />
@@ -382,42 +392,73 @@
                 label="建档日期"
                 prop="assetsGetDate"
                 label-width="90px"
+                style="display:none"
               >
                 <el-date-picker
                   v-model="form.assetsGetDate"
                   class="colWidth"
                   type="date"
-                  placeholder="请输入资产取得时间"
+
                   style="margin-left:-80px;"
                   :picker-options="pickerOptions"
                 />
               </el-form-item>
             </el-col>
-
             <el-col :span="8">
-              <el-form-item
-                label="资产用途"
-                prop="assetsFor"
-                label-width="90px"
-              >
-                <el-input
-                  v-model="form.assetsFor"
-                  style="margin-left:-80px;"
-                  class="colWidth"
-                  placeholder="请输入资产用途描述"
-                />
+              <el-form-item label="资产地址" label-width="90px">
+                <el-input v-model="form.assetsAdress" style="margin-left:-80px;" class="colWidth" />
               </el-form-item>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="8">
+              <el-form-item label="不动产权号" prop="assetsCode" label-width="90px">
+                <el-input v-model="form.landPropertyInfo" style="margin-left:-80px;" class="colWidth" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="产权人"
+                prop="propertyOwner"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="form.propertyOwner"
+                  style="margin-left:-80px;"
+                  class="colWidth"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="共有情况"
+                label-width="90px"
+              >
+                <el-select v-model="form.gyqk" style="margin-left:-80px;" class="colWidth">
+                  <el-option
+                    v-for="item in options2"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="不动单元号" label-width="90px">
+                <el-input v-model="form.bdcdyh" style="margin-left:-80px;" class="colWidth" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item
                 label="资产类型"
                 prop="assetsTypeId"
                 label-width="90px"
               >
-                <el-select v-model="form.assetsTypeId" class="colWidth" style="margin-left:-80px;" placeholder="请选择资产类型">
+                <el-select v-model="form.assetsTypeId" class="colWidth" style="margin-left:-80px;">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
@@ -429,29 +470,13 @@
             </el-col>
             <el-col :span="8">
               <el-form-item
-                label="共有情况"
+                label="权利性质"
                 prop="assetsSourceId"
                 label-width="90px"
               >
-                <el-select v-model="form.assetsSourceId" style="margin-left:-80px;" class="colWidth" placeholder="请选择资产来源">
+                <el-select v-model="form.assetUseType" style="margin-left:-80px;" class="colWidth">
                   <el-option
-                    v-for="item in options2"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item
-                label="资产状态"
-                prop="assetsState"
-                label-width="90px"
-              >
-                <el-select v-model="form.assetsState" style="margin-left:-80px;" class="colWidth" placeholder="请选择资产状态">
-                  <el-option
-                    v-for="item in options3"
+                    v-for="item in options6"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -461,36 +486,41 @@
             </el-col>
           </el-row>
           <el-row>
-
             <el-col :span="8">
-              <el-form-item
-                label="产权人"
-                prop="propertyOwner"
-                label-width="90px"
-              >
-                <el-input
-                  v-model="form.propertyOwner"
-                  prefix-icon="el-icon-search"
-                  placeholder="请输入产权人"
-                  style="margin-left:-80px;"
-                  class="colWidth"
-                />
+              <el-form-item label="用途" label-width="90px">
+                <el-input v-model="form.yt" style="margin-left:-80px;" class="colWidth" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
+              <el-form-item label="土地使用面积" label-width="90px" class="lineheight">
+                <el-input v-model="form.tdsymj" class="colWidth" style="margin-left:-80px;">
+                  <template slot="append">m²</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="房屋建筑面积" label-width="90px" class="lineheight">
+                <el-input v-model="form.fwjzmj" style="margin-left:-80px;" class="colWidth">
+                  <template slot="append">m²</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
               <el-form-item
-                label="权利性质"
-                prop="assetsSourceId"
+                label="备注"
+                prop="assetsState"
                 label-width="90px"
               >
-                <el-select v-model="form.assetUseType" style="margin-left:-80px;" class="colWidth" placeholder="请选择资产来源">
-                  <el-option
-                    v-for="item in options6"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
+                <el-input
+                  v-model="form.remarks"
+
+                  style="margin-left:-80px;"
+                  class="colWidth"
+                />
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -501,48 +531,38 @@
               >
                 <el-input
                   v-model="form.mapInfo"
-                  prefix-icon="el-icon-search"
-                  placeholder="请输入地图标注"
+
                   style="margin-left:-80px;"
                   class="colWidth"
                 />
               </el-form-item>
             </el-col>
           </el-row>
-
           <el-row>
             <el-col :span="8">
               <el-form-item label="期限" label-width="90px">
 
-                <el-input v-model="form.assetsAdress" style="margin-left:-80px;" class="colWidth" prefix-icon="el-icon-search" placeholder="请输入期限" />
+                <el-input v-model="form.qx" style="margin-left:-80px;" class="colWidth" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="起始日期" label-width="90px">
+              <el-form-item label="起止日期" label-width="90px">
                 <el-date-picker
-                  v-model="form.assetsGetDate"
-                  class="colWidth"
-                  type="date"
-                  placeholder="请输入结束日期"
-                  style="margin-left:-80px;"
-                  :picker-options="pickerOptions"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="结束日期" label-width="90px">
-                <el-date-picker
-                  v-model="form.assetsGetDate"
-                  class="colWidth"
-                  type="date"
-                  placeholder="请输入结束日期"
-                  style="margin-left:-80px;"
-                  :picker-options="pickerOptions"
+                  v-model="form.assetDate"
+                  type="daterange"
+                  style="margin-left:-18px;"
+                  align="right"
+                  unlink-panels
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :picker-options="pickerOptions1"
                 />
               </el-form-item>
             </el-col>
 
           </el-row>
+
           <el-row>
             <el-col :span="24">
               <el-divider content-position="center">资产现状</el-divider>
@@ -550,39 +570,39 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="土地使用面积" label-width="90px" class="lineheight">
-                <el-input v-model="form.assetsArea" class="colWidth" style="margin-left:-80px;" placeholder="请输入土地使用面积" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="房屋建筑面积" label-width="90px" class="lineheight">
-                <el-input v-model="form.assetsBefore" placeholder="请输入房屋建筑面积" style="margin-left:-80px;" class="colWidth" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="资产地址" label-width="90px">
-                <el-input v-model="form.assetsAdress" style="margin-left:-80px;" prefix-icon="el-icon-search" class="colWidth" placeholder="请输入资产地址" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row>
-            <el-col :span="8">
               <el-form-item label="层数" label-width="90px">
-                <el-input v-model="form.assetsArea" class="colWidth" style="margin-left:-80px;" placeholder="请输入层数" />
+                <el-input v-model="form.cs" class="colWidth" style="margin-left:-80px;" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="房屋结构形式/分类情况" label-width="90px" class="lineheight">
-                <el-input v-model="form.assetsBefore" placeholder="请输入房屋结构形式/分类情况" style="margin-left:-80px;" class="colWidth" />
+                <el-input v-model="form.fwjg" style="margin-left:-80px;" class="colWidth" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="建设年度" label-width="90px">
-                <el-input v-model="form.assetsAdress" style="margin-left:-80px;" prefix-icon="el-icon-search" class="colWidth" placeholder="请输入建设年度" />
+                <el-input v-model="form.jsnd" style="margin-left:-80px;" class="colWidth" />
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="土地面积" label-width="90px" class="lineheight">
+                <el-input v-model="form.tdmj" class="colWidth" style="margin-left:-80px;">
+                  <template slot="append">m²</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="房屋建筑面积" label-width="90px" class="lineheight">
+                <el-input v-model="form.fwmj" style="margin-left:-80px;" class="colWidth">
+                  <template slot="append">m²</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+
+          </el-row>
+
           <el-row>
             <el-col :span="24">
               <el-divider content-position="center">资产抵押情况</el-divider>
@@ -591,17 +611,19 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="抵押权人" label-width="90px">
-                <el-input v-model="form.assetsArea" class="colWidth" style="margin-left:-80px;" placeholder="请输入抵押权人" />
+                <el-input v-model="form.dyqr" class="colWidth" style="margin-left:-80px;" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="抵押金额" label-width="90px">
-                <el-input v-model="form.assetsBefore" placeholder="请输入抵押金额" style="margin-left:-80px;" class="colWidth" />
+                <el-input v-model="form.dyje" style="margin-left:-80px;" class="colWidth">
+                  <template slot="append">元</template>
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="抵押期限" label-width="90px">
-                <el-input v-model="form.assetsAdress" style="margin-left:-80px;" prefix-icon="el-icon-search" class="colWidth" placeholder="请输入抵押期限" />
+                <el-input v-model="form.dyqx" style="margin-left:-80px;" class="colWidth" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -611,6 +633,8 @@
               <el-form-item
                 label="相关资料附件"
                 prop="assetsFor"
+                label-width="90px"
+                class="lineheight"
               >
                 <el-upload
                   class="upload-demo"
@@ -630,29 +654,90 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-divider content-position="center">产权信息</el-divider>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="房产证号" prop="propertyCode" label-width="90px">
-                <el-input v-model="form.propertyCode" style="margin-left:-80px;" class="colWidth" placeholder="请输入房产证号" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="土地证号" prop="assetsCode" label-width="90px">
-                <el-input v-model="form.landCode" style="margin-left:-80px;" class="colWidth" placeholder="请输入土地证号" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="不动产权号" prop="assetsCode" label-width="90px">
-                <el-input v-model="form.landPropertyInfo" style="margin-left:-80px;" class="colWidth" placeholder="请输入不动产权号" />
-              </el-form-item>
-            </el-col>
-          </el-row>
 
+          <el-collapse accordion>
+            <el-collapse-item>
+              <template slot="title">
+                <p>资产日常巡查情况  </p><i class="header-icon el-icon-school" />
+
+              </template>
+              <el-collapse>
+                <el-collapse-item title="结构安全" name="1">
+
+                  <el-row>
+                    <el-col :span="8">
+                      <el-form-item label="巡查时间" prop="propertyCode" label-width="90px">
+                        <el-date-picker
+                          v-model="form.xcsj1"
+                          class="colWidth"
+                          type="date"
+
+                          style="margin-left:-80px;"
+                          :picker-options="pickerOptions"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="巡查情况" prop="assetsCode" label-width="90px">
+                        <el-input v-model="form.xcqk1" style="margin-left:-80px;" class="colWidth" />
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+                </el-collapse-item>
+
+                <el-collapse-item title="消防设施" name="2">
+
+                  <el-row>
+                    <el-col :span="8">
+                      <el-form-item label="巡查时间" prop="propertyCode" label-width="90px">
+                        <el-date-picker
+                          v-model="form.xcsj2"
+                          class="colWidth"
+                          type="date"
+
+                          style="margin-left:-80px;"
+                          :picker-options="pickerOptions"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="巡查情况" prop="assetsCode" label-width="90px">
+                        <el-input v-model="form.xcqk2" style="margin-left:-80px;" class="colWidth" />
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+                </el-collapse-item>
+
+                <el-collapse-item title="资产使用情况" name="3">
+
+                  <el-row>
+                    <el-col :span="8">
+                      <el-form-item label="巡查时间" prop="propertyCode" label-width="90px">
+                        <el-date-picker
+                          v-model="form.xcsj3"
+                          class="colWidth"
+                          type="date"
+
+                          style="margin-left:-80px;"
+                          :picker-options="pickerOptions"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                      <el-form-item label="巡查情况" prop="assetsCode" label-width="90px">
+                        <el-input v-model="form.xcqk3" style="margin-left:-80px;" class="colWidth" />
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+                </el-collapse-item>
+              </el-collapse>
+
+            </el-collapse-item>
+          </el-collapse>
+          <!--
           <el-row>
             <el-col :span="24">
               <el-form-item
@@ -675,8 +760,8 @@
                 </el-upload>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-collapse accordion>
+          </el-row> -->
+          <el-collapse accordion value="1">
             <el-collapse-item>
               <template slot="title">
                 <p>资产评估  </p><i class="header-icon el-icon-school" />
@@ -691,7 +776,7 @@
                       v-model="form.assetsMent.buildDate"
                       class="colWidth"
                       type="date"
-                      placeholder="请输入评估基准日期"
+
                       :picker-options="pickerOptions"
                     />
                   </el-form-item>
@@ -700,7 +785,7 @@
                   <el-form-item
                     label="评估面积"
                   >
-                    <el-input v-model="form.assetsMent.assessArea" class="colWidth" placeholder="评估面积"><template slot="append">m²</template></el-input>
+                    <el-input v-model="form.assetsMent.assessArea" class="colWidth"><template slot="append">m²</template></el-input>
 
                   </el-form-item>
                 </el-col>
@@ -708,28 +793,39 @@
                   <el-form-item
                     label="评估价值"
                   >
-                    <el-input v-model="form.assetsMent.assetPriceOneYear" class="colWidth" placeholder="评估租赁价值"><template slot="append">元/年</template></el-input>
+                    <el-input v-model="form.assetsMent.assetPriceOneYear" class="colWidth"><template slot="append">元/年</template></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-collapse-item>
 
-            <el-collapse-item>
+            <el-collapse-item name="1">
               <template slot="title">
                 <p>合同信息  </p><i class="header-icon el-icon-notebook-2" />
-
               </template>
-              <el-collapse value="1">
-                <el-collapse-item title="当前合同信息" name="1">
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item
+                    label=""
+                    prop="assetsFor"
+                    class="lineheight"
+                  >
+
+                    <el-button size="small" type="primary" style="margin-left:-115px;" @click="addDomain">新增合同</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-collapse v-for="(domain,index) in form.contractinfo" :key="domain.id" value="1">
+                <el-collapse-item :title="'合同'+(index+1)" name="1">
                   <el-row>
                     <el-col :span="8">
                       <el-form-item label="合同编号" label-width="90px">
-                        <el-input v-model="form.contractinfo.id" :disabled="true" placeholder="合同编号自动生成" class="col3" />
+                        <el-input v-model="domain.id" :disabled="true" class="col3" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="签订日期" label-width="90px">
-                        <el-date-picker v-model="form.contractinfo.contractDate" type="date" placeholder="选择签订日期" :picker-options="pickerOptions" class="col3" />
+                        <el-date-picker v-model="domain.contractDate" type="date" :picker-options="pickerOptions" class="col3" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -738,7 +834,7 @@
                         prop="assetsState"
                         label-width="90px"
                       >
-                        <el-select v-model="form.contractinfo.contractType" class="col3" placeholder="请选择合同类型">
+                        <el-select v-model="domain.contractType" class="col3">
                           <el-option
                             v-for="item in options5"
                             :key="item.value"
@@ -752,7 +848,7 @@
                   <el-row>
                     <el-col :span="8">
                       <el-form-item label="起始日期" label-width="90px">
-                        <el-date-picker v-model="form.contractinfo.contracStartDate" type="date" placeholder="" :picker-options="pickerOptions" class="col3" />
+                        <el-date-picker v-model="domain.contracStartDate" type="date" class="col3" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -761,17 +857,15 @@
                         label-width="90px"
                       >
                         <el-date-picker
-                          v-model="form.contractinfo.contractEndDate"
+                          v-model="domain.contractEndDate"
                           type="date"
-                          placeholder=""
-                          :picker-options="pickerOptions"
                           class="col3"
                         />
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="总租期" label-width="90px">
-                        <el-input v-model="form.contractinfo.contractLife" class="col3" placeholder="">
+                        <el-input v-model="domain.contractLife" class="col3" placeholder="">
                           <template slot="append">年</template>
                         </el-input>
                       </el-form-item>
@@ -780,21 +874,21 @@
                   <el-row>
                     <el-col :span="8">
                       <el-form-item label="保证金" label-width="90px">
-                        <el-input v-model="form.contractinfo.contractPrice" class="col3" placeholder="">
+                        <el-input v-model="domain.contractPrice" class="col3" placeholder="">
                           <template slot="append">元/年</template>
                         </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="年租金" label-width="90px">
-                        <el-input v-model="form.contractinfo.contractPromiseMoney" class="col3" placeholder="">
+                        <el-input v-model="domain.contractPromiseMoney" class="col3" placeholder="">
                           <template slot="append">元/年</template>
                         </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="合同总金额" label-width="90px">
-                        <el-input v-model="form.contractinfo.contractMoney" class="col3" placeholder="">
+                        <el-input v-model="domain.contractMoney" class="col3" placeholder="">
                           <template slot="append">元</template>
                         </el-input>
                       </el-form-item>
@@ -803,7 +897,7 @@
                   <el-row>
                     <el-col :span="8">
                       <el-form-item label="缴纳方式" label-width="90px">
-                        <el-select v-model="form.contractinfo.contractPayment" class="col3" placeholder="请选择资产来源">
+                        <el-select v-model="domain.contractPayment" class="col3">
                           <el-option
                             v-for="item in options7"
                             :key="item.value"
@@ -815,7 +909,7 @@
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="合同状态" label-width="90px">
-                        <el-select v-model="form.contractinfo.contractState" class="col3" placeholder="请选择资产来源">
+                        <el-select v-model="domain.contractState" class="col3">
                           <el-option
                             v-for="item in options8"
                             :key="item.value"
@@ -830,10 +924,9 @@
                     <el-form-item label="合同备注" label-width="90px" class="nowrap">
                       <el-col :span="24">
                         <el-input
-                          v-model="form.contractinfo.remark"
+                          v-model="domain.remark"
                           class="htbz"
                           type="textarea"
-                          placeholder="请输入合同备注"
                         />
                       </el-col>
                     </el-form-item>
@@ -842,12 +935,12 @@
                   <el-row>
                     <el-col :span="12">
                       <el-form-item label="出租方(甲方) " class="nowrap" label-width="90px">
-                        <el-input v-model="form.contractinfo.lessor" placeholder="请输入出租方(甲方) " class="colWidth2" />
+                        <el-input v-model="domain.lessor" class="colWidth2" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
                       <el-form-item label="承租方(乙方) " class="nowrap" label-width="90px">
-                        <el-input v-model="form.contractinfo.lessee" placeholder="请输入承租方(乙方)" class="colWidth2" />
+                        <el-input v-model="domain.lessee" class="colWidth2" />
                       </el-form-item>
                     </el-col>
 
@@ -855,36 +948,36 @@
                   <el-row>
                     <el-col :span="12">
                       <el-form-item label="甲方联系方式" label-width="90px" class="nowrap">
-                        <el-input v-model="form.contractinfo.lessorPhone" placeholder="请输入甲方联系方式" class="colWidth2" />
+                        <el-input v-model="domain.lessorPhone" class="colWidth2" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
                       <el-form-item label="乙方联系方式" class="nowrap" label-width="90px">
-                        <el-input v-model="form.contractinfo.lesseePhone" placeholder="请输入乙方联系方式" class="colWidth2" />
+                        <el-input v-model="domain.lesseePhone" class="colWidth2" />
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="12">
                       <el-form-item label="甲方地址" label-width="90px" class="nowrap">
-                        <el-input v-model="form.contractinfo.lessorAdress" placeholder="请输入甲方地址" class="colWidth2" />
+                        <el-input v-model="domain.lessorAdress" class="colWidth2" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
                       <el-form-item label="乙方地址" class="nowrap" label-width="90px">
-                        <el-input v-model="form.contractinfo.lesseeAdress" placeholder="请输入乙方地址" class="colWidth2" />
+                        <el-input v-model="domain.lesseeAdress" class="colWidth2" />
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="12">
                       <el-form-item label="甲方统一社会信用代码" label-width="160px">
-                        <el-input v-model="form.contractinfo.lessorId" placeholder="请输入甲方统一社会信用代码" class="colWidth2" />
+                        <el-input v-model="domain.lessorId" class="colWidth2" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
                       <el-form-item label="乙方统一社会信用代码" label-width="160px">
-                        <el-input v-model="form.contractinfo.lesseeId" placeholder="请输入乙方统一社会信用代码" class="colWidth2" />
+                        <el-input v-model="domain.lesseeId" class="colWidth2" />
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -905,7 +998,7 @@
                           :on-success="handleSuccess3"
                           :on-preview="handlePreview"
                           :before-upload="beforeUpload"
-                          :file-list="form.contractinfo.contractPdfGroupFiles"
+                          :file-list="domain.contractPdfGroupFiles"
                         >
                           <el-button size="small" type="primary">点击上传</el-button>
                         </el-upload>
@@ -913,7 +1006,6 @@
                     </el-col>
                   </el-row>
                 </el-collapse-item>
-                <el-collapse-item title="历史合同信息" />
               </el-collapse>
 
             </el-collapse-item>
@@ -978,7 +1070,7 @@ export default {
         landPropertyInfo: null,
         propertyFileGroupId: '',
         propertyFileGroupFiles: [],
-        contractinfo: {
+        contractinfo: [{
           id: null,
           contractCode: '',
           contractType: -1,
@@ -1002,8 +1094,35 @@ export default {
           contractState: 2,
           contractMoney: null,
           remark: ''
-        },
-        assetUseType: -1
+        }],
+        assetUseType: -1,
+        gyqk: null,
+        bdcdyh: null,
+        qlxz: null,
+        yt: null,
+        tdsymj: null,
+        fwjzmj: null,
+        qx: null,
+        bgtime: null,
+        endtime: null,
+        ateassetD: null,
+        cs: null,
+        fwjg: null,
+        jsnd: null,
+        tdmj: null,
+        fwmj: null,
+        dyqr: null,
+        dyje: null,
+        dyqx: null,
+        xcsj1: null,
+        xcqk1: null,
+        xcsj2: null,
+        xcqk2: null,
+        xcsj3: null,
+        xcqk3: null,
+        assetDate: [],
+        remarks: null,
+        assetsName: null
       },
       rules: {
         AssetCode: [
@@ -1042,6 +1161,48 @@ export default {
             picker.$emit('pick', date)
           }
         }]
+      },
+      pickerOptions1: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        },
+        shortcuts: [{
+          text: '最近一年',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30 * 12)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三年',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30 * 12 * 3)
+            picker.$emit('pick', [start, end])
+          }
+        },
+        {
+          text: '最近五年',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30 * 12 * 5)
+            picker.$emit('pick', [start, end])
+          }
+        },
+        {
+          text: '最近十年',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30 * 12 * 10)
+            picker.$emit('pick', [start, end])
+          }
+        }
+
+        ]
       },
       options: [{
         value: -1,
@@ -1194,10 +1355,37 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    addDomain() {
+      this.form.contractinfo.push({
+        id: null,
+        contractCode: '',
+        contractType: -1,
+        contractDate: new Date(),
+        lessee: '',
+        lesseePhone: '',
+        lessorPhone: '',
+        lessorAdress: '',
+        lessor: '',
+        lessorId: '',
+        lesseeAdress: '',
+        lesseeId: '',
+        contractPdfGroupFiles: [],
+        ContractPdfGroupId: '',
+        contractPayment: -1,
+        contracStartDate: null,
+        contractEndDate: null,
+        contractLife: null,
+        contractPrice: null,
+        contractPromiseMoney: null,
+        contractState: 2,
+        contractMoney: null,
+        remark: ''
+      })
+    },
     dbclick: function(row, column) {
       this.loading = true
       this.resetForm()
-      this.PostData('Asset/GetById', { id: row.id, contractinfo: { id: row.contractinfo.id }}).then((response) => {
+      this.PostData('Asset/GetById', { id: row.id, contractinfo: [{ id: row.contractinfo[0].id }] }).then((response) => {
         this.title = '查看资产'
         Object.assign(this.form, response.object)
         this.dialogFormVisible = true
@@ -1218,7 +1406,7 @@ export default {
           type: 'warning'
         }).then(() => {
         if (this.multipleSelection.length === 1) {
-          this.PostData('Asset/DeleteById', { id: this.multipleSelection[0].id, contractinfo: { id: this.multipleSelection[0].contractinfo.id }}).then(response => {
+          this.PostData('Asset/DeleteById', { id: this.multipleSelection[0].id, contractinfo: [{ id: this.multipleSelection[0].contractinfo[0].id }] }).then(response => {
             this.$message({
               showClose: true,
               message: this.BusinessLanguage.GetMenuName(this.BusinessLanguage.Common.Dialog.Message.Delete),
@@ -1304,8 +1492,8 @@ export default {
     handleSuccess3: function(response, file, fileList) {
       this.refreshLocalToken()
       if (response.message === 'OK') {
-        this.form.contractinfo.ContractPdfGroupId = response.object[0].fileId
-        this.form.contractinfo.contractPdfGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
+        this.form.contractinfo[0].ContractPdfGroupId = response.object[0].fileId
+        this.form.contractinfo[0].contractPdfGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
       }
     },
     beforeUpload: function(file) {
@@ -1450,7 +1638,7 @@ export default {
     },
     edit: function() {
       this.loading = true
-      this.PostData('Asset/GetById', { id: this.multipleSelection[0].id, contractinfo: { id: this.multipleSelection[0].contractinfo.id }}).then((response) => {
+      this.PostData('Asset/GetById', { id: this.multipleSelection[0].id, contractinfo: [{ id: this.multipleSelection[0].contractinfo[0].id }] }).then((response) => {
         this.title = '修改资产'
         Object.assign(this.form, response.object)
         this.dialogFormVisible = true
@@ -1480,30 +1668,59 @@ export default {
       this.form.landPropertyInfo = ''
       this.form.propertyFileGroupId = ''
       this.form.propertyFileGroupFiles = []
-      this.form.contractinfo.id = null
-      this.form.contractinfo.contractCode = ''
-      this.form.contractinfo.contractType = -1
-      this.form.contractinfo.lessorAdress = ''
-      this.form.contractinfo.contractDate = new Date()
-      this.form.contractinfo.lessee = ''
-      this.form.contractinfo.lesseePhone = ''
-      this.form.contractinfo.lessorPhone = ''
-      this.form.contractinfo.lessor = ''
-      this.form.contractinfo.lessorId = ''
-      this.form.contractinfo.lesseeAdress = ''
-      this.form.contractinfo.lesseeId = ''
-      this.form.contractinfo.contractPdfGroupFiles = []
-      this.form.contractinfo.ContractPdfGroupId = ''
-      this.form.contractinfo.contractPayment = -1
-      this.form.contractinfo.contracStartDate = null
-      this.form.contractinfo.contractEndDate = null
-      this.form.contractinfo.contractLife = null
-      this.form.contractinfo.contractPrice = null
-      this.form.contractinfo.contractPromiseMoney = null
-      this.form.contractinfo.contractState = 2
-      this.form.contractinfo.contractMoney = null
-      this.form.contractinfo.remark = ''
+      this.form.contractinfo = [{
+        id: null,
+        contractCode: null,
+        contractType: -1,
+        lessorAdress: null,
+        contractDate: new Date(),
+        lessee: null,
+        lesseePhone: null,
+        lessorPhone: null,
+        lessor: null,
+        lessorId: null,
+        lesseeAdress: null,
+        lesseeId: null,
+        contractPdfGroupFiles: [],
+        ContractPdfGroupId: null,
+        contractPayment: null,
+        contracStartDate: null,
+        contractEndDate: null,
+        contractLife: null,
+        contractPrice: null,
+        contractPromiseMoney: null,
+        contractState: 2,
+        contractMoney: null,
+        remark: null
+      }]
+
       this.form.assetUseType = -1
+      this.form.gyqk = null
+      this.form.bdcdyh = null
+      this.form.qlxz = null
+      this.form.yt = null
+      this.form.tdsymj = null
+      this.form.fwjzmj = null
+      this.form.qx = null
+      this.form.bgtime = null
+      this.form.endtime = null
+      this.form.assetDate = null
+      this.form.cs = null
+      this.form.fwjg = null
+      this.form.jsnd = null
+      this.form.tdmj = null
+      this.form.fwmj = null
+      this.form.dyqr = null
+      this.form.dyje = null
+      this.form.dyqx = null
+      this.form.xcsj1 = null
+      this.form.xcqk1 = null
+      this.form.xcsj2 = null
+      this.form.xcqk2 = null
+      this.form.xcsj3 = null
+      this.form.xcqk3 = null
+      this.form.assetsName = null
+      this.form.remarks = null
     }
   }
 }

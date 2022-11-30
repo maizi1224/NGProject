@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      title: '宁国国控',
+      title: '宁国市乡村振兴投资集团有限公司',
       logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
     }
   }
