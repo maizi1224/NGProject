@@ -145,7 +145,7 @@
       style="width: 100%"
       align="center"
       stripe
-      row-key="id"
+
       border
       :header-cell-style="{ textAlign: 'center' }"
       @row-dblclick="dbclick"
@@ -435,14 +435,7 @@
                 label="共有情况"
                 label-width="90px"
               >
-                <el-select v-model="form.gyqk" style="margin-left:-80px;" class="colWidth">
-                  <el-option
-                    v-for="item in options2"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
+                <el-input v-model="form.gyqk" style="margin-left:-80px;" class="colWidth" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -458,14 +451,7 @@
                 prop="assetsTypeId"
                 label-width="90px"
               >
-                <el-select v-model="form.assetsTypeId" class="colWidth" style="margin-left:-80px;">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
+                <el-input v-model="form.assetsTypeId" style="margin-left:-80px;" class="colWidth" />
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -510,39 +496,11 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item
-                label="备注"
-                prop="assetsState"
-                label-width="90px"
-              >
-                <el-input
-                  v-model="form.remarks"
-
-                  style="margin-left:-80px;"
-                  class="colWidth"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item
-                label="地图标注"
-                prop="mapInfo"
-                label-width="90px"
-              >
-                <el-input
-                  v-model="form.mapInfo"
-
-                  style="margin-left:-80px;"
-                  class="colWidth"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
               <el-form-item label="期限" label-width="90px">
 
-                <el-input v-model="form.qx" style="margin-left:-80px;" class="colWidth" />
+                <el-input v-model="form.qx" style="margin-left:-80px;" class="colWidth">
+                  <template slot="append">年</template>
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -556,18 +514,17 @@
                   range-separator="至"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
-                  :picker-options="pickerOptions1"
                 />
               </el-form-item>
             </el-col>
 
           </el-row>
 
-          <el-row>
+          <!-- <el-row>
             <el-col :span="24">
               <el-divider content-position="center">资产现状</el-divider>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row>
             <el-col :span="8">
               <el-form-item label="层数" label-width="90px">
@@ -602,7 +559,62 @@
             </el-col>
 
           </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item
+                label="备注"
+                prop="assetsState"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="form.remarks"
 
+                  style="margin-left:-80px;"
+                  class="colWidth"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item
+                label="地图标注"
+                prop="mapInfo"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="form.mapInfo"
+                  style="margin-left:-80px;"
+                  class="colWidth"
+                  @dblclick.native="BaiduClick"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item
+                label="不动产资料附件"
+                prop="assetsFor"
+                label-width="90px"
+                class="lineheight"
+              >
+                <el-upload
+                  class="upload-demo"
+                  :action="importUrl"
+                  :headers="headers"
+                  :before-remove="beforeRemove"
+                  multiple
+                  :limit="limit"
+                  :on-exceed="handleExceed"
+                  :on-success="handleSuccess"
+                  :on-preview="handlePreview"
+                  :before-upload="beforeUpload"
+                  :file-list="form.assetsFileGroupFiles"
+                >
+                  <el-button size="small" type="primary">点击上传</el-button>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-row>
             <el-col :span="24">
               <el-divider content-position="center">资产抵押情况</el-divider>
@@ -624,33 +636,6 @@
             <el-col :span="8">
               <el-form-item label="抵押期限" label-width="90px">
                 <el-input v-model="form.dyqx" style="margin-left:-80px;" class="colWidth" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-
-          <el-row>
-            <el-col :span="24">
-              <el-form-item
-                label="相关资料附件"
-                prop="assetsFor"
-                label-width="90px"
-                class="lineheight"
-              >
-                <el-upload
-                  class="upload-demo"
-                  :action="importUrl"
-                  :headers="headers"
-                  :before-remove="beforeRemove"
-                  multiple
-                  :limit="limit"
-                  :on-exceed="handleExceed"
-                  :on-success="handleSuccess"
-                  :on-preview="handlePreview"
-                  :before-upload="beforeUpload"
-                  :file-list="form.assetsFileGroupFiles"
-                >
-                  <el-button size="small" type="primary">点击上传</el-button>
-                </el-upload>
               </el-form-item>
             </el-col>
           </el-row>
@@ -737,30 +722,7 @@
 
             </el-collapse-item>
           </el-collapse>
-          <!--
-          <el-row>
-            <el-col :span="24">
-              <el-form-item
-                label="产权资料附件"
-              >
-                <el-upload
-                  class="upload-demo"
-                  :action="importUrl"
-                  :before-remove="beforeRemove"
-                  :headers="headers"
-                  multiple
-                  :limit="5"
-                  :on-exceed="handleExceed"
-                  :on-success="handleSuccess2"
-                  :on-preview="handlePreview"
-                  :before-upload="beforeUpload"
-                  :file-list="form.propertyFileGroupFiles"
-                >
-                  <el-button size="small" type="primary">点击上传</el-button>
-                </el-upload>
-              </el-form-item>
-            </el-col>
-          </el-row> -->
+
           <el-collapse accordion value="1">
             <el-collapse-item>
               <template slot="title">
@@ -771,29 +733,59 @@
                 <el-col :span="8">
                   <el-form-item
                     label="评估基准日期"
+                    label-width="90px"
+                    class="lineheight"
                   >
                     <el-date-picker
                       v-model="form.assetsMent.buildDate"
                       class="colWidth"
                       type="date"
-
-                      :picker-options="pickerOptions"
                     />
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item
                     label="评估面积"
+                    label-width="90px"
+                    class="lineheight"
                   >
-                    <el-input v-model="form.assetsMent.assessArea" class="colWidth"><template slot="append">m²</template></el-input>
+                    <el-input v-model="form.assetsMent.assessArea" style="margin-left:-80px;" class="colWidth"><template slot="append">m²</template></el-input>
 
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item
                     label="评估价值"
+                    label-width="90px"
+                    class="lineheight"
                   >
-                    <el-input v-model="form.assetsMent.assetPriceOneYear" class="colWidth"><template slot="append">元/年</template></el-input>
+                    <el-input v-model="form.assetsMent.assetPriceOneYear" style="margin-left:-80px;" class="colWidth"><template slot="append">元/年</template></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item
+                    label="资产评估资料附件"
+                    label-width="90px"
+                    class="lineheight"
+                  >
+                    <el-upload
+                      class="upload-demo"
+                      :action="importUrl"
+                      :before-remove="beforeRemove"
+                      :headers="headers"
+                      multiple
+                      :limit="5"
+                      :on-exceed="handleExceed"
+                      :on-success="handleSuccess2"
+                      :on-preview="handlePreview"
+                      :before-upload="beforeUpload"
+                      :file-list="form.propertyFileGroupFiles"
+                    >
+                      <el-button size="small" type="primary">点击上传</el-button>
+                    </el-upload>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -971,12 +963,12 @@
                   </el-row>
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="甲方统一社会信用代码" label-width="160px">
+                      <el-form-item label="甲方统一社会信用代码(身份证)" label-width="160px">
                         <el-input v-model="domain.lessorId" class="colWidth2" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="乙方统一社会信用代码" label-width="160px">
+                      <el-form-item label="乙方统一社会信用代码(身份证)" label-width="160px">
                         <el-input v-model="domain.lesseeId" class="colWidth2" />
                       </el-form-item>
                     </el-col>
@@ -988,6 +980,7 @@
                         label-width="100px"
                       >
                         <el-upload
+                          :id="index"
                           class="upload-demo"
                           :action="importUrl"
                           :before-remove="beforeRemove"
@@ -995,9 +988,8 @@
                           multiple
                           :limit="5"
                           :on-exceed="handleExceed"
-                          :on-success="handleSuccess3"
+                          :on-success="(response,file,file_list)=>{return handleSuccess3(response,file,file_list,index)}"
                           :on-preview="handlePreview"
-                          :before-upload="beforeUpload"
                           :file-list="domain.contractPdfGroupFiles"
                         >
                           <el-button size="small" type="primary">点击上传</el-button>
@@ -1015,10 +1007,39 @@
       </el-card>
       <div class="demo-drawer__footer">
         <el-button @click="cancelForm">取 消</el-button>
-        <el-button type="primary" :loading="loading" @click="SubmitForm">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
+        <el-button type="primary" :disabled="Isdisabled" :loading="loading" @click="SubmitForm">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
       </div>
     </el-drawer>
+    <el-dialog
+      title="地图标注"
+      :visible.sync="BaiduMapVisible"
+      width="60%"
+    >
+      <baidu-map
+        class="map-wrap"
+        :center="mapData.center"
+        :zoom="mapData.zoom"
+        style="height:600px;width: 1000px;"
+        :enable-scroll-wheel-zoom="true"
+        @ready="mapHandler"
+        @click="getLocation"
+      >
+
+        <bm-navigation anchor="BMAP_ANCHOR_TOP_LEFT" />
+        <bm-city-list anchor="BMAP_ANCHOR_TOP_RIGHT" />
+        <bm-geolocation
+          anchor="BMAP_ANCHOR_BOTTOM_RIGHT"
+          :show-address-bar="true"
+          :auto-location="true"
+        />
+      </baidu-map>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="BaiduMapVisible = false">取 消</el-button>
+        <el-button type="primary" @click="BaiduMapVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
+
 </template>
 
 <script>
@@ -1030,7 +1051,23 @@ export default {
   extends: RuYiAdminBasePage,
   data() {
     return {
+      location: '北京',
+      keyword: '百度',
+      // 商家信息(包含坐标信息)
+      businessDetail: {},
+      // 地图数据
+      mapData: {
+        // 中心坐标
+        center: { lng: 0, lat: 0 },
+        // 缩放级别
+        zoom: 18
+      },
+      // BMap类
+      BMap: null,
+      // 地图对象
+      map: null,
       title: '',
+      BaiduMapVisible: false,
       Isdisabled: false,
       activeNames: ['1'],
       uploadParam: {},
@@ -1048,43 +1085,44 @@ export default {
       },
       form: {
         id: '',
-        assetsCode: '',
+        isdel: 0,
+        assetsCode: null,
         assetsGetDate: null,
-        assetsTypeId: -1,
+        assetsTypeId: null,
         assetsSourceId: -1,
         assetsBefore: null,
         assetsValue: null,
         assetsState: 0,
-        assetsAdress: '',
-        propertyOwner: '',
-        assetsFor: '',
-        assetsFileGroupId: '',
+        assetsAdress: null,
+        propertyOwner: null,
+        assetsFor: null,
+        assetsFileGroupId: null,
         assetsFileGroupFiles: [],
         assetsMent: {
           buildDate: null,
           assessArea: null,
           assetPriceOneYear: null
         },
-        propertyCode: '',
+        propertyCode: null,
         landCode: null,
         landPropertyInfo: null,
-        propertyFileGroupId: '',
+        propertyFileGroupId: null,
         propertyFileGroupFiles: [],
         contractinfo: [{
           id: null,
-          contractCode: '',
+          contractCode: null,
           contractType: -1,
           contractDate: new Date(),
-          lessee: '',
-          lesseePhone: '',
-          lessorPhone: '',
-          lessorAdress: '',
-          lessor: '',
-          lessorId: '',
-          lesseeAdress: '',
-          lesseeId: '',
+          lessee: null,
+          lesseePhone: null,
+          lessorPhone: null,
+          lessorAdress: null,
+          lessor: null,
+          lessorId: null,
+          lesseeAdress: null,
+          lesseeId: null,
           contractPdfGroupFiles: [],
-          ContractPdfGroupId: '',
+          ContractPdfGroupId: null,
           contractPayment: -1,
           contracStartDate: null,
           contractEndDate: null,
@@ -1162,48 +1200,7 @@ export default {
           }
         }]
       },
-      pickerOptions1: {
-        disabledDate(time) {
-          return time.getTime() > Date.now()
-        },
-        shortcuts: [{
-          text: '最近一年',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30 * 12)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近三年',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30 * 12 * 3)
-            picker.$emit('pick', [start, end])
-          }
-        },
-        {
-          text: '最近五年',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30 * 12 * 5)
-            picker.$emit('pick', [start, end])
-          }
-        },
-        {
-          text: '最近十年',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            end.setTime(start.getTime() + 3600 * 1000 * 24 * 30 * 12 * 10)
-            picker.$emit('pick', [start, end])
-          }
-        }
 
-        ]
-      },
       options: [{
         value: -1,
         label: ' '
@@ -1211,27 +1208,7 @@ export default {
         value: 0,
         label: '国有建设用地使用权房屋所有权'
       }
-      // , {
-      //   value: 1,
-      //   label: '租赁型门面房'
-      // }, {
-      //   value: 2,
-      //   label: '土地'
-      // }, {
-      //   value: 3,
-      //   label: '经营性用房'
-      // },
-      // {
-      //   value: 4,
-      //   label: '商服用房'
-      // },
-      // {
-      //   value: 5,
-      //   label: '工厂用房'
-      // }, {
-      //   value: 6,
-      //   label: '沿街商铺'
-      // }]
+
       ],
       options2: [
         {
@@ -1245,18 +1222,7 @@ export default {
         }
 
       ],
-      options3: [
-        {
-          value: 0,
-          label: '闲置中'
 
-        },
-        {
-          value: 1,
-          label: '出租中'
-
-        }
-      ],
       options4: [
         { 'value': '宁国市乡村振兴投资集团有限公司' }
       ],
@@ -1343,7 +1309,7 @@ export default {
     this.url.queryList = 'Asset/Post'
     this.url.queryEntity = 'Asset/GetById/'
     this.url.addEntity = 'Asset/Add'
-    this.url.editEntity = 'ScheduleJobManagement/Put'
+    this.url.editEntity = 'Asset/UpdateById'
     this.url.deleteEntity = 'Asset/DeleteById/'
     this.queryCondition.Sort = 'Id ASC'
     this.refreshLocalToken()
@@ -1355,22 +1321,104 @@ export default {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    // 地图预处理
+    async mapHandler({ BMap, map }) {
+      if (this.businessId) {
+        // 可以在此处请求接口获取坐标数据
+        await this.getMallBusinessDetail()
+      }
+      // 保存百度地图类
+      this.BMap = BMap
+      // 保存地图对象
+      this.map = map
+
+      map.enableScrollWheelZoom(true)
+      // 如果一开始坐标存在(编辑的时候)
+      if (this.businessDetail.longitude && this.businessDetail.latitude) {
+        // 设置坐标
+        this.mapData.center.lng = this.businessDetail.longitude
+        this.mapData.center.lat = this.businessDetail.latitude
+      } else {
+        // 如果坐标不存在则动态获取当前浏览器坐标（创建的时候）
+        const geolocation = new BMap.Geolocation()
+        // 获取当前的坐标（使用promise 将异步转换为同步）
+        await new Promise((resolve) => {
+          geolocation.getCurrentPosition((r) => {
+            this.mapData.center.lng = this.businessDetail.longitude =
+              r.point.lng
+            this.mapData.center.lat = this.businessDetail.latitude = r.point.lat
+            resolve()
+          })
+        })
+      }
+      // 创建定位标记
+      const marker = new BMap.Marker(
+        new BMap.Point(
+          this.businessDetail.longitude,
+          this.businessDetail.latitude
+        )
+      )
+      // 将标记添加到地图上
+      map.addOverlay(marker)
+    },
+    // 在地图上选择区域
+    getLocation(e) {
+      // 设置经度
+      this.businessDetail.longitude = e.point.lng
+      // 设置纬度
+      this.businessDetail.latitude = e.point.lat
+      // 百度地图类
+      const BMapGL = this.BMap
+      // 地图对象
+      const map = this.map
+      // 清除地图上所有的覆盖物(保证每次点击只有一个标记)
+      map.clearOverlays()
+      // 创建定位标记
+      const marker = new BMapGL.Marker(new BMapGL.Point(e.point.lng, e.point.lat))
+      // 将标记添加到地图上
+      map.addOverlay(marker)
+      // 创建坐标解析对象
+      const geoc = new BMapGL.Geocoder()
+      // 解析当前的坐标成地址
+      geoc.getLocation(e.point, (rs) => {
+        // 获取地址对象
+        const addressComp = rs.addressComponents
+        // 拼接出详细地址
+        this.businessDetail.address =
+          addressComp.province +
+          addressComp.city +
+          addressComp.district +
+          addressComp.street +
+          addressComp.streetNumber + rs.surroundingPois[0].title
+        this.form.mapInfo = this.businessDetail.address
+
+        // 向地图添加了一个文本标注，并使用默认的标注样式：
+        var label = new BMapGL.Label(this.businessDetail.address, { // 创建文本标注
+          position: e.point, // 设置标注的地理位置
+          offset: new BMapGL.Size(10, 20) // 设置标注的偏移量
+        })
+        map.addOverlay(label) // 将标注添加到地图中 作者：星银色飞行船 https://www.bilibili.com/read/cv16784331/ 出处：bilibili
+      })
+    },
+    BaiduClick() {
+      this.BaiduMapVisible = true
+    },
     addDomain() {
       this.form.contractinfo.push({
         id: null,
-        contractCode: '',
+        contractCode: null,
         contractType: -1,
         contractDate: new Date(),
-        lessee: '',
-        lesseePhone: '',
-        lessorPhone: '',
-        lessorAdress: '',
-        lessor: '',
-        lessorId: '',
-        lesseeAdress: '',
-        lesseeId: '',
+        lessee: null,
+        lesseePhone: null,
+        lessorPhone: null,
+        lessorAdress: null,
+        lessor: null,
+        lessorId: null,
+        lesseeAdress: null,
+        lesseeId: null,
         contractPdfGroupFiles: [],
-        ContractPdfGroupId: '',
+        ContractPdfGroupId: null,
         contractPayment: -1,
         contracStartDate: null,
         contractEndDate: null,
@@ -1451,12 +1499,11 @@ export default {
         this.EditEntity(this.form).then(response => {
           this.$message({
             showClose: true,
-            message: this.BusinessLanguage.GetMenuName(this.BusinessLanguage.Common.Dialog.Message.Edit),
+            message: '资产档案修改成功',
             type: 'success'
           })
+          this.loading = false
           this.dialogFormVisible = false
-          this.editDisabled = true
-          this.delDisabled = true
           this.InitData()
         })
       }
@@ -1489,11 +1536,11 @@ export default {
         this.form.propertyFileGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
       }
     },
-    handleSuccess3: function(response, file, fileList) {
+    handleSuccess3: function(response, file, fileList, j) {
       this.refreshLocalToken()
       if (response.message === 'OK') {
-        this.form.contractinfo[0].ContractPdfGroupId = response.object[0].fileId
-        this.form.contractinfo[0].contractPdfGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
+        this.form.contractinfo[j].ContractPdfGroupId = response.object[0].fileId
+        this.form.contractinfo[j].contractPdfGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
       }
     },
     beforeUpload: function(file) {
@@ -1507,31 +1554,37 @@ export default {
       return true
     },
     cancelForm() {
-      this.$confirm('是否在离开前保存资产信息?', '确认信息', {
-        distinguishCancelAndClose: true,
-        confirmButtonText: '保存',
-        cancelButtonText: '放弃修改'
-      })
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: '保存成功'
-          })
-          this.loading = false
-          this.dialogFormVisible = false
-          clearTimeout(this.timer)
+      if (this.Isdisabled) {
+        this.loading = false
+        this.dialogFormVisible = false
+        clearTimeout(this.timer)
+      } else {
+        this.$confirm('是否在离开前保存资产信息?', '确认信息', {
+          distinguishCancelAndClose: true,
+          confirmButtonText: '保存',
+          cancelButtonText: '放弃修改'
         })
-        .catch(action => {
-          this.$message({
-            type: 'info',
-            message: action === 'cancel'
-              ? '放弃保存并离开页面'
-              : '停留在当前页面'
+          .then(() => {
+            this.$message({
+              type: 'success',
+              message: '保存成功'
+            })
+            this.loading = false
+            this.dialogFormVisible = false
+            clearTimeout(this.timer)
           })
-          this.loading = false
-          this.dialogFormVisible = false
-          clearTimeout(this.timer)
-        })
+          .catch(action => {
+            this.$message({
+              type: 'info',
+              message: action === 'cancel'
+                ? '放弃保存并离开页面'
+                : '停留在当前页面'
+            })
+            this.loading = false
+            this.dialogFormVisible = false
+            clearTimeout(this.timer)
+          })
+      }
     },
     handleClose(done) {
       if (this.loading) {
@@ -1648,25 +1701,25 @@ export default {
     },
     resetForm: function() {
       this.form.id = ''
-      this.form.assetsCode = ''
+      this.form.assetsCode = null
       this.form.assetsBefore = null
       this.form.assetsValue = null
       this.form.assetsGetDate = new Date()
-      this.form.assetsTypeId = -1
+      this.form.assetsTypeId = null
       this.form.assetsSourceId = -1
       this.form.assetsState = 0
-      this.form.assetsAdress = ''
-      this.form.propertyOwner = ''
-      this.form.assetsFor = ''
-      this.form.assetsFileGroupId = ''
+      this.form.assetsAdress = null
+      this.form.propertyOwner = null
+      this.form.assetsFor = null
+      this.form.assetsFileGroupId = null
       this.form.assetsFileGroupFiles = []
       this.form.assetsMent.buildDate = null
       this.form.assetsMent.assessArea = null
       this.form.assetsMent.assetPriceOneYear = null
-      this.form.propertyCode = ''
-      this.form.landCode = ''
-      this.form.landPropertyInfo = ''
-      this.form.propertyFileGroupId = ''
+      this.form.propertyCode = null
+      this.form.landCode = null
+      this.form.landPropertyInfo = null
+      this.form.propertyFileGroupId = null
       this.form.propertyFileGroupFiles = []
       this.form.contractinfo = [{
         id: null,
