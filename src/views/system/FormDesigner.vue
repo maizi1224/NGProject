@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <v-form-designer style="margin-left: 0;"></v-form-designer>
+    <v-form-designer style="margin-left: 0;" />
   </div>
 </template>
 

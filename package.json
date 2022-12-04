@@ -47,6 +47,7 @@
     "uuid": "^8.3.2",
     "vform-builds": "^2.2.7",
     "vue": "2.6.10",
+    "vue-baidu-map": "^0.21.22",
     "vue-count-to": "1.0.13",
     "vue-pdf": "^4.3.0",
     "vue-router": "3.0.2",

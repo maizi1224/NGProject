@@ -44,6 +44,7 @@ import { Guid } from '@/constants/guid'
 import { DateTime } from '@/constants/date'
 import { MessageLevel } from '@/constants/message-level'
 import CryptoJS from 'crypto-js'
+import BaiduMap from 'vue-baidu-map'
 
 Vue.use(VueParticles)
 Vue.use(DataV)
@@ -89,6 +90,11 @@ Vue.use(Element, {
 })
 
 Vue.use(VForm) // 全局注册VForm(同时注册了v-form-designer和v-form-render组件)
+
+Vue.use(BaiduMap, {
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+  ak: '90sap0XCpGWVfx8tGdiHaKxTQG1valuG'
+})
 
 // register global utility filters
 Object.keys(filters).forEach(key => {

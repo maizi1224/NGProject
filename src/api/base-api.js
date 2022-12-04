@@ -33,7 +33,7 @@ export const RuYiAdmin = {
   EditEntity: function(url, param) {
     return request({
       url: url,
-      method: 'put',
+      method: 'post',
       data: param
     })
   },
