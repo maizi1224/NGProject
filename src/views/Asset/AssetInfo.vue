@@ -478,14 +478,14 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="土地使用面积" label-width="90px" class="lineheight">
+              <el-form-item label="土地使用面积" label-width="90px" class="lineheight" prop="tdsymj">
                 <el-input v-model="form.tdsymj" class="colWidth" style="margin-left:-80px;">
                   <template slot="append">m²</template>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="房屋建筑面积" label-width="90px" class="lineheight">
+              <el-form-item label="房屋建筑面积" label-width="90px" class="lineheight" prop="fwjzmj">
                 <el-input v-model="form.fwjzmj" style="margin-left:-80px;" class="colWidth">
                   <template slot="append">m²</template>
                 </el-input>
@@ -496,9 +496,9 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label="期限" label-width="90px">
+              <el-form-item label="期限" label-width="90px" prop="qx">
 
-                <el-input v-model="form.qx" style="margin-left:-80px;" class="colWidth">
+                <el-input v-model="form.qx" style="margin-left:-80px;" class="colWidth" prop="qx">
                   <template slot="append">年</template>
                 </el-input>
               </el-form-item>
@@ -542,7 +542,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <!-- <el-row>
             <el-col :span="8">
               <el-form-item label="土地面积" label-width="90px" class="lineheight">
                 <el-input v-model="form.tdmj" class="colWidth" style="margin-left:-80px;">
@@ -558,7 +558,7 @@
               </el-form-item>
             </el-col>
 
-          </el-row>
+          </el-row> -->
           <el-row>
             <el-col :span="8">
               <el-form-item
@@ -599,18 +599,19 @@
               >
                 <el-upload
                   class="upload-demo"
-                  :action="importUrl"
                   :headers="headers"
+                  action=""
                   :before-remove="beforeRemove"
-                  multiple
+                  :multiple="true"
                   :limit="limit"
+                  :auto-upload="false"
                   :on-exceed="handleExceed"
-                  :on-success="handleSuccess"
+                  :on-change="(file,file_list)=>{return fileChange(file,file_list,'1')}"
                   :on-preview="handlePreview"
-                  :before-upload="beforeUpload"
                   :file-list="form.assetsFileGroupFiles"
                 >
-                  <el-button size="small" type="primary">点击上传</el-button>
+                  <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
+                  <el-button size="small" type="success" style="margin-left:50px" @click="submitUpload('1')">点击上传</el-button>
                 </el-upload>
               </el-form-item>
             </el-col>
@@ -627,7 +628,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="抵押金额" label-width="90px">
+              <el-form-item label="抵押金额" label-width="90px" prop="dyje">
                 <el-input v-model="form.dyje" style="margin-left:-80px;" class="colWidth">
                   <template slot="append">元</template>
                 </el-input>
@@ -759,7 +760,7 @@
                     label-width="90px"
                     class="lineheight"
                   >
-                    <el-input v-model="form.assetsMent.assetPriceOneYear" style="margin-left:-80px;" class="colWidth"><template slot="append">元/年</template></el-input>
+                    <el-input v-model="form.assetsMent.assetPriceOneYear" style="margin-left:-80px;" class="colWidth"><template slot="append">元</template></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -773,18 +774,19 @@
                   >
                     <el-upload
                       class="upload-demo"
-                      :action="importUrl"
-                      :before-remove="beforeRemove"
                       :headers="headers"
-                      multiple
-                      :limit="5"
+                      action=""
+                      :before-remove="beforeRemove"
+                      :multiple="true"
+                      :limit="limit"
+                      :auto-upload="false"
                       :on-exceed="handleExceed"
-                      :on-success="handleSuccess2"
+                      :on-change="(file,file_list)=>{return fileChange(file,file_list,'2')}"
                       :on-preview="handlePreview"
-                      :before-upload="beforeUpload"
                       :file-list="form.propertyFileGroupFiles"
                     >
-                      <el-button size="small" type="primary">点击上传</el-button>
+                      <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
+                      <el-button size="small" type="success" style="margin-left:50px" @click="submitUpload('2')">点击上传</el-button>
                     </el-upload>
                   </el-form-item>
                 </el-col>
@@ -856,7 +858,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                      <el-form-item label="总租期" label-width="90px">
+                      <el-form-item label="总租期" label-width="90px" prop="contractLife">
                         <el-input v-model="domain.contractLife" class="col3" placeholder="">
                           <template slot="append">年</template>
                         </el-input>
@@ -865,21 +867,21 @@
                   </el-row>
                   <el-row>
                     <el-col :span="8">
-                      <el-form-item label="保证金" label-width="90px">
+                      <el-form-item label="保证金" label-width="90px" prop="contractPrice">
                         <el-input v-model="domain.contractPrice" class="col3" placeholder="">
-                          <template slot="append">元/年</template>
+                          <template slot="append">元</template>
                         </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                      <el-form-item label="年租金" label-width="90px">
+                      <el-form-item label="年租金" label-width="90px" prop="contractPromiseMoney">
                         <el-input v-model="domain.contractPromiseMoney" class="col3" placeholder="">
                           <template slot="append">元/年</template>
                         </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                      <el-form-item label="合同总金额" label-width="90px">
+                      <el-form-item label="合同总金额" label-width="90px" prop="contractMoney">
                         <el-input v-model="domain.contractMoney" class="col3" placeholder="">
                           <template slot="append">元</template>
                         </el-input>
@@ -979,20 +981,37 @@
                         label="纸质合同附件"
                         label-width="100px"
                       >
-                        <el-upload
+                        <!-- <el-upload
                           :id="index"
                           class="upload-demo"
                           :action="importUrl"
                           :before-remove="beforeRemove"
                           :headers="headers"
-                          multiple
-                          :limit="5"
+                          :multiple="true"
+                          :limit="50"
                           :on-exceed="handleExceed"
                           :on-success="(response,file,file_list)=>{return handleSuccess3(response,file,file_list,index)}"
                           :on-preview="handlePreview"
                           :file-list="domain.contractPdfGroupFiles"
                         >
                           <el-button size="small" type="primary">点击上传</el-button>
+                        </el-upload> -->
+
+                        <el-upload
+                          class="upload-demo"
+                          :headers="headers"
+                          action=""
+                          :before-remove="beforeRemove"
+                          :multiple="true"
+                          :limit="limit"
+                          :auto-upload="false"
+                          :on-exceed="handleExceed"
+                          :on-change="(file,file_list)=>{return fileChange(file,file_list,'3',index)}"
+                          :on-preview="handlePreview"
+                          :file-list="domain.contractPdfGroupFiles"
+                        >
+                          <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
+                          <el-button size="small" type="success" style="margin-left:50px" @click="submitUpload('3',index)">点击上传</el-button>
                         </el-upload>
                       </el-form-item>
                     </el-col>
@@ -1051,6 +1070,9 @@ export default {
   extends: RuYiAdminBasePage,
   data() {
     return {
+      realfilelist: [],
+      filecount: 0,
+      oldFileList: [],
       location: '北京',
       keyword: '百度',
       // 商家信息(包含坐标信息)
@@ -1071,7 +1093,7 @@ export default {
       Isdisabled: false,
       activeNames: ['1'],
       uploadParam: {},
-      limit: 5,
+      limit: 50,
       headers: null,
       importUrl: process.env.VUE_APP_BASE_API + '/Files/UploadFiles',
       timer: null,
@@ -1099,6 +1121,8 @@ export default {
         assetsFileGroupId: null,
         assetsFileGroupFiles: [],
         assetsMent: {
+          id: null,
+          assetMentId: null,
           buildDate: null,
           assessArea: null,
           assetPriceOneYear: null
@@ -1163,24 +1187,31 @@ export default {
         assetsName: null
       },
       rules: {
-        AssetCode: [
-          {
-            required: true,
-            message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.AssetMent.Placeholder.AssetMentCode
-            ),
-            trigger: 'blur'
-          },
-          {
-            min: 0,
-            max: 255,
-            message: this.BusinessLanguage.GetMenuName(
-              this.BusinessLanguage.ScheduleJob.Form.Rule.MinLength255
-            ),
-            trigger: 'blur'
-          }
-        ]
 
+        tdsymj: [
+          { required: true, message: '土地使用面积不能为空', trigger: 'blur' },
+          { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '土地使用面积需为数字', trigger: 'blur' }
+        ],
+        fwjzmj: [
+          { required: true, message: '房屋检测面积不能为空', trigger: 'blur' },
+          { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '房屋检测面积需为数字', trigger: 'blur' }
+        ],
+        qx: [
+          { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '期限需为数字', trigger: 'blur' }
+        ],
+        dyje: [
+          { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '抵押金额需为数字', trigger: 'blur' }
+        ]
+        // contractLife: [
+        //   { required: true, message: '土地使用面积不能为空', trigger: 'blur' },
+        //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '合同期限需为数字', trigger: 'blur' }
+        // ],
+        // contractPrice: [
+        //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '保证金需为数字', trigger: 'blur' }
+        // ], contractPromiseMoney: [
+        //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '年租金需为数字', trigger: 'blur' }
+        // ],
+        // contractMoney: [{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '合同金额需为数字', trigger: 'blur' }]
       },
       pickerOptions: {
         disabledDate(time) {
@@ -1484,29 +1515,33 @@ export default {
       })
     },
     SubmitForm: function() {
-      if (this.form.id === '') {
-        this.AddEntity(this.form).then(response => {
-          this.$message({
-            showClose: true,
-            message: '资产档案新建成功',
-            type: 'success'
-          })
-          this.loading = false
-          this.dialogFormVisible = false
-          this.InitData()
-        })
-      } else {
-        this.EditEntity(this.form).then(response => {
-          this.$message({
-            showClose: true,
-            message: '资产档案修改成功',
-            type: 'success'
-          })
-          this.loading = false
-          this.dialogFormVisible = false
-          this.InitData()
-        })
-      }
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          if (this.form.id === '') {
+            this.AddEntity(this.form).then(response => {
+              this.$message({
+                showClose: true,
+                message: '资产档案新建成功',
+                type: 'success'
+              })
+              this.loading = false
+              this.dialogFormVisible = false
+              this.InitData()
+            })
+          } else {
+            this.EditEntity(this.form).then(response => {
+              this.$message({
+                showClose: true,
+                message: '资产档案修改成功',
+                type: 'success'
+              })
+              this.loading = false
+              this.dialogFormVisible = false
+              this.InitData()
+            })
+          }
+        }
+      })
     },
     refreshLocalToken: function() {
       this.RuYiAdmin.RefreshLocalToken()
@@ -1522,12 +1557,82 @@ export default {
         'Files/DownloadFiles/', file.id, file.name
       )
     },
-    handleSuccess: function(response, file, fileList) {
-      this.refreshLocalToken()
-      if (response.message === 'OK') {
-        this.form.assetsFileGroupId = response.object[0].fileId
-        this.form.assetsFileGroupFiles.push({ name: response.object[0].fileName, url: response.object[0].fileUrl, id: response.object[0].id })
+    fileChange(file, fileList, param, p2) {
+      if (param === '1') {
+        this.form.assetsFileGroupFiles = fileList
+      } else if (param === '2') {
+        this.form.propertyFileGroupFiles = fileList
+      } else if (param === '3') {
+        this.form.contractinfo[p2].contractPdfGroupFiles = fileList
       }
+    },
+    submitUpload(param, p2) { // 提交点击
+      this.uploadFile(param, p2)
+    },
+    uploadFile(param, p2) { // 文件上传方法
+      const formData = new FormData()
+
+      if (param === '1') {
+        this.form.assetsFileGroupFiles.forEach(file => {
+          formData.append('multipartFiles', file.raw)
+        })
+      } else if (param === '2') {
+        this.form.propertyFileGroupFiles.forEach(file => {
+          formData.append('multipartFiles', file.raw)
+        })
+      } else if (param === '3') {
+        this.form.contractinfo[p2].contractPdfGroupFiles.forEach(file => {
+          formData.append('multipartFiles', file.raw)
+        })
+      }
+
+      const VueThis = this
+      this.PostData('/Files/UploadFiles', formData).then(response => {
+        this.$message({
+          showClose: true,
+          message: '成功',
+          type: 'success'
+        })
+        const files = []
+
+        if (param === '1') {
+          // 资产附件
+          response.object.forEach(element => {
+            VueThis.form.assetsFileGroupId = element.fileId
+            files.push({ name: element.fileName, url: element.fileUrl, id: element.id })
+          })
+          VueThis.form.assetsFileGroupFiles.forEach(element => {
+            if (element.id) {
+              files.push(element)
+            }
+          })
+          VueThis.form.assetsFileGroupFiles = files
+        } else if (param === '2') {
+          // 评估附件
+          response.object.forEach(element => {
+            VueThis.form.propertyFileGroupId = element.fileId
+            files.push({ name: element.fileName, url: element.fileUrl, id: element.id })
+          })
+          VueThis.form.propertyFileGroupFiles.forEach(element => {
+            if (element.id) {
+              files.push(element)
+            }
+          })
+          VueThis.form.propertyFileGroupFiles = files
+        } else if (param === '3') {
+          // 评估附件
+          response.object.forEach(element => {
+            VueThis.form.contractinfo[p2].ContractPdfGroupId = element.fileId
+            files.push({ name: element.fileName, url: element.fileUrl, id: element.id })
+          })
+          VueThis.form.contractinfo[p2].contractPdfGroupFiles.forEach(element => {
+            if (element.id) {
+              files.push(element)
+            }
+          })
+          VueThis.form.contractinfo[p2].contractPdfGroupFiles = files
+        }
+      })
     },
     handleSuccess2: function(response, file, fileList) {
       this.refreshLocalToken()
@@ -1713,6 +1818,8 @@ export default {
       this.form.assetsFor = null
       this.form.assetsFileGroupId = null
       this.form.assetsFileGroupFiles = []
+      this.form.assetsMent.id = null
+      this.form.assetsMent.assetMentId = null
       this.form.assetsMent.buildDate = null
       this.form.assetsMent.assessArea = null
       this.form.assetsMent.assetPriceOneYear = null
