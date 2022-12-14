@@ -167,31 +167,7 @@
             BusinessLanguage.AssetMent.Grid.AssetsType
           )
         "
-      >
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.assetsTypeId === 0">
-            租赁型住宅
-          </el-tag>
-          <el-tag v-else-if="scope.assetsTypeId === 1">
-            租赁型门面房
-          </el-tag>
-          <el-tag v-else-if="scope.assetsTypeId === 2">
-            土地
-          </el-tag>
-          <el-tag v-else-if="scope.assetsTypeId === 3">
-            经营性用房
-          </el-tag>
-          <el-tag v-else-if="scope.assetsTypeId === 4">
-            商服用房
-          </el-tag>
-          <el-tag v-else-if="scope.assetsTypeId === 5">
-            工厂用房
-          </el-tag>
-          <el-tag v-else>
-            沿街商铺
-          </el-tag>
-        </template>
-      </el-table-column>
+      />
       <el-table-column
         prop="assetsState"
         align="center"
@@ -221,13 +197,9 @@
         "
       />
       <el-table-column
-        prop="assetsAdress"
+        prop="assetsName"
         align="center"
-        :label="
-          BusinessLanguage.GetMenuName(
-            BusinessLanguage.AssetMent.Grid.AssetsAdress
-          )
-        "
+        label="原用途"
       />
       <el-table-column
         prop="contractinfo[0].lessee"
@@ -498,7 +470,7 @@
             <el-col :span="8">
               <el-form-item label="期限" label-width="90px" prop="qx">
 
-                <el-input v-model="form.qx" style="margin-left:-80px;" class="colWidth" prop="qx">
+                <el-input v-model="form.qx" style="margin-left:-80px;" class="colWidth">
                   <template slot="append">年</template>
                 </el-input>
               </el-form-item>
@@ -542,23 +514,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <!-- <el-row>
-            <el-col :span="8">
-              <el-form-item label="土地面积" label-width="90px" class="lineheight">
-                <el-input v-model="form.tdmj" class="colWidth" style="margin-left:-80px;">
-                  <template slot="append">m²</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="房屋建筑面积" label-width="90px" class="lineheight">
-                <el-input v-model="form.fwmj" style="margin-left:-80px;" class="colWidth">
-                  <template slot="append">m²</template>
-                </el-input>
-              </el-form-item>
-            </el-col>
 
-          </el-row> -->
           <el-row>
             <el-col :span="8">
               <el-form-item
@@ -730,28 +686,25 @@
                 <p>资产评估  </p><i class="header-icon el-icon-school" />
 
               </template>
+
               <el-row>
                 <el-col :span="8">
                   <el-form-item
-                    label="评估基准日期"
+                    label="评估日期"
                     label-width="90px"
                     class="lineheight"
                   >
                     <el-date-picker
                       v-model="form.assetsMent.buildDate"
+                      style="margin-left:-80px;"
                       class="colWidth"
                       type="date"
                     />
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item
-                    label="评估面积"
-                    label-width="90px"
-                    class="lineheight"
-                  >
-                    <el-input v-model="form.assetsMent.assessArea" style="margin-left:-80px;" class="colWidth"><template slot="append">m²</template></el-input>
-
+                  <el-form-item label="评估编号" label-width="90px" class="lineheight">
+                    <el-input v-model="form.assetsMent.assetCode" class="colWidth" style="margin-left:-80px;" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -759,12 +712,47 @@
                     label="评估价值"
                     label-width="90px"
                     class="lineheight"
+                    prop="pgjz"
                   >
-                    <el-input v-model="form.assetsMent.assetPriceOneYear" style="margin-left:-80px;" class="colWidth"><template slot="append">元</template></el-input>
+                    <el-input v-model="form.assetsMent.assetPriceOneYear" style="margin-left:-80px;" class="colWidth"><template slot="append">万元</template></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
+              <el-row>
 
+                <el-col :span="8">
+                  <el-form-item label="土地面积" label-width="90px" class="lineheight" prop="tdmj">
+                    <el-input v-model="form.tdmj" class="colWidth" style="margin-left:-80px;" prop="tdmj">
+                      <template slot="append">m²</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="土地评估价值" label-width="90px" class="lineheight" prop="tdpgjz">
+                    <el-input v-model="form.tdpgjz" class="colWidth" style="margin-left:-80px;">
+                      <template slot="append">万元</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="房产面积" label-width="90px" class="lineheight" prop="fwmj">
+                    <el-input v-model="form.fwmj" style="margin-left:-80px;" class="colWidth">
+                      <template slot="append">m²</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="房产评估价值" label-width="90px" class="lineheight" pro="fwpgjz">
+                    <el-input v-model="form.fwpgjz" class="colWidth" style="margin-left:-80px;">
+                      <template slot="append">万元</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
               <el-row>
                 <el-col :span="24">
                   <el-form-item
@@ -1125,6 +1113,7 @@ export default {
           assetMentId: null,
           buildDate: null,
           assessArea: null,
+          assetCode: null,
           assetPriceOneYear: null
         },
         propertyCode: null,
@@ -1184,7 +1173,9 @@ export default {
         xcqk3: null,
         assetDate: [],
         remarks: null,
-        assetsName: null
+        assetsName: null,
+        tdpgjz: null,
+        fwpgjz: null
       },
       rules: {
 
@@ -1199,9 +1190,21 @@ export default {
         qx: [
           { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '期限需为数字', trigger: 'blur' }
         ],
-        dyje: [
-          { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '抵押金额需为数字', trigger: 'blur' }
+        pgjz: [
+          { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '评估价值需为数字', trigger: 'blur' }
         ]
+        // tdmj: [
+        //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '抵押金额需为数字', trigger: 'blur' }
+        // ],
+        // fwmj: [
+        //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '抵押金额需为数字', trigger: 'blur' }
+        // ],
+        // tdpgjz: [
+        //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '抵押金额需为数字', trigger: 'blur' }
+        // ],
+        // fwpgjz: [
+        //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '抵押金额需为数字', trigger: 'blur' }
+        // ]
         // contractLife: [
         //   { required: true, message: '土地使用面积不能为空', trigger: 'blur' },
         //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '合同期限需为数字', trigger: 'blur' }
@@ -1570,6 +1573,7 @@ export default {
       this.uploadFile(param, p2)
     },
     uploadFile(param, p2) { // 文件上传方法
+      this.refreshLocalToken()
       const formData = new FormData()
 
       if (param === '1') {
@@ -1823,6 +1827,7 @@ export default {
       this.form.assetsMent.buildDate = null
       this.form.assetsMent.assessArea = null
       this.form.assetsMent.assetPriceOneYear = null
+      this.form.assetsMent.assetCode = null
       this.form.propertyCode = null
       this.form.landCode = null
       this.form.landPropertyInfo = null
@@ -1881,6 +1886,8 @@ export default {
       this.form.xcqk3 = null
       this.form.assetsName = null
       this.form.remarks = null
+      this.form.tdpgjz = null
+      this.form.fwpgjz = null
     }
   }
 }
