@@ -133,6 +133,15 @@
             )
           }}
         </el-button>
+        <!-- <el-button
+          type="success"
+          icon="el-icon-printer"
+          plain
+          size="mini"
+          @click="print"
+        >
+          打印
+        </el-button> -->
       </el-col>
     </el-row>
 
@@ -171,18 +180,14 @@
       <el-table-column
         prop="assetsState"
         align="center"
-        :label="
-          BusinessLanguage.GetMenuName(
-            BusinessLanguage.AssetMent.Grid.AssetsState
-          )
-        "
+        label="承租情况"
       >
         <template slot-scope="scope">
           <el-tag v-if="scope.row.assetsState === 0">
-            闲置中
+            未出租
           </el-tag>
-          <el-tag v-else>
-            出租
+          <el-tag v-else type="success">
+            已出租
           </el-tag>
         </template>
       </el-table-column>
@@ -201,7 +206,7 @@
         align="center"
         label="原用途"
       />
-      <el-table-column
+      <!-- <el-table-column
         prop="contractinfo[0].lessee"
         align="center"
         :label="
@@ -229,7 +234,8 @@
           )
         "
       />
-      <el-table-column
+      -->
+      <!-- <el-table-column
         prop="contractinfo[0].contractEndDate"
         align="center"
         :formatter="formatterDate"
@@ -238,8 +244,8 @@
             BusinessLanguage.AssetMent.Grid.ContractEndDate
           )
         "
-      />
-      <el-table-column
+      /> -->
+      <!-- <el-table-column
         prop="contractinfo[0].contractPrice"
         align="center"
         :label="
@@ -248,7 +254,7 @@
           )
         "
       />
-      <el-table-column
+     <el-table-column
         prop="contractinfo[0].contractMoney"
         align="center"
         :label="
@@ -256,7 +262,7 @@
             BusinessLanguage.AssetMent.Grid.ContractMoney
           )
         "
-      />
+      /> -->
       <el-table-column
         prop="assetUseType"
         align="center"
@@ -267,17 +273,17 @@
         "
       >
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.assetUseType === 0">
-            移交
+          <el-tag v-if="scope.row.assetUseType === 0" type="success">
+            正常管理
           </el-tag>
-          <el-tag v-else-if="scope.assetUseType === 1">
+          <el-tag v-else-if="scope.assetUseType === 1" type="success">
             拆迁
           </el-tag>
-          <el-tag v-else-if="scope.assetUseType === 2">
-            出借
+          <el-tag v-else-if="scope.assetUseType === 2" type="success">
+            正常管理
           </el-tag>
           <el-tag v-else-if="scope.assetUseType === 3" type="danger">
-            停用
+            正常管理
           </el-tag>
           <el-tag v-else type="success">
             正常管理
@@ -285,10 +291,25 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column
+        prop="contractinfo[0].contractEndDate"
+        align="center"
+        :formatter="formatterDate"
+        label="操作"
+      >
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleVideo(scope.$index, scope.row)"
+          >查看监控</el-button>
+
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pagination">
       <el-pagination
-        :current-page="queryCondition.PageIndex"
+        background
+        :current-page.sync="queryCondition.PageIndex"
         :page-sizes="[10, 15, 20, 40, 60, 80, 100]"
         :page-size="queryCondition.PageSize"
         layout="total, sizes, prev, pager, next, jumper"
@@ -335,7 +356,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item
-                label="资产编号"
+                label="档案号"
                 prop="assetsCode"
                 label-width="90px"
               >
@@ -797,7 +818,7 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-collapse v-for="(domain,index) in form.contractinfo" :key="domain.id" value="1">
+              <el-collapse v-for="(domain,index) in form.contractinfo" :key="index" value="1">
                 <el-collapse-item :title="'合同'+(index+1)" name="1">
                   <el-row>
                     <el-col :span="8">
@@ -846,7 +867,12 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                      <el-form-item label="总租期" label-width="90px" prop="contractLife">
+                      <el-form-item
+                        label="总租期"
+                        label-width="90px"
+                        :prop="'contractinfo.'+index+'.contractLife'"
+                        :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '总租期需为数字', trigger: 'blur'}"
+                      >
                         <el-input v-model="domain.contractLife" class="col3" placeholder="">
                           <template slot="append">年</template>
                         </el-input>
@@ -855,21 +881,36 @@
                   </el-row>
                   <el-row>
                     <el-col :span="8">
-                      <el-form-item label="保证金" label-width="90px" prop="contractPrice">
+                      <el-form-item
+                        label="保证金"
+                        label-width="90px"
+                        :prop="'contractinfo.'+index+'.contractPrice'"
+                        :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '保证金需为数字', trigger: 'blur'}"
+                      >
                         <el-input v-model="domain.contractPrice" class="col3" placeholder="">
                           <template slot="append">元</template>
                         </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                      <el-form-item label="年租金" label-width="90px" prop="contractPromiseMoney">
+                      <el-form-item
+                        label="年租金"
+                        label-width="90px"
+                        :prop="'contractinfo.'+index+'.contractPromiseMoney'"
+                        :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '年租金需为数字', trigger: 'blur'}"
+                      >
                         <el-input v-model="domain.contractPromiseMoney" class="col3" placeholder="">
                           <template slot="append">元/年</template>
                         </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                      <el-form-item label="合同总金额" label-width="90px" prop="contractMoney">
+                      <el-form-item
+                        label="合同总金额"
+                        label-width="90px"
+                        :prop="'contractinfo.'+index+'.contractMoney'"
+                        :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '合同总金额需为数字', trigger: 'blur'}"
+                      >
                         <el-input v-model="domain.contractMoney" class="col3" placeholder="">
                           <template slot="append">元</template>
                         </el-input>
@@ -934,7 +975,13 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="乙方联系方式" class="nowrap" label-width="90px">
+                      <el-form-item
+                        label="乙方联系方式"
+                        class="nowrap"
+                        label-width="90px"
+                        :prop="'contractinfo.'+index+'.lesseePhone'"
+                        :rules="{ pattern: /^1\d{10}$/, message: '乙方联系方式需为号码', trigger: 'blur'}"
+                      >
                         <el-input v-model="domain.lesseePhone" class="colWidth2" />
                       </el-form-item>
                     </el-col>
@@ -1146,6 +1193,7 @@ export default {
           contractMoney: null,
           remark: ''
         }],
+        contract_groupId: null,
         assetUseType: -1,
         gyqk: null,
         bdcdyh: null,
@@ -1192,10 +1240,10 @@ export default {
         ],
         pgjz: [
           { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '评估价值需为数字', trigger: 'blur' }
+        ],
+        dyje: [
+          { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '抵押金额需为数字', trigger: 'blur' }
         ]
-        // tdmj: [
-        //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '抵押金额需为数字', trigger: 'blur' }
-        // ],
         // fwmj: [
         //   { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '抵押金额需为数字', trigger: 'blur' }
         // ],
@@ -1437,6 +1485,9 @@ export default {
     BaiduClick() {
       this.BaiduMapVisible = true
     },
+    handleVideo() {
+      window.open('https://36.34.229.143:8443', '_blank')
+    },
     addDomain() {
       this.form.contractinfo.push({
         id: null,
@@ -1467,7 +1518,7 @@ export default {
     dbclick: function(row, column) {
       this.loading = true
       this.resetForm()
-      this.PostData('Asset/GetById', { id: row.id, contractinfo: [{ id: row.contractinfo[0].id }] }).then((response) => {
+      this.PostData('Asset/GetById', { id: row.id }).then((response) => {
         this.title = '查看资产'
         Object.assign(this.form, response.object)
         this.dialogFormVisible = true
@@ -1800,7 +1851,7 @@ export default {
     },
     edit: function() {
       this.loading = true
-      this.PostData('Asset/GetById', { id: this.multipleSelection[0].id, contractinfo: [{ id: this.multipleSelection[0].contractinfo[0].id }] }).then((response) => {
+      this.PostData('Asset/GetById', { id: this.multipleSelection[0].id }).then((response) => {
         this.title = '修改资产'
         Object.assign(this.form, response.object)
         this.dialogFormVisible = true
@@ -1833,6 +1884,7 @@ export default {
       this.form.landPropertyInfo = null
       this.form.propertyFileGroupId = null
       this.form.propertyFileGroupFiles = []
+      this.form.contract_groupId = null
       this.form.contractinfo = [{
         id: null,
         contractCode: null,

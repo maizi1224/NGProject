@@ -234,7 +234,6 @@
     </el-table>
     <div class="pagination">
       <el-pagination
-        :current-page="queryCondition.PageIndex"
         :page-sizes="[10, 15, 20, 40, 60, 80, 100]"
         :page-size="queryCondition.PageSize"
         layout="total, sizes, prev, pager, next, jumper"

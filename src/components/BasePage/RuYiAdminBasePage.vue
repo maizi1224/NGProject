@@ -53,7 +53,7 @@ export default {
       this.InitData()
     },
     HandleCurrentChange(val) {
-      this.queryCondition.PageIndex = val - 1
+      this.queryCondition.PageIndex = val
       this.InitData()
     },
     HandleSelectionChange: function(val) {
