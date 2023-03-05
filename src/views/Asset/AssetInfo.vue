@@ -851,7 +851,7 @@
                   <el-row>
                     <el-col :span="8">
                       <el-form-item label="起始日期" label-width="90px">
-                        <el-date-picker v-model="domain.contracStartDate" type="date" class="col3" />
+                        <el-date-picker v-model="domain.contracStartDate" :disabled="domain.contractPrice>0" type="date" class="col3" />
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -884,10 +884,10 @@
                       <el-form-item
                         label="保证金"
                         label-width="90px"
-                        :prop="'contractinfo.'+index+'.contractPrice'"
+                        :prop="'contractinfo.'+index+'.contractPromiseMoney'"
                         :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '保证金需为数字', trigger: 'blur'}"
                       >
-                        <el-input v-model="domain.contractPrice" class="col3" placeholder="">
+                        <el-input v-model="domain.contractPromiseMoney" class="col3" placeholder="">
                           <template slot="append">元</template>
                         </el-input>
                       </el-form-item>
@@ -896,10 +896,10 @@
                       <el-form-item
                         label="年租金"
                         label-width="90px"
-                        :prop="'contractinfo.'+index+'.contractPromiseMoney'"
+                        :prop="'contractinfo.'+index+'.contractPrice'"
                         :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '年租金需为数字', trigger: 'blur'}"
                       >
-                        <el-input v-model="domain.contractPromiseMoney" class="col3" placeholder="">
+                        <el-input v-model="domain.contractPrice" class="col3" placeholder="">
                           <template slot="append">元/年</template>
                         </el-input>
                       </el-form-item>
@@ -920,7 +920,7 @@
                   <el-row>
                     <el-col :span="8">
                       <el-form-item label="缴纳方式" label-width="90px">
-                        <el-select v-model="domain.contractPayment" class="col3">
+                        <el-select v-model="domain.contractPayment" :disabled="domain.contractPrice>0" class="col3">
                           <el-option
                             v-for="item in options7"
                             :key="item.value"
@@ -1125,6 +1125,7 @@ export default {
       map: null,
       title: '',
       BaiduMapVisible: false,
+      IsdisabledDate: false,
       Isdisabled: false,
       activeNames: ['1'],
       uploadParam: {},
@@ -1524,6 +1525,7 @@ export default {
         this.dialogFormVisible = true
         this.loading = false
         this.Isdisabled = true
+        this.IsdisabledDate = true
       })
     },
     refresh: function() {
@@ -1848,6 +1850,7 @@ export default {
       this.title = '新增资产'
       this.dialogFormVisible = true
       this.Isdisabled = false
+      this.IsdisabledDate = false
     },
     edit: function() {
       this.loading = true
@@ -1857,6 +1860,7 @@ export default {
         this.dialogFormVisible = true
         this.loading = false
         this.Isdisabled = false
+        this.IsdisabledDate = true
       })
     },
     resetForm: function() {
@@ -1900,7 +1904,7 @@ export default {
         lesseeId: null,
         contractPdfGroupFiles: [],
         ContractPdfGroupId: null,
-        contractPayment: null,
+        contractPayment: -1,
         contracStartDate: null,
         contractEndDate: null,
         contractLife: null,
