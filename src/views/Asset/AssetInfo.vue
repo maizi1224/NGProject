@@ -1541,7 +1541,7 @@ export default {
           type: 'warning'
         }).then(() => {
         if (this.multipleSelection.length === 1) {
-          this.PostData('Asset/DeleteById', { id: this.multipleSelection[0].id, contractinfo: [{ id: this.multipleSelection[0].contractinfo[0].id }] }).then(response => {
+          this.PostData('Asset/DeleteById', { id: this.multipleSelection[0].id, contractinfo: [{ id: this.multipleSelection[0].contractinfo }] }).then(response => {
             this.$message({
               showClose: true,
               message: this.BusinessLanguage.GetMenuName(this.BusinessLanguage.Common.Dialog.Message.Delete),
