@@ -815,6 +815,7 @@
                   >
 
                     <el-button size="small" type="primary" style="margin-left:-115px;" @click="addDomain">新增合同</el-button>
+
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -1047,6 +1048,7 @@
                         >
                           <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
                           <el-button size="small" type="success" style="margin-left:50px" @click="submitUpload('3',index)">点击上传</el-button>
+                          <el-button size="small" type="danger" style="margin-left:50px" @click="delDomain(domain.id)">删除合同</el-button>
                         </el-upload>
                       </el-form-item>
                     </el-col>
@@ -1488,6 +1490,36 @@ export default {
     },
     handleVideo() {
       window.open('https://36.34.229.143:8443', '_blank')
+    },
+    delDomain(obj) {
+      this.$confirm(
+        '是否确认删除?',
+        '确认信息',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+        if (obj != null) {
+          this.PostData('Contract/DeleteById', { id: obj }).then((response) => {
+            this.form.assetsState = response.object
+            Object.assign(this.form, response.object)
+            const id1 = this.form.contractinfo.findIndex(item => {
+              if (item.id === obj) {
+                return true
+              }
+            })
+            this.form.contractinfo.splice(id1, 1)
+          })
+        } else {
+          const id1 = this.form.contractinfo.findIndex(item => {
+            if (item.id === obj) {
+              return true
+            }
+          })
+          this.form.contractinfo.splice(id1, 1)
+        }
+      })
     },
     addDomain() {
       this.form.contractinfo.push({
