@@ -7,9 +7,10 @@
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
-          <raddar-chart />
+          <bar-chart />
         </div>
       </el-col>
+
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <pie-chart />
@@ -17,7 +18,8 @@
       </el-col>
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
-          <bar-chart />
+          <div style="text-align: center;font-size: 18px;color: #1C97D2;">缴费信息</div>
+          <raddar-chart />
         </div>
       </el-col>
     </el-row>
@@ -113,12 +115,14 @@ export default {
     background: #fff;
     padding: 16px 16px 0;
     margin-bottom: 32px;
+    height: 500px;
   }
 }
 
 @media (max-width:1024px) {
   .chart-wrapper {
     padding: 8px;
+
   }
 }
 </style>

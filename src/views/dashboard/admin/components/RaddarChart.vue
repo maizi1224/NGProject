@@ -1,121 +1,66 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <ul v-infinite-scroll="initdata" infinite-scroll-distance="1" class="infinite-list" style="padding-left: 0px; overflow:auto;height: 420px;">
+    <li v-for="i in msg" :key="i.Msg" class="infinite-list-item">
+      <i class="el-icon-s-opportunity" style="color: #46a6ff;margin-left: 10px;" />
+      <el-link type="primary" :title="i.placeholder" style="margin-left: 10px;">{{ i.Msg }}</el-link>
+    </li>
+  </ul>
 </template>
 
 <script>
-import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import resize from './mixins/resize'
-
-const animationDuration = 3000
-
 export default {
-  mixins: [resize],
-  props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '400px'
-    }
-  },
   data() {
     return {
-      chart: null
+      count: 7,
+      msg: []
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart()
-    })
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    this.chart.dispose()
-    this.chart = null
-  },
-  methods: {
-    initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
+  created() {
 
-      this.chart.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+  },
+  mounted() { this.initdata() },
+  methods: {
+    initdata() {
+      this.RuYiAdmin.PostData('Asset/GetFeeinfoData', this.count).then(response => {
+        this.msg = []
+        response.object.forEach(element => {
+          if (element.length > 73) {
+            var Msg = element.slice(0, 72) + '···'
+            var placeholder = element
+            this.msg.push({ 'Msg': Msg, 'placeholder': placeholder })
+          } else {
+            this.msg.push({ 'Msg': Msg, 'placeholder': Msg })
           }
-        },
-        radar: {
-          radius: '66%',
-          center: ['50%', '42%'],
-          splitNumber: 8,
-          splitArea: {
-            areaStyle: {
-              color: 'rgba(127,95,132,.3)',
-              opacity: 1,
-              shadowBlur: 45,
-              shadowColor: 'rgba(0,0,0,.5)',
-              shadowOffsetX: 0,
-              shadowOffsetY: 15
-            }
-          },
-          indicator: [
-            { name: '合同履行数', max: 10000 },
-            { name: '合同到期数', max: 20000 },
-            { name: '合同逾期数', max: 20000 },
-            { name: '应收租金', max: 20000 },
-            { name: '实收租金', max: 20000 },
-            { name: '待收租金', max: 20000 }
-          ]
-        },
-        title: {
-          text: '近三个月',
-          top: 10,
-          left: 10
-        },
-        legend: {
-          left: 'center',
-          bottom: '10',
-          data: ['上月', '本月', '下月']
-        },
-        series: [{
-          type: 'radar',
-          symbolSize: 0,
-          areaStyle: {
-            normal: {
-              shadowBlur: 13,
-              shadowColor: 'rgba(0,0,0,.2)',
-              shadowOffsetX: 0,
-              shadowOffsetY: 10,
-              opacity: 1
-            }
-          },
-          data: [
-            {
-              value: [5000, 7000, 12000, 11000, 15000, 14000],
-              name: '上月'
-            },
-            {
-              value: [4000, 9000, 15000, 15000, 13000, 11000],
-              name: '本月'
-            },
-            {
-              value: [5500, 11000, 12000, 15000, 12000, 12000],
-              name: '下月'
-            }
-          ],
-          animationDuration: animationDuration
-        }]
+        })
       })
+      this.count += 2
     }
   }
 }
 </script>
+<style>
+.infinite-list .infinite-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    height: 50px;
+    background: #e8f3fe;
+    margin: 10px;
+    color: #070707;
+    border-radius: 10px;
+}
+.infinite-list{
+    overflow-y: auto;
+
+    padding-right: 15px;
+}
+.infinite-list::-webkit-scrollbar
+{
+  height: 6px;
+  width: 10px;
+  margin-left: 10px;
+}
+.infinite-list::-webkit-scrollbar-thumb{
+  background: rgb(224, 214, 235);
+}
+</style>

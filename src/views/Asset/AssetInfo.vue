@@ -178,6 +178,11 @@
         "
       />
       <el-table-column
+        prop="propertyOwner"
+        align="center"
+        label="资产所属单位"
+      />
+      <el-table-column
         prop="assetsState"
         align="center"
         label="承租情况"
@@ -191,7 +196,11 @@
           </el-tag>
         </template>
       </el-table-column>
-
+      <el-table-column
+        prop="zcjz"
+        align="center"
+        label="资产价值"
+      />
       <el-table-column
         prop="assetsArea"
         align="center"
@@ -205,6 +214,11 @@
         prop="assetsName"
         align="center"
         label="原用途"
+      />
+      <el-table-column
+        prop="dyje"
+        align="center"
+        label="抵押金额"
       />
       <!-- <el-table-column
         prop="contractinfo[0].lessee"
@@ -538,7 +552,7 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item
+              <!-- <el-form-item
                 label="备注"
                 prop="assetsState"
                 label-width="90px"
@@ -549,7 +563,23 @@
                   style="margin-left:-80px;"
                   class="colWidth"
                 />
+              </el-form-item> -->
+
+              <el-form-item
+                label="资产价值"
+                prop="zcjz"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="form.zcjz"
+
+                  style="margin-left:-80px;"
+                  class="colWidth"
+                >
+                  <template slot="append">元</template>
+                </el-input>
               </el-form-item>
+
             </el-col>
             <el-col :span="8">
               <el-form-item
@@ -1146,6 +1176,7 @@ export default {
       form: {
         id: '',
         isdel: 0,
+        zcjz: 0,
         assetsCode: null,
         assetsGetDate: null,
         assetsTypeId: null,
@@ -1237,6 +1268,9 @@ export default {
         fwjzmj: [
           { required: true, message: '房屋检测面积不能为空', trigger: 'blur' },
           { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '房屋检测面积需为数字', trigger: 'blur' }
+        ],
+        zcjz: [
+          { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '资产价值需为数字', trigger: 'blur' }
         ],
         qx: [
           { pattern: /^(\d+|\d+\.\d{1,2})$/, message: '期限需为数字', trigger: 'blur' }
@@ -1898,6 +1932,7 @@ export default {
     resetForm: function() {
       this.form.id = ''
       this.form.assetsCode = null
+      this.form.zcjz = 0
       this.form.assetsBefore = null
       this.form.assetsValue = null
       this.form.assetsGetDate = new Date()

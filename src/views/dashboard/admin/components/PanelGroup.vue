@@ -1,5 +1,19 @@
 <template>
   <el-row :gutter="40" class="panel-group">
+
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData('purchases')">
+        <div class="card-panel-icon-wrapper icon-money">
+          <svg-icon icon-class="money" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            资产总价值
+          </div>
+          <count-to :start-val="0" :end-val="invalidContract" :duration="3200" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
         <div class="card-panel-icon-wrapper icon-people">
@@ -9,7 +23,7 @@
           <div class="card-panel-text">
             当前资产总数
           </div>
-          <count-to :start-val="0" :end-val="21" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="assetsCount" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -22,23 +36,11 @@
           <div class="card-panel-text">
             当前在履行合同数
           </div>
-          <count-to :start-val="0" :end-val="17" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="validContract" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="guide" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            逾期合同数
-          </div>
-          <count-to :start-val="0" :end-val="1" :duration="3200" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
+
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('shoppings')">
         <div class="card-panel-icon-wrapper icon-shopping">
@@ -64,10 +66,23 @@ export default {
   },
   data() {
     return {
-
+      assetsCount: 0,
+      validContract: 0,
+      invalidContract: 0,
+      mouthCloseContract: 0
     }
   },
+  mounted() {
+    this.initEcharts()
+  },
   methods: {
+    initEcharts() {
+      this.loading = true
+
+      this.RuYiAdmin.PostData('Asset/GetAssetsData').then(response => {
+        Object.assign(this, response.object)
+      })
+    },
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
     }
