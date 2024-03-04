@@ -1,5 +1,13 @@
+<!--
+ * @Author: maizi 851620279@qq.com
+ * @Date: 2022-10-23 19:29:14
+ * @LastEditors: maizi 851620279@qq.com
+ * @LastEditTime: 2024-03-04 21:21:43
+ * @FilePath: \NGProject\src\views\Asset\AssetInfo.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
-  <div class="app-container">
+  <div id="primary" class="app-container">
     <!--
        头部查询
     -->
@@ -405,7 +413,7 @@
                   v-model="form.assetsGetDate"
                   class="colWidth"
                   type="date"
-
+                  value-format="yyyy-MM-dd"
                   style="margin-left:-80px;"
                   :picker-options="pickerOptions"
                 />
@@ -515,6 +523,7 @@
                 <el-date-picker
                   v-model="form.assetDate"
                   type="daterange"
+                  value-format="yyyy-MM-dd"
                   style="margin-left:-18px;"
                   align="right"
                   unlink-panels
@@ -664,7 +673,7 @@
                           v-model="form.xcsj1"
                           class="colWidth"
                           type="date"
-
+                          value-format="yyyy-MM-dd"
                           style="margin-left:-80px;"
                           :picker-options="pickerOptions"
                         />
@@ -688,7 +697,7 @@
                           v-model="form.xcsj2"
                           class="colWidth"
                           type="date"
-
+                          value-format="yyyy-MM-dd"
                           style="margin-left:-80px;"
                           :picker-options="pickerOptions"
                         />
@@ -712,7 +721,7 @@
                           v-model="form.xcsj3"
                           class="colWidth"
                           type="date"
-
+                          value-format="yyyy-MM-dd"
                           style="margin-left:-80px;"
                           :picker-options="pickerOptions"
                         />
@@ -750,6 +759,7 @@
                       style="margin-left:-80px;"
                       class="colWidth"
                       type="date"
+                      value-format="yyyy-MM-dd"
                     />
                   </el-form-item>
                 </el-col>
@@ -832,7 +842,7 @@
               </el-row>
             </el-collapse-item>
 
-            <el-collapse-item name="1">
+            <el-collapse-item accordion name="1">
               <template slot="title">
                 <p>合同信息  </p><i class="header-icon el-icon-notebook-2" />
               </template>
@@ -849,205 +859,210 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-collapse v-for="(domain,index) in form.contractinfo" :key="index" value="1">
-                <el-collapse-item :title="'合同'+(index+1)" name="1">
-                  <el-row>
-                    <el-col :span="8">
-                      <el-form-item label="合同编号" label-width="90px">
-                        <el-input v-model="domain.id" :disabled="true" class="col3" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="签订日期" label-width="90px">
-                        <el-date-picker v-model="domain.contractDate" type="date" :picker-options="pickerOptions" class="col3" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item
-                        label="合同类型"
-                        prop="assetsState"
-                        label-width="90px"
-                      >
-                        <el-select v-model="domain.contractType" class="col3">
-                          <el-option
-                            v-for="item in options5"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                          />
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="8">
-                      <el-form-item label="起始日期" label-width="90px">
-                        <el-date-picker v-model="domain.contracStartDate" :disabled="domain.contractPrice>0" type="date" class="col3" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item
-                        label="终止日期"
-                        label-width="90px"
-                      >
-                        <el-date-picker
-                          v-model="domain.contractEndDate"
-                          type="date"
-                          class="col3"
-                        />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item
-                        label="总租期"
-                        label-width="90px"
-                        :prop="'contractinfo.'+index+'.contractLife'"
-                        :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '总租期需为数字', trigger: 'blur'}"
-                      >
-                        <el-input v-model="domain.contractLife" class="col3" placeholder="">
-                          <template slot="append">年</template>
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="8">
-                      <el-form-item
-                        label="保证金"
-                        label-width="90px"
-                        :prop="'contractinfo.'+index+'.contractPromiseMoney'"
-                        :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '保证金需为数字', trigger: 'blur'}"
-                      >
-                        <el-input v-model="domain.contractPromiseMoney" class="col3" placeholder="">
-                          <template slot="append">元</template>
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item
-                        label="年租金"
-                        label-width="90px"
-                        :prop="'contractinfo.'+index+'.contractPrice'"
-                        :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '年租金需为数字', trigger: 'blur'}"
-                      >
-                        <el-input v-model="domain.contractPrice" class="col3" placeholder="">
-                          <template slot="append">元/年</template>
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item
-                        label="合同总金额"
-                        label-width="90px"
-                        :prop="'contractinfo.'+index+'.contractMoney'"
-                        :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '合同总金额需为数字', trigger: 'blur'}"
-                      >
-                        <el-input v-model="domain.contractMoney" class="col3" placeholder="">
-                          <template slot="append">元</template>
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="8">
-                      <el-form-item label="缴纳方式" label-width="90px">
-                        <el-select v-model="domain.contractPayment" :disabled="domain.contractPrice>0" class="col3">
-                          <el-option
-                            v-for="item in options7"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                          />
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="合同状态" label-width="90px">
-                        <el-select v-model="domain.contractState" class="col3">
-                          <el-option
-                            v-for="item in options8"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                          />
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-form-item label="合同备注" label-width="90px" class="nowrap">
-                      <el-col :span="24">
-                        <el-input
-                          v-model="domain.remark"
-                          class="htbz"
-                          type="textarea"
-                        />
-                      </el-col>
-                    </el-form-item>
+              <el-collapse accordion>
+                <el-collapse-item v-for="(values,indexs) in form.contractinfoByGroup" :key="indexs" :title="values.year+'年'" :name="indexs">
+                  <el-collapse v-for="(domain,index) in values.contractinfoGroups" :key="index" accordion>
 
-                  </el-row>
-                  <el-row>
-                    <el-col :span="12">
-                      <el-form-item label="出租方(甲方) " class="nowrap" label-width="90px">
-                        <el-input v-model="domain.lessor" class="colWidth2" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="承租方(乙方) " class="nowrap" label-width="90px">
-                        <el-input v-model="domain.lessee" class="colWidth2" />
-                      </el-form-item>
-                    </el-col>
+                    <el-collapse-item :title="values.year+'-合同-'+(index+1)" :name="index">
 
-                  </el-row>
-                  <el-row>
-                    <el-col :span="12">
-                      <el-form-item label="甲方联系方式" label-width="90px" class="nowrap">
-                        <el-input v-model="domain.lessorPhone" class="colWidth2" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item
-                        label="乙方联系方式"
-                        class="nowrap"
-                        label-width="90px"
-                        :prop="'contractinfo.'+index+'.lesseePhone'"
-                        :rules="{ pattern: /^1\d{10}$/, message: '乙方联系方式需为号码', trigger: 'blur'}"
-                      >
-                        <el-input v-model="domain.lesseePhone" class="colWidth2" />
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="12">
-                      <el-form-item label="甲方地址" label-width="90px" class="nowrap">
-                        <el-input v-model="domain.lessorAdress" class="colWidth2" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="乙方地址" class="nowrap" label-width="90px">
-                        <el-input v-model="domain.lesseeAdress" class="colWidth2" />
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="12">
-                      <el-form-item label="甲方统一社会信用代码(身份证)" label-width="160px">
-                        <el-input v-model="domain.lessorId" class="colWidth2" />
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="乙方统一社会信用代码(身份证)" label-width="160px">
-                        <el-input v-model="domain.lesseeId" class="colWidth2" />
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <el-form-item
-                        label="纸质合同附件"
-                        label-width="100px"
-                      >
-                        <!-- <el-upload
+                      <el-row>
+                        <el-col :span="8">
+                          <el-form-item label="合同编号" label-width="90px">
+                            <el-input v-model="domain.id" :disabled="true" class="col3" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item label="签订日期" label-width="90px">
+                            <el-date-picker v-model="domain.contractDate" value-format="yyyy-MM-dd" type="date" :picker-options="pickerOptions" class="col3" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item
+                            label="合同类型"
+                            prop="assetsState"
+                            label-width="90px"
+                          >
+                            <el-select v-model="domain.contractType" class="col3">
+                              <el-option
+                                v-for="item in options5"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              />
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="8">
+                          <el-form-item label="起始日期" label-width="90px">
+                            <el-date-picker v-model="domain.contracStartDate" value-format="yyyy-MM-dd" :disabled="domain.contractPrice>0" type="date" class="col3" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item
+                            label="终止日期"
+                            label-width="90px"
+                          >
+                            <el-date-picker
+                              v-model="domain.contractEndDate"
+                              value-format="yyyy-MM-dd"
+                              type="date"
+                              class="col3"
+                            />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item
+                            label="总租期"
+                            label-width="90px"
+                            :prop="'contractinfoByGroup.'+indexs+'.contractinfoGroups.'+index+'.contractLife'"
+                            :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '总租期需为数字', trigger: 'blur'}"
+                          >
+                            <el-input v-model="domain.contractLife" class="col3" placeholder="">
+                              <template slot="append">年</template>
+                            </el-input>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="8">
+                          <el-form-item
+                            label="保证金"
+                            label-width="90px"
+                            :prop="'contractinfoByGroup.'+indexs+'.contractinfoGroups.'+index+'.contractPromiseMoney'"
+                            :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '保证金需为数字', trigger: 'blur'}"
+                          >
+                            <el-input v-model="domain.contractPromiseMoney" class="col3" placeholder="">
+                              <template slot="append">元</template>
+                            </el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item
+                            label="年租金"
+                            label-width="90px"
+                            :prop="'contractinfoByGroup.'+indexs+'.contractinfoGroups.'+index+'.contractPrice'"
+                            :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '年租金需为数字', trigger: 'blur'}"
+                          >
+                            <el-input v-model="domain.contractPrice" class="col3" placeholder="">
+                              <template slot="append">元/年</template>
+                            </el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item
+                            label="合同总金额"
+                            label-width="90px"
+                            :prop="'contractinfoByGroup.'+indexs+'.contractinfoGroups.'+index+'.contractMoney'"
+                            :rules="{ pattern: /^(\d+|\d+\.\d{1,2})$/, message: '合同总金额需为数字', trigger: 'blur'}"
+                          >
+                            <el-input v-model="domain.contractMoney" class="col3" placeholder="">
+                              <template slot="append">元</template>
+                            </el-input>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="8">
+                          <el-form-item label="缴纳方式" label-width="90px">
+                            <el-select v-model="domain.contractPayment" :disabled="domain.contractPrice>0" class="col3">
+                              <el-option
+                                v-for="item in options7"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              />
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                          <el-form-item label="合同状态" label-width="90px">
+                            <el-select v-model="domain.contractState" class="col3">
+                              <el-option
+                                v-for="item in options8"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              />
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-form-item label="合同备注" label-width="90px" class="nowrap">
+                          <el-col :span="24">
+                            <el-input
+                              v-model="domain.remark"
+                              class="htbz"
+                              type="textarea"
+                            />
+                          </el-col>
+                        </el-form-item>
+
+                      </el-row>
+                      <el-row>
+                        <el-col :span="12">
+                          <el-form-item label="出租方(甲方) " class="nowrap" label-width="90px">
+                            <el-input v-model="domain.lessor" class="colWidth2" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item label="承租方(乙方) " class="nowrap" label-width="90px">
+                            <el-input v-model="domain.lessee" class="colWidth2" />
+                          </el-form-item>
+                        </el-col>
+
+                      </el-row>
+                      <el-row>
+                        <el-col :span="12">
+                          <el-form-item label="甲方联系方式" label-width="90px" class="nowrap">
+                            <el-input v-model="domain.lessorPhone" class="colWidth2" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item
+                            label="乙方联系方式"
+                            class="nowrap"
+                            label-width="90px"
+                            :prop="'contractinfoByGroup.'+indexs+'.contractinfoGroups.'+index+'.lesseePhone'"
+                            :rules="{ pattern: /^1\d{10}$/, message: '乙方联系方式需为号码', trigger: 'blur'}"
+                          >
+                            <el-input v-model="domain.lesseePhone" class="colWidth2" />
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="12">
+                          <el-form-item label="甲方地址" label-width="90px" class="nowrap">
+                            <el-input v-model="domain.lessorAdress" class="colWidth2" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item label="乙方地址" class="nowrap" label-width="90px">
+                            <el-input v-model="domain.lesseeAdress" class="colWidth2" />
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="12">
+                          <el-form-item label="甲方统一社会信用代码(身份证)" label-width="160px">
+                            <el-input v-model="domain.lessorId" class="colWidth2" />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item label="乙方统一社会信用代码(身份证)" label-width="160px">
+                            <el-input v-model="domain.lesseeId" class="colWidth2" />
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                      <el-row>
+                        <el-col :span="24">
+                          <el-form-item
+                            label="纸质合同附件"
+                            label-width="100px"
+                          >
+                            <!-- <el-upload
                           :id="index"
                           class="upload-demo"
                           :action="importUrl"
@@ -1063,37 +1078,41 @@
                           <el-button size="small" type="primary">点击上传</el-button>
                         </el-upload> -->
 
-                        <el-upload
-                          class="upload-demo"
-                          :headers="headers"
-                          action=""
-                          :before-remove="beforeRemove"
-                          :multiple="true"
-                          :limit="limit"
-                          :auto-upload="false"
-                          :on-exceed="handleExceed"
-                          :on-change="(file,file_list)=>{return fileChange(file,file_list,'3',index)}"
-                          :on-preview="handlePreview"
-                          :file-list="domain.contractPdfGroupFiles"
-                        >
-                          <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
-                          <el-button size="small" type="success" style="margin-left:50px" @click="submitUpload('3',index)">点击上传</el-button>
-                          <el-button size="small" type="danger" style="margin-left:50px" @click="delDomain(domain.id)">删除合同</el-button>
-                        </el-upload>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
+                            <el-upload
+                              class="upload-demo"
+                              :headers="headers"
+                              action=""
+                              :before-remove="beforeRemove"
+                              :multiple="true"
+                              :limit="limit"
+                              :auto-upload="false"
+                              :on-exceed="handleExceed"
+                              :on-change="(file,file_list)=>{return fileChange(file,file_list,'3',indexs,index)}"
+                              :on-preview="handlePreview"
+                              :file-list="domain.contractPdfGroupFiles"
+                            >
+                              <el-button slot="trigger" size="small" type="primary">选择文件</el-button>
+                              <el-button size="small" type="success" style="margin-left:50px" @click="submitUpload('3',indexs,index)">点击上传</el-button>
+                              <el-button size="small" type="danger" style="margin-left:50px" @click="delDomain(domain.id)">删除合同</el-button>
+                            </el-upload>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-collapse-item>
+                  </el-collapse>
                 </el-collapse-item>
               </el-collapse>
 
             </el-collapse-item>
           </el-collapse>
+
         </el-form>
 
       </el-card>
       <div class="demo-drawer__footer">
         <el-button @click="cancelForm">取 消</el-button>
         <el-button type="primary" :disabled="Isdisabled" :loading="loading" @click="SubmitForm">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
+        <el-button @click="printForm">打 印</el-button>
       </div>
     </el-drawer>
     <el-dialog
@@ -1124,6 +1143,7 @@
         <el-button type="primary" @click="BaiduMapVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+    <print-view id="PrintView" ref="PrintView" style="display: none" :info-form=" this.form " />
   </div>
 
 </template>
@@ -1132,11 +1152,18 @@
 import RuYiAdminBasePage from '@/components/BasePage/RuYiAdminBasePage'
 import { generateQueryItem } from '@/utils/query-item'
 
+import PrintView from '@/components/print/LeavePrintView.vue'
+
 export default {
   name: 'AssetMent',
+  components: { PrintView },
   extends: RuYiAdminBasePage,
   data() {
     return {
+      infoForm: {
+        checkUserId: '',
+        copyUserId: '' },
+
       realfilelist: [],
       filecount: 0,
       oldFileList: [],
@@ -1202,6 +1229,34 @@ export default {
         landPropertyInfo: null,
         propertyFileGroupId: null,
         propertyFileGroupFiles: [],
+        contractinfoByGroup: [{
+          year: null,
+          contractinfoGroups: [{
+            id: null,
+            contractCode: null,
+            contractType: -1,
+            contractDate: new Date(),
+            lessee: null,
+            lesseePhone: null,
+            lessorPhone: null,
+            lessorAdress: null,
+            lessor: null,
+            lessorId: null,
+            lesseeAdress: null,
+            lesseeId: null,
+            contractPdfGroupFiles: [],
+            ContractPdfGroupId: null,
+            contractPayment: -1,
+            contracStartDate: null,
+            contractEndDate: null,
+            contractLife: null,
+            contractPrice: null,
+            contractPromiseMoney: null,
+            contractState: 2,
+            contractMoney: null,
+            remark: ''
+          }]
+        }],
         contractinfo: [{
           id: null,
           contractCode: null,
@@ -1556,30 +1611,31 @@ export default {
       })
     },
     addDomain() {
-      this.form.contractinfo.push({
-        id: null,
-        contractCode: null,
-        contractType: -1,
-        contractDate: new Date(),
-        lessee: null,
-        lesseePhone: null,
-        lessorPhone: null,
-        lessorAdress: null,
-        lessor: null,
-        lessorId: null,
-        lesseeAdress: null,
-        lesseeId: null,
-        contractPdfGroupFiles: [],
-        ContractPdfGroupId: null,
-        contractPayment: -1,
-        contracStartDate: null,
-        contractEndDate: null,
-        contractLife: null,
-        contractPrice: null,
-        contractPromiseMoney: null,
-        contractState: 2,
-        contractMoney: null,
-        remark: ''
+      this.form.contractinfoByGroup.push({
+        year: new Date().getFullYear().toString(),
+        contractinfoGroups: [{ id: null,
+          contractCode: null,
+          contractType: -1,
+          contractDate: new Date(),
+          lessee: null,
+          lesseePhone: null,
+          lessorPhone: null,
+          lessorAdress: null,
+          lessor: null,
+          lessorId: null,
+          lesseeAdress: null,
+          lesseeId: null,
+          contractPdfGroupFiles: [],
+          ContractPdfGroupId: null,
+          contractPayment: -1,
+          contracStartDate: null,
+          contractEndDate: null,
+          contractLife: null,
+          contractPrice: null,
+          contractPromiseMoney: null,
+          contractState: 2,
+          contractMoney: null,
+          remark: '' }]
       })
     },
     dbclick: function(row, column) {
@@ -1607,7 +1663,7 @@ export default {
           type: 'warning'
         }).then(() => {
         if (this.multipleSelection.length === 1) {
-          this.PostData('Asset/DeleteById', { id: this.multipleSelection[0].id, contractinfo: [{ id: this.multipleSelection[0].contractinfo }] }).then(response => {
+          this.PostData('Asset/DeleteById', { id: this.multipleSelection[0].id }).then(response => {
             this.$message({
               showClose: true,
               message: this.BusinessLanguage.GetMenuName(this.BusinessLanguage.Common.Dialog.Message.Delete),
@@ -1679,21 +1735,24 @@ export default {
         'Files/DownloadFiles/', file.id, file.name
       )
     },
-    fileChange(file, fileList, param, p2) {
+    fileChange(file, fileList, param, p3, p2) {
       if (param === '1') {
         this.form.assetsFileGroupFiles = fileList
       } else if (param === '2') {
         this.form.propertyFileGroupFiles = fileList
       } else if (param === '3') {
-        this.form.contractinfo[p2].contractPdfGroupFiles = fileList
+        var id = this.form.contractinfoByGroup[p3].contractinfoGroups[p2].id
+        this.form.contractinfo.find(e => e.id === id).contractPdfGroupFiles = fileList
       }
     },
-    submitUpload(param, p2) { // 提交点击
-      this.uploadFile(param, p2)
+    submitUpload(param, p3, p2) { // 提交点击
+      this.uploadFile(param, p3, p2)
     },
-    uploadFile(param, p2) { // 文件上传方法
+    uploadFile(param, p3, p2) { // 文件上传方法
       this.refreshLocalToken()
       const formData = new FormData()
+      var conId = null
+      var obj1 = null
 
       if (param === '1') {
         this.form.assetsFileGroupFiles.forEach(file => {
@@ -1704,12 +1763,23 @@ export default {
           formData.append('multipartFiles', file.raw)
         })
       } else if (param === '3') {
-        this.form.contractinfo[p2].contractPdfGroupFiles.forEach(file => {
+        conId = this.form.contractinfoByGroup[p3].contractinfoGroups[p2].id
+        obj1 = this.form.contractinfoByGroup[p3].contractinfoGroups[p2]
+        if (!conId) {
+          this.$message({
+            showClose: true,
+            message: '新合同请保存后再上传文件',
+            type: 'warning'
+          })
+          return
+        }
+        this.form.contractinfo.find(e => e.id === conId).contractPdfGroupFiles.forEach(file => {
           formData.append('multipartFiles', file.raw)
         })
       }
 
       const VueThis = this
+
       this.PostData('/Files/UploadFiles', formData).then(response => {
         this.$message({
           showClose: true,
@@ -1745,15 +1815,17 @@ export default {
         } else if (param === '3') {
           // 评估附件
           response.object.forEach(element => {
-            VueThis.form.contractinfo[p2].ContractPdfGroupId = element.fileId
+            VueThis.form.contractinfo.find(e => e.id === conId).ContractPdfGroupId = element.fileId
+            obj1.ContractPdfGroupId = element.fileId
             files.push({ name: element.fileName, url: element.fileUrl, id: element.id })
           })
-          VueThis.form.contractinfo[p2].contractPdfGroupFiles.forEach(element => {
+          VueThis.form.contractinfo.find(e => e.id === conId).contractPdfGroupFiles.forEach(element => {
             if (element.id) {
               files.push(element)
             }
           })
-          VueThis.form.contractinfo[p2].contractPdfGroupFiles = files
+          VueThis.form.contractinfo.find(e => e.id === conId).contractPdfGroupFiles = files
+          obj1.contractPdfGroupFiles = files
         }
       })
     },
@@ -1781,6 +1853,13 @@ export default {
       }
       return true
     },
+    async printForm() {
+      // 调用子组件方法-进行数据封装
+      await this.$refs.PrintView.getCheckUser(this.infoForm.checkUserId, this.infoForm.copyUserId)
+      // 调用工具类中的打印方法，进行打印
+      this.$print(this.$refs.PrintView.$el, { 'styleStr': '#PrintView{display:block !important;}' })
+    },
+
     cancelForm() {
       if (this.Isdisabled) {
         this.loading = false

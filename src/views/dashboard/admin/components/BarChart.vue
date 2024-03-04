@@ -2,7 +2,7 @@
  * @Author: maizi 851620279@qq.com
  * @Date: 2022-10-08 02:20:47
  * @LastEditors: maizi 851620279@qq.com
- * @LastEditTime: 2023-03-30 22:58:26
+ * @LastEditTime: 2023-04-03 23:20:43
  * @FilePath: \NGProject\src\views\dashboard\admin\components\BarChart.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -85,7 +85,7 @@ export default {
               formatter: function(params) {
                 var newParamsName = '' // 最终拼接成的字符串
                 var paramsNameNumber = params.length // 实际标签的个数
-                var provideNumber = 10 // 每行能显示的字的个数
+                var provideNumber = 20 // 每行能显示的字的个数
                 var rowNumber = Math.ceil(paramsNameNumber / provideNumber) // 换行的话，需要显示几行，向上取整
                 /**
      * 判断标签的个数是否大于规定的个数， 如果大于，则进行换行处理 如果不大于，即等于或小于，就返回原标签

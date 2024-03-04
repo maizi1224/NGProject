@@ -50,7 +50,7 @@
           <div class="card-panel-text">
             本月到期合同
           </div>
-          <count-to :start-val="0" :end-val="2" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="mouthCloseContract" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>

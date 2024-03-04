@@ -43,6 +43,8 @@ import { DeletionType } from '@/constants/deletion-type'
 import { Guid } from '@/constants/guid'
 import { DateTime } from '@/constants/date'
 import { MessageLevel } from '@/constants/message-level'
+import print from '@/utils/print'
+Vue.use(print)
 import CryptoJS from 'crypto-js'
 import BaiduMap from 'vue-baidu-map'
 

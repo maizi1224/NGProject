@@ -18,6 +18,7 @@ export default {
         deleteEntity: null,
         deleteEntities: null
       },
+      optionsAssets: [],
       addDisabled: false,
       editDisabled: true,
       delDisabled: true,
@@ -77,6 +78,11 @@ export default {
         this.tableData = response.list
         this.queryCondition.TotalCount = response.totalCount
         this.loading = false
+      })
+    },
+    GetAllAssets: function() {
+      this.RuYiAdmin.PostData('Contract/GetAllAssets', null).then(response => {
+        this.optionsAssets = response.object
       })
     },
     PostData: function(url, param) {

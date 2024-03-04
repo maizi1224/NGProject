@@ -301,7 +301,7 @@ export default {
 
 $bg: #283443;
 $light_gray: rgb(12, 1, 1);
-$cursor: #fff;
+$cursor: black;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {

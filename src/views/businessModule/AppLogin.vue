@@ -29,7 +29,7 @@
         label-position="left"
       >
         <div class="title-container">
-          <h3 class="title">如意Admin统一身份认证系统</h3>
+          <h3 class="title" />
         </div>
         <el-form-item prop="username">
           <span class="svg-container">

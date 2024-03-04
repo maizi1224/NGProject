@@ -14,12 +14,8 @@
         <el-tooltip class="right-menu-item hover-effect" effect="dark" content="当前用户" placement="top">
           <span ref="user" style="padding-right: 30px;font-size: 14px;" />
         </el-tooltip>
-        <el-tooltip class="right-menu-item hover-effect" effect="dark" content="锁屏" placement="bottom">
-          <i class="el-icon-lock" style="padding-top:12px;font-size:20px;cursor: pointer;" @click="lockScreen" />
-        </el-tooltip>
-        <!-- <search id="header-search" class="right-menu-item" /> -->
 
-        <error-log class="errLog-container right-menu-item hover-effect" />
+        <!-- <search id="header-search" class="right-menu-item" /> -->
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
@@ -31,7 +27,7 @@
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <svg-icon icon-class="quit" class="user-avatar" />
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -173,8 +169,8 @@ export default {
 
         .user-avatar {
           cursor: pointer;
-          width: 40px;
-          height: 40px;
+          width: 28px;
+          height: 28px;
           border-radius: 10px;
         }
 

@@ -1,3 +1,11 @@
+<!--
+ * @Author: maizi 851620279@qq.com
+ * @Date: 2022-10-08 02:20:47
+ * @LastEditors: maizi 851620279@qq.com
+ * @LastEditTime: 2023-04-03 23:22:19
+ * @FilePath: \NGProject\src\views\dashboard\admin\components\RaddarChart.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <ul v-infinite-scroll="initdata" infinite-scroll-distance="1" class="infinite-list" style="padding-left: 0px; overflow:auto;height: 420px;">
     <li v-for="i in msg" :key="i.Msg" class="infinite-list-item">
@@ -24,8 +32,8 @@ export default {
       this.RuYiAdmin.PostData('Asset/GetFeeinfoData', this.count).then(response => {
         this.msg = []
         response.object.forEach(element => {
-          if (element.length > 73) {
-            var Msg = element.slice(0, 72) + '···'
+          if (element.length > 71) {
+            var Msg = element.slice(0, 70) + '···'
             var placeholder = element
             this.msg.push({ 'Msg': Msg, 'placeholder': placeholder })
           } else {
